@@ -1,5 +1,13 @@
+.DS_Store
+/src/.DS_Store
+/src/main/.DS_Store
+/src/main/java/.DS_Store
+/src/main/java/com/.DS_Store
+/src/main/java/com/riskgame/.DS_Store
+/riskgame/src/main/java/com/riskgame/.DS_Store
+
 HELP.md
-target/
+/target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**
 !**/src/test/**

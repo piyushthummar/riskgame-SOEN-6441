@@ -1,4 +1,4 @@
-package com.riskgame;
+package com.riskgame.driver;
 
 import java.awt.Container;
 import java.awt.EventQueue;
@@ -29,7 +29,7 @@ public class RiskgameApplication extends JFrame{
 	    private void initUI() {
 
 	        JButton quitButton = new JButton("Quit");
-	        JButton ashish = new JButton("Ashish");
+	        JButton ashish = new JButton("patel");
 
 	        quitButton.addActionListener((ActionEvent event) -> {
 	        	System.out.println("Button Click");
@@ -37,7 +37,7 @@ public class RiskgameApplication extends JFrame{
 	        });
 
 	        createLayout(quitButton,ashish);
-	        //createLayout(ashish);
+	        
 	        
 	        
 
@@ -66,6 +66,7 @@ public class RiskgameApplication extends JFrame{
 
 	    public static void main(String[] args) {
 
+	    	System.out.println();
 	        ConfigurableApplicationContext ctx = new SpringApplicationBuilder(RiskgameApplication.class)
 	                .headless(false).run(args);
 

@@ -1,3 +1,5 @@
+.DS_Store
+/riskgame/src/main/java/com/riskgame/.DS_Store
 # Compiled class file
 *.class
 
@@ -21,3 +23,8 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+riskgame/src/.DS_Store
+riskgame/src/main/.DS_Store
+riskgame/src/main/.DS_Store
+riskgame/src/main/java/com/riskgame/.DS_Store
+riskgame/src/main/.DS_Store
