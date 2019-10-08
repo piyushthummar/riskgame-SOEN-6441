@@ -1,23 +1,22 @@
 package com.riskgame.model;
 
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
 public class Continent {
 	private String continentName;
 	private int continentValue;
-
-	public String getContinentName() {
-		return continentName;
-	}
-
-	public void setContinentName(String continentName) {
-		this.continentName = continentName;
-	}
-
-	public int getContinentValue() {
-		return continentValue;
-	}
-
-	public void setContinentValue(int continentValue) {
-		this.continentValue = continentValue;
-	}
+	private List<Territory> TerritoryList = new ArrayList<>();
 
 }
+
+
+
