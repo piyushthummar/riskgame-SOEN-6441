@@ -153,6 +153,8 @@ public class MapController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		System.out.println("initialize call");
+		
 		continentTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		countryTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		neighborTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -166,6 +168,7 @@ public class MapController implements Initializable {
 		loadNeighbourDetails();
 	}
 
+	//load
 	private void loadContinentDetails() {
 		// TODO Auto-generated method stub
 
