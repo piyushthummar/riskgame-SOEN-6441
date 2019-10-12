@@ -38,7 +38,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
-
 /**
  * This class is the entry point of HTTP Client Library Implementation.
  * 
@@ -166,7 +165,7 @@ public class MapController implements Initializable {
 		loadCountryDetails();
 		loadNeighbourDetails();
 	}
-	
+
 	private void loadContinentDetails() {
 		// TODO Auto-generated method stub
 
@@ -187,11 +186,11 @@ public class MapController implements Initializable {
 
 	}
 
-//	private void loadContinentComboBox() {
-//
-//		
-//
-//	}
+	// private void loadContinentComboBox() {
+	//
+	//
+	//
+	// }
 
 	private void loadNeighbourDetails() {
 
@@ -368,7 +367,7 @@ public class MapController implements Initializable {
 			return cell;
 		}
 	};
-	
+
 	@FXML
 	void deleteContinent(ActionEvent event) {
 
@@ -394,25 +393,25 @@ public class MapController implements Initializable {
 			// continentTable.setItems(continentList);
 			// loadContinentComboBox();
 			loadContinentDetails();
-			
-			//delete country
+
+			// delete country
 			List<String> countryToDel = new ArrayList<String>();
-			for(CountryDto countryDto : countryList) {
-				if(countryDto.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName())) {
+			for (CountryDto countryDto : countryList) {
+				if (countryDto.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName())) {
 					countryToDel.add(countryDto.getCountryName());
 				}
 			}
-			countryList.removeIf(country -> country.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName()));
+			countryList.removeIf(
+					country -> country.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName()));
 			loadCountryDetails();
-			
-			//deleteNeighbour
+
+			// deleteNeighbour
 			for (String country : countryToDel) {
 				neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(country));
 				neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(country));
 			}
 			loadNeighbourDetails();
-			
-			
+
 		}
 
 	}
@@ -442,18 +441,24 @@ public class MapController implements Initializable {
 			// countryTable.setItems(countryList);
 			loadCountryDetails();
 
-//			for (int i = 0; i < neighbourList.size(); i++) {
-//				NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
-//				if (neighbourDto.getCountryName().equalsIgnoreCase(countryDto.getCountryName())) {
-//					neighbourList.remove(i);
-//				} else if (neighbourDto.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName())) {
-//					neighbourList.remove(i);
-//				}
-//
-//			}
-			
-			neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryDto.getCountryName()));
-			neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()));
+			// for (int i = 0; i < neighbourList.size(); i++) {
+			// NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
+			// if
+			// (neighbourDto.getCountryName().equalsIgnoreCase(countryDto.getCountryName()))
+			// {
+			// neighbourList.remove(i);
+			// } else if
+			// (neighbourDto.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()))
+			// {
+			// neighbourList.remove(i);
+			// }
+			//
+			// }
+
+			neighbourList
+					.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryDto.getCountryName()));
+			neighbourList.removeIf(
+					neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()));
 			loadNeighbourDetails();
 
 		}
@@ -578,8 +583,232 @@ public class MapController implements Initializable {
 		return isValid;
 	}
 
+	@FXML
+	void saveCountry(ActionEvent event) {
 
+		if (validate("Country Name", countryName.getText(), "^([a-zA-Z]+\\s)*[a-zA-Z]+$")
+				&& emptyValidation("Continent", continentComboBox.getSelectionModel().getSelectedItem() == null)
+				&& isValidCountryName(countryName.getText(), lblCountryId.getText())) {
 
-	
+			if (lblCountryId.getText() == null || lblCountryId.getText() == "") {
+
+				CountryDto countryDto = new CountryDto();
+				countryDto.setId(countryId);
+				countryId++;
+				countryDto.setCountryName(countryName.getText());
+				countryDto.setContinentName(continentComboBox.getSelectionModel().getSelectedItem());
+
+				countryList.add(countryDto);
+				alertMesage("Country saved successfully");
+				// countryTable.setItems(countryList);
+				loadCountryDetails();
+				loadNeighbourDetails();
+
+			} else {
+
+				String oldCountryName = "";
+
+				for (int i = 0; i < countryList.size(); i++) {
+
+					if (String.valueOf(countryList.get(i).getId()).equals(lblCountryId.getText())) {
+						CountryDto countryDto = countryList.get(i);
+						oldCountryName = countryDto.getCountryName();
+						countryDto.setCountryName(countryName.getText());
+						countryDto.setContinentName(continentComboBox.getSelectionModel().getSelectedItem());
+						countryList.set(i, countryDto);
+						break;
+					}
+
+				}
+
+				alertMesage("Country updated successfully");
+				// countryTable.setItems(countryList);
+				loadCountryDetails();
+
+				for (int i = 0; i < neighbourList.size(); i++) {
+					NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
+
+					if (neighbourDto.getCountryName().equalsIgnoreCase(oldCountryName)) {
+						neighbourDto.setCountryName(countryName.getText());
+					} else if (neighbourDto.getCountryNeighbourName().equalsIgnoreCase(oldCountryName)) {
+						neighbourDto.setCountryNeighbourName(countryName.getText());
+					}
+
+					neighbourList.set(i, neighbourDto);
+				}
+				loadNeighbourDetails();
+
+			}
+
+			clearCountryFields();
+
+		}
+
+	}
+
+	private boolean isValidCountryName(String countryName, String countryId) {
+		boolean isValid = true;
+
+		for (CountryDto countryDto : countryList) {
+
+			// for create
+			if (countryName.equalsIgnoreCase(countryDto.getCountryName())
+					&& (countryId == null || countryId.isEmpty())) {
+				alertMesage("Country name already exists");
+				isValid = false;
+				break;
+
+				// for update
+			} else if ((countryId != null && !countryId.isEmpty())
+					&& (Integer.parseInt(countryId) != countryDto.getId())
+					&& (countryName.equalsIgnoreCase(countryDto.getCountryName()))) {
+				alertMesage("Country name already exists");
+				isValid = false;
+				break;
+			}
+
+		}
+
+		return isValid;
+	}
+
+	private boolean isValidNeighbour(String countryName, String neighbourCountryName) {
+		boolean isValid = true;
+
+		if (countryName.equalsIgnoreCase(neighbourCountryName)) {
+			alertMesage("Please select valid options");
+			isValid = false;
+		} else {
+
+			for (NeighbourTerritoriesDto neighbourDto : neighbourList) {
+
+				if (countryName.equalsIgnoreCase(neighbourDto.getCountryName())
+						&& neighbourCountryName.equalsIgnoreCase(neighbourDto.getCountryNeighbourName())) {
+					alertMesage("Combination of value already exists");
+					isValid = false;
+
+				}
+
+			}
+
+		}
+
+		return isValid;
+	}
+
+	@FXML
+	void saveNeighbor(ActionEvent event) {
+
+		if (emptyValidation("Country", countryComboBox.getSelectionModel().getSelectedItem() == null)
+
+				&& emptyValidation("Neighbour Country", neighborComboBox.getSelectionModel().getSelectedItem() == null)
+
+				&& isValidNeighbour(countryComboBox.getSelectionModel().getSelectedItem(),
+						neighborComboBox.getSelectionModel().getSelectedItem())) {
+
+			if (lblNeighbourId.getText() == null || lblNeighbourId.getText() == "") {
+
+				NeighbourTerritoriesDto neighbourDto = new NeighbourTerritoriesDto();
+				neighbourDto.setId(neighbourId);
+				neighbourId++;
+				neighbourDto.setCountryName(countryComboBox.getSelectionModel().getSelectedItem());
+				neighbourDto.setCountryNeighbourName(neighborComboBox.getSelectionModel().getSelectedItem());
+
+				neighbourList.add(neighbourDto);
+				alertMesage("Neighbour saved successfully");
+				// neighborTable.setItems(value);
+				loadNeighbourDetails();
+
+			} else {
+
+				for (int i = 0; i < neighbourList.size(); i++) {
+
+					if (String.valueOf(neighbourList.get(i).getId()).equals(lblNeighbourId.getText())) {
+						NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
+						neighbourDto.setCountryName(countryComboBox.getSelectionModel().getSelectedItem());
+						neighbourDto.setCountryNeighbourName(neighborComboBox.getSelectionModel().getSelectedItem());
+						neighbourList.set(i, neighbourDto);
+
+					}
+
+				}
+
+				alertMesage("Neighbour updated successfully");
+				// countryTable.setItems(countryList);
+				loadNeighbourDetails();
+			}
+
+			clearNeighbourFields();
+
+		}
+
+	}
+
+	/*
+	 * Validations
+	 */
+	private boolean validate(String field, String value, String pattern) {
+		if (!value.isEmpty()) {
+			Pattern p = Pattern.compile(pattern);
+			Matcher m = p.matcher(value);
+			if (m.find() && m.group().equals(value)) {
+				return true;
+			} else {
+				validationAlert(field, false);
+				return false;
+			}
+		} else {
+			validationAlert(field, true);
+			return false;
+		}
+	}
+
+	private void alertMesage(String alertMessage) {
+
+		Alert alert = new Alert(AlertType.INFORMATION);
+		// alert.setTitle("Saved successfully.");
+		alert.setHeaderText(null);
+		alert.setContentText(alertMessage);
+		alert.showAndWait();
+	}
+
+	private boolean emptyValidation(String field, boolean empty) {
+		if (!empty) {
+			return true;
+		} else {
+			validationAlert(field, true);
+			return false;
+		}
+	}
+
+	private void validationAlert(String field, boolean empty) {
+		Alert alert = new Alert(AlertType.WARNING);
+		alert.setTitle("Validation Error");
+		alert.setHeaderText(null);
+		if (empty)
+			alert.setContentText("Please Select or Enter " + field);
+		else
+			alert.setContentText("Please Select or Enter Valid " + field);
+
+		alert.showAndWait();
+	}
+
+	private void clearContinentFields() {
+		lblContinentId.setText(null);
+		continentName.clear();
+		continentValue.clear();
+	}
+
+	private void clearCountryFields() {
+		lblCountryId.setText(null);
+		countryName.clear();
+		continentComboBox.getSelectionModel().clearSelection();
+	}
+
+	private void clearNeighbourFields() {
+		lblNeighbourId.setText(null);
+		countryComboBox.getSelectionModel().clearSelection();
+		neighborComboBox.getSelectionModel().clearSelection();
+	}
 
 }
