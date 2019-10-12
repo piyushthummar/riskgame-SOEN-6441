@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="576.0" prefWidth="842.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.WelcomeController">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="540.0" layoutX="19.0" layoutY="20.0" stroke="BLACK" strokeType="INSIDE" width="807.0" />
+      <Label layoutX="157.0" layoutY="55.0" text="Welcome to The RISK Game" textAlignment="CENTER" underline="true">
+         <font>
+            <Font size="40.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnCreateMap" cancelButton="true" layoutX="157.0" layoutY="161.0" mnemonicParsing="false" onAction="#createMap" prefHeight="57.0" prefWidth="132.0" style="-fx-background-color: #3cbc53;" text="Create Map" textFill="#1b0c0c" underline="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnEditMap" cancelButton="true" layoutX="355.0" layoutY="161.0" mnemonicParsing="false" onAction="#editMap" prefHeight="57.0" prefWidth="132.0" style="-fx-background-color: #3cbc53;" text="Edit Map" textFill="#1b0c0c" underline="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnExit" cancelButton="true" layoutX="554.0" layoutY="161.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="57.0" prefWidth="132.0" style="-fx-background-color: #3cbc53;" text="Exit Game" textFill="#1b0c0c" underline="true">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="430.0" layoutY="340.0" text="Developed by :">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label layoutX="464.0" layoutY="379.0" text="Zankhanaben Patel">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="464.0" layoutY="405.0" text="Koshaben Patel">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="464.0" layoutY="431.0" text="Piyush Thummar">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="464.0" layoutY="457.0" text="Raj Mistry">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="464.0" layoutY="483.0" text="Jaswanth Banavathu">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
