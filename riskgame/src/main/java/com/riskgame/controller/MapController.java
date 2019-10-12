@@ -166,6 +166,209 @@ public class MapController implements Initializable {
 		loadCountryDetails();
 		loadNeighbourDetails();
 	}
+	
+	private void loadContinentDetails() {
+		// TODO Auto-generated method stub
+
+		// continentList.clear();
+		continentTable.setItems(continentList);
+
+	}
+
+	private void loadCountryDetails() {
+
+		List<String> continentInfo = continentList.stream().map(ContinentDto::getContinentName)
+				.collect(Collectors.toList());
+		continentComboValue.clear();
+		continentComboValue.addAll(continentInfo);
+		continentComboBox.setItems(continentComboValue);
+		// countryList.clear();
+		countryTable.setItems(countryList);
+
+	}
+
+//	private void loadContinentComboBox() {
+//
+//		
+//
+//	}
+
+	private void loadNeighbourDetails() {
+
+		List<String> countryInfo = countryList.stream().map(CountryDto::getCountryName).collect(Collectors.toList());
+
+		countryComboValue.clear();
+		countryComboValue.addAll(countryInfo);
+		countryComboBox.setItems(countryComboValue);
+
+		neighbourComboValue.clear();
+		neighbourComboValue.addAll(countryInfo);
+		neighborComboBox.setItems(neighbourComboValue);
+
+		// neighbourList.clear();
+		neighborTable.setItems(neighbourList);
+
+	}
+
+	private void setContinentTableColumnProperties() {
+		// TODO Auto-generated method stub
+		colContinentId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colContinentName.setCellValueFactory(new PropertyValueFactory<>("continentName"));
+		colContinentValue.setCellValueFactory(new PropertyValueFactory<>("continentValue"));
+		colEditContinent.setCellFactory(continentCellFactory);
+	}
+
+	private void setCountryTableColumnProperties() {
+		// TODO Auto-generated method stub
+		colCountryId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colCountryName.setCellValueFactory(new PropertyValueFactory<>("countryName"));
+		colCountryContinent.setCellValueFactory(new PropertyValueFactory<>("continentName"));
+		colEditCountry.setCellFactory(countryCellFactory);
+
+	}
+
+	private void setNeighborTableColumnProperties() {
+		// TODO Auto-generated method stub
+		colNeighborId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		colCountryNeighbor.setCellValueFactory(new PropertyValueFactory<>("countryName"));
+		colNeighborName.setCellValueFactory(new PropertyValueFactory<>("countryNeighbourName"));
+		colEditNeighbor.setCellFactory(neighbourCellFactory);
+
+	}
+
+	Callback<TableColumn<ContinentDto, Boolean>, TableCell<ContinentDto, Boolean>> continentCellFactory = new Callback<TableColumn<ContinentDto, Boolean>, TableCell<ContinentDto, Boolean>>() {
+		@Override
+		public TableCell<ContinentDto, Boolean> call(final TableColumn<ContinentDto, Boolean> param) {
+			final TableCell<ContinentDto, Boolean> cell = new TableCell<ContinentDto, Boolean>() {
+				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
+				final Button btnEdit = new Button();
+
+				@Override
+				public void updateItem(Boolean check, boolean empty) {
+					super.updateItem(check, empty);
+					if (empty) {
+						setGraphic(null);
+						setText(null);
+					} else {
+						btnEdit.setOnAction(e -> {
+							ContinentDto continentDto = getTableView().getItems().get(getIndex());
+							updateContinent(continentDto);
+						});
+
+						btnEdit.setStyle("-fx-background-color: transparent;");
+						ImageView iv = new ImageView();
+						iv.setImage(imgEdit);
+						iv.setPreserveRatio(true);
+						iv.setSmooth(true);
+						iv.setCache(true);
+						btnEdit.setGraphic(iv);
+
+						setGraphic(btnEdit);
+						setAlignment(Pos.CENTER);
+						setText(null);
+					}
+				}
+
+				private void updateContinent(ContinentDto continentDto) {
+					lblContinentId.setText(String.valueOf(continentDto.getId()));
+					continentName.setText(continentDto.getContinentName());
+					continentValue.setText(String.valueOf(continentDto.getContinentValue()));
+
+				}
+			};
+			return cell;
+		}
+	};
+
+	Callback<TableColumn<CountryDto, Boolean>, TableCell<CountryDto, Boolean>> countryCellFactory = new Callback<TableColumn<CountryDto, Boolean>, TableCell<CountryDto, Boolean>>() {
+		@Override
+		public TableCell<CountryDto, Boolean> call(final TableColumn<CountryDto, Boolean> param) {
+			final TableCell<CountryDto, Boolean> cell = new TableCell<CountryDto, Boolean>() {
+				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
+				final Button btnEdit = new Button();
+
+				@Override
+				public void updateItem(Boolean check, boolean empty) {
+					super.updateItem(check, empty);
+					if (empty) {
+						setGraphic(null);
+						setText(null);
+					} else {
+						btnEdit.setOnAction(e -> {
+							CountryDto countryDto = getTableView().getItems().get(getIndex());
+							updateCountry(countryDto);
+						});
+
+						btnEdit.setStyle("-fx-background-color: transparent;");
+						ImageView iv = new ImageView();
+						iv.setImage(imgEdit);
+						iv.setPreserveRatio(true);
+						iv.setSmooth(true);
+						iv.setCache(true);
+						btnEdit.setGraphic(iv);
+
+						setGraphic(btnEdit);
+						setAlignment(Pos.CENTER);
+						setText(null);
+					}
+				}
+
+				private void updateCountry(CountryDto countryDto) {
+					lblCountryId.setText(String.valueOf(countryDto.getId()));
+					countryName.setText(countryDto.getCountryName());
+					continentComboBox.getSelectionModel().select(countryDto.getContinentName());
+
+				}
+			};
+			return cell;
+		}
+	};
+
+	Callback<TableColumn<NeighbourTerritoriesDto, Boolean>, TableCell<NeighbourTerritoriesDto, Boolean>> neighbourCellFactory = new Callback<TableColumn<NeighbourTerritoriesDto, Boolean>, TableCell<NeighbourTerritoriesDto, Boolean>>() {
+		@Override
+		public TableCell<NeighbourTerritoriesDto, Boolean> call(
+				final TableColumn<NeighbourTerritoriesDto, Boolean> param) {
+			final TableCell<NeighbourTerritoriesDto, Boolean> cell = new TableCell<NeighbourTerritoriesDto, Boolean>() {
+				Image imgEdit = new Image(getClass().getResourceAsStream("/images/edit.png"));
+				final Button btnEdit = new Button();
+
+				@Override
+				public void updateItem(Boolean check, boolean empty) {
+					super.updateItem(check, empty);
+					if (empty) {
+						setGraphic(null);
+						setText(null);
+					} else {
+						btnEdit.setOnAction(e -> {
+							NeighbourTerritoriesDto neighbourTerritoriesDto = getTableView().getItems().get(getIndex());
+							updateNeighbour(neighbourTerritoriesDto);
+						});
+
+						btnEdit.setStyle("-fx-background-color: transparent;");
+						ImageView iv = new ImageView();
+						iv.setImage(imgEdit);
+						iv.setPreserveRatio(true);
+						iv.setSmooth(true);
+						iv.setCache(true);
+						btnEdit.setGraphic(iv);
+
+						setGraphic(btnEdit);
+						setAlignment(Pos.CENTER);
+						setText(null);
+					}
+				}
+
+				private void updateNeighbour(NeighbourTerritoriesDto neighbourTerritoriesDto) {
+					lblNeighbourId.setText(String.valueOf(neighbourTerritoriesDto.getId()));
+					countryComboBox.getSelectionModel().select(neighbourTerritoriesDto.getCountryName());
+					neighborComboBox.getSelectionModel().select(neighbourTerritoriesDto.getCountryNeighbourName());
+
+				}
+			};
+			return cell;
+		}
+	};
+
 
 	
 
