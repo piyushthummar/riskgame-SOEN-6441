@@ -368,6 +368,216 @@ public class MapController implements Initializable {
 			return cell;
 		}
 	};
+	
+	@FXML
+	void deleteContinent(ActionEvent event) {
+
+		List<ContinentDto> continentDtoList = continentTable.getSelectionModel().getSelectedItems();
+		ContinentDto continentDtoDel = continentDtoList.get(0);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure you want to delete selected?");
+		Optional<ButtonType> action = alert.showAndWait();
+
+		if (action.get() == ButtonType.OK) {
+
+			for (int i = 0; i < continentList.size(); i++) {
+
+				if (continentList.get(i).getId() == continentDtoDel.getId()) {
+					continentList.remove(i);
+					break;
+				}
+
+			}
+			alertMesage("Continent deleted successfully");
+			// continentTable.setItems(continentList);
+			// loadContinentComboBox();
+			loadContinentDetails();
+			
+			//delete country
+			List<String> countryToDel = new ArrayList<String>();
+			for(CountryDto countryDto : countryList) {
+				if(countryDto.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName())) {
+					countryToDel.add(countryDto.getCountryName());
+				}
+			}
+			countryList.removeIf(country -> country.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName()));
+			loadCountryDetails();
+			
+			//deleteNeighbour
+			for (String country : countryToDel) {
+				neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(country));
+				neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(country));
+			}
+			loadNeighbourDetails();
+			
+			
+		}
+
+	}
+
+	@FXML
+	void deleteCountry(ActionEvent event) {
+
+		List<CountryDto> countryDtoList = countryTable.getSelectionModel().getSelectedItems();
+		CountryDto countryDto = countryDtoList.get(0);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure you want to delete selected?");
+		Optional<ButtonType> action = alert.showAndWait();
+
+		if (action.get() == ButtonType.OK) {
+
+			for (int i = 0; i < countryList.size(); i++) {
+
+				if (countryList.get(i).getId() == countryDto.getId()) {
+					countryList.remove(i);
+					break;
+				}
+
+			}
+			alertMesage("Country deleted successfully");
+			// countryTable.setItems(countryList);
+			loadCountryDetails();
+
+//			for (int i = 0; i < neighbourList.size(); i++) {
+//				NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
+//				if (neighbourDto.getCountryName().equalsIgnoreCase(countryDto.getCountryName())) {
+//					neighbourList.remove(i);
+//				} else if (neighbourDto.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName())) {
+//					neighbourList.remove(i);
+//				}
+//
+//			}
+			
+			neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryDto.getCountryName()));
+			neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()));
+			loadNeighbourDetails();
+
+		}
+
+	}
+
+	@FXML
+	void deleteNeighbor(ActionEvent event) {
+
+		List<NeighbourTerritoriesDto> neighbourDtoList = neighborTable.getSelectionModel().getSelectedItems();
+		NeighbourTerritoriesDto neighbourDto = neighbourDtoList.get(0);
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText("Are you sure you want to delete selected?");
+		Optional<ButtonType> action = alert.showAndWait();
+
+		if (action.get() == ButtonType.OK) {
+
+			for (int i = 0; i < neighbourList.size(); i++) {
+
+				if (neighbourList.get(i).getId() == neighbourDto.getId()) {
+					neighbourList.remove(i);
+					break;
+				}
+
+			}
+			alertMesage("Neighbour deleted successfully");
+			// neighborTable.setItems(neighbourList);
+			loadNeighbourDetails();
+
+		}
+
+	}
+
+	@FXML
+	void saveContinent(ActionEvent event) {
+
+		if (validate("Continent Name", continentName.getText(), "^([a-zA-Z]+\\s)*[a-zA-Z]+$")
+				&& validate("Continent Value", continentValue.getText(), "[1-9][0-9]*")
+				&& isValidContinentName(continentName.getText(), lblContinentId.getText())) {
+
+			if (lblContinentId.getText() == null || lblContinentId.getText() == "") {
+
+				ContinentDto continentDto = new ContinentDto();
+				continentDto.setId(continentId);
+				continentId++;
+				continentDto.setContinentName(continentName.getText());
+				continentDto.setContinentValue(Integer.parseInt(continentValue.getText()));
+
+				continentList.add(continentDto);
+
+				alertMesage("Continent saved successfully");
+				// continentTable.setItems(continentList);
+				// loadContinentComboBox();
+				loadContinentDetails();
+				loadCountryDetails();
+
+			} else {
+
+				String oldContinentName = "";
+
+				for (int i = 0; i < continentList.size(); i++) {
+
+					if (String.valueOf(continentList.get(i).getId()).equals(lblContinentId.getText())) {
+						ContinentDto continentDto = continentList.get(i);
+						oldContinentName = continentDto.getContinentName();
+						continentDto.setContinentName(continentName.getText());
+						continentDto.setContinentValue(Integer.parseInt(continentValue.getText()));
+						continentList.set(i, continentDto);
+						break;
+					}
+
+				}
+
+				alertMesage("Continent updated successfully");
+				// continentTable.setItems(continentList);
+				// loadContinentComboBox();
+				loadContinentDetails();
+
+				for (int i = 0; i < countryList.size(); i++) {
+					CountryDto countryDto = countryList.get(i);
+					if (oldContinentName.equalsIgnoreCase(countryDto.getContinentName())) {
+						countryDto.setContinentName(continentName.getText());
+						countryList.set(i, countryDto);
+					}
+
+				}
+
+				loadCountryDetails();
+			}
+
+			clearContinentFields();
+
+		}
+
+	}
+
+	private boolean isValidContinentName(String continentName, String continentId) {
+		boolean isValid = true;
+
+		for (ContinentDto continentDto : continentList) {
+
+			// for create
+			if (continentName.equalsIgnoreCase(continentDto.getContinentName())
+					&& (continentId == null || continentId.isEmpty())) {
+				alertMesage("Continent name already exists");
+				isValid = false;
+				break;
+
+				// for update
+			} else if ((continentId != null && !continentId.isEmpty())
+					&& (Integer.parseInt(continentId) != continentDto.getId())
+					&& (continentName.equalsIgnoreCase(continentDto.getContinentName()))) {
+				alertMesage("Continent name already exists");
+				isValid = false;
+				break;
+			}
+
+		}
+
+		return isValid;
+	}
+
 
 
 	
