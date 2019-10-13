@@ -973,5 +973,74 @@ public class MapController implements Initializable {
 		return result.toString();
 
 	}
+	
+
+	private String commandEditCountry(String commandLine) {
+		StringBuilder result = new StringBuilder();
+		String countryName = "";
+		String continentName = "";
+		List<String> command = Arrays.asList(commandLine.split(" "));
+
+		for (int i = 0; i < command.size(); i++) {
+
+			if (command.get(i).equalsIgnoreCase("-add")) {
+				countryName = command.get(i + 1);
+				continentName = command.get(i + 2);
+				String message = "-add " + countryName + " " + continentName + " :=> ";
+				if (validateInput(countryName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+						&& validateInput(continentName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+					final String cName = countryName;
+					final String contiName = continentName;
+					CountryDto dto = countryList.stream().filter(x -> cName.equalsIgnoreCase(x.getCountryName()))
+							.findAny().orElse(null);
+					if (dto == null) {
+
+						ContinentDto continentDto = continentList.stream()
+								.filter(x -> contiName.equals(x.getContinentName())).findAny().orElse(null);
+						if (continentDto != null) {
+							saveCommonCountry(countryName, continentName);
+							result.append(message + countryName + " country saved successfully")
+									.append(System.getProperty("line.separator"));
+						} else {
+							result.append(message + continentName + " continent not found")
+									.append(System.getProperty("line.separator"));
+						}
+
+					} else {
+						result.append(message + countryName + " country name already exists")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + "Please enter valid country name or continent name")
+							.append(System.getProperty("line.separator"));
+				}
+
+			} else if (command.get(i).equalsIgnoreCase("-remove")) {
+				countryName = command.get(i + 1);
+
+				String message = "-remove " + countryName + " :=> ";
+
+				if (validateInput(countryName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+
+					if (deleteCommonCountry(countryName)) {
+						result.append(message + countryName + " country removed successfully")
+								.append(System.getProperty("line.separator"));
+					} else {
+						result.append(message + countryName + " country not found")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + countryName + " Please enter valid country Name")
+							.append(System.getProperty("line.separator"));
+				}
+			}
+
+		}
+
+		return result.toString();
+
+	}
 
 }
