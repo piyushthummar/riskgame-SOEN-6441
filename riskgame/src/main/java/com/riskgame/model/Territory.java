@@ -12,6 +12,9 @@ import lombok.ToString;
 public class Territory {
 	private int territoryIndex;
 	private String territoryName;
+	private int continentIndex;
+	private int xAxis;
+	private int yAxis;
 	private List<String> neighbourTerritories;
 
 }
