@@ -915,5 +915,63 @@ public class MapController implements Initializable {
 		}
 
 	}
+	
+	private String commandEditContinent(String commandLine) {
+		StringBuilder result = new StringBuilder();
+		String cName = "";
+		String cValue = "";
+		List<String> command = Arrays.asList(commandLine.split(" "));
+
+		for (int i = 0; i < command.size(); i++) {
+
+			if (command.get(i).equalsIgnoreCase("-add")) {
+				cName = command.get(i + 1);
+				cValue = command.get(i + 2);
+				String message = "-add " + cName + " " + cValue + " :=> ";
+				if (validateInput(cName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") && validateInput(cValue, "[1-9][0-9]*")) {
+					boolean isvalidName = true;
+					for (ContinentDto continentDto : continentList) {
+						if (continentDto != null && cName.equalsIgnoreCase(continentDto.getContinentName())) {
+							result.append(message + cName + " continent name already exists")
+									.append(System.getProperty("line.separator"));
+							isvalidName = false;
+							break;
+						}
+					}
+					if (isvalidName) {
+						saveCommonContinent(cName, cValue);
+						result.append(message + cName + " continent saved successfully")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + "Please enter valid continent name or value")
+							.append(System.getProperty("line.separator"));
+				}
+
+			} else if (command.get(i).equalsIgnoreCase("-remove")) {
+				cName = command.get(i + 1);
+				String message = "-remove " + cName + " :=> ";
+				if (validateInput(cName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+
+					if (deleteCommonContinent(cName)) {
+						result.append(message + cName + " continent removed successfully")
+								.append(System.getProperty("line.separator"));
+					} else {
+						result.append(message + cName + " continent not found")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + cName + " Please enter valid continent Name")
+							.append(System.getProperty("line.separator"));
+				}
+			}
+
+		}
+
+		return result.toString();
+
+	}
 
 }
