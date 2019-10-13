@@ -10,6 +10,7 @@ import lombok.ToString;
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a> documenation added
+ * @see PlayerTerritory
  */
 @Getter
 @Setter
