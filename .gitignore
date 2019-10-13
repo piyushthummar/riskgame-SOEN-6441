@@ -1,4 +1,5 @@
 .DS_Store
+.project
 /riskgame/src/main/java/com/riskgame/.DS_Store
 # Compiled class file
 *.class

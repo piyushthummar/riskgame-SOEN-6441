@@ -7,122 +7,138 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1106.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.MapController">
-   <children>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1068.0" layoutX="18.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="1175.0" />
-      <TableView fx:id="continentTable" layoutX="675.0" layoutY="81.0" prefHeight="264.0" prefWidth="398.0" tableMenuButtonVisible="true">
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem fx:id="deleteContinent" mnemonicParsing="false" onAction="#deleteContinent" text="Delete Continent" />
-              </items>
-            </ContextMenu>
-         </contextMenu>
-         <columns>
-            <TableColumn fx:id="colContinentId" prefWidth="85.0" text="Continent ID" />
-            <TableColumn fx:id="colContinentName" prefWidth="113.0" text="Continent" />
-            <TableColumn fx:id="colContinentValue" prefWidth="103.0" text="Value" />
-            <TableColumn fx:id="colEditContinent" prefWidth="81.0" text="Edit" />
-         </columns>
-      </TableView>
-      <TableView fx:id="countryTable" layoutX="675.0" layoutY="379.0" prefHeight="290.0" prefWidth="398.0" tableMenuButtonVisible="true">
-        <columns>
-          <TableColumn fx:id="colCountryId" prefWidth="89.0" text="Country ID" />
-            <TableColumn fx:id="colCountryName" prefWidth="113.0" text="Country" />
-          <TableColumn fx:id="colCountryContinent" prefWidth="117.0" text="Continent" />
-            <TableColumn fx:id="colEditCountry" prefWidth="60.0" text="Edit" />
-        </columns>
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem fx:id="deleteCountry" mnemonicParsing="false" onAction="#deleteCountry" text="Delete Country" />
-              </items>
-            </ContextMenu>
-         </contextMenu>
-      </TableView>
-      <TableView fx:id="neighborTable" layoutX="672.0" layoutY="697.0" prefHeight="303.0" prefWidth="405.0" tableMenuButtonVisible="true">
-        <columns>
-          <TableColumn fx:id="colNeighborId" prefWidth="75.0" text="ID" />
-            <TableColumn fx:id="colCountryNeighbor" prefWidth="75.0" text="Country" />
-          <TableColumn fx:id="colNeighborName" prefWidth="75.0" text="Neighbor" />
-            <TableColumn fx:id="colEditNeighbor" prefWidth="75.0" text="Edit" />
-        </columns>
-         <contextMenu>
-            <ContextMenu>
-              <items>
-                <MenuItem fx:id="deleteNeighbor" mnemonicParsing="false" onAction="#deleteNeighbor" text="Delete Neighbor" />
-              </items>
-            </ContextMenu>
-         </contextMenu>
-      </TableView>
-      <Label layoutX="47.0" layoutY="140.0" text="Continent Name" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="47.0" layoutY="214.0" text="Value" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="continentName" layoutX="212.0" layoutY="139.0" promptText="Continent Name" />
-      <TextField fx:id="continentValue" layoutX="212.0" layoutY="213.0" promptText="Value" />
-      <Button fx:id="btnContinent" layoutX="212.0" layoutY="286.0" mnemonicParsing="false" onAction="#saveContinent" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
-      <Label layoutX="47.0" layoutY="429.0" text="Country Name" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <TextField fx:id="countryName" layoutX="215.0" layoutY="429.0" promptText="Country Name" />
-      <Label layoutX="47.0" layoutY="498.0" text="Continent" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="continentComboBox" layoutX="212.0" layoutY="497.0" prefWidth="150.0" promptText="Select Continent" />
-      <Button fx:id="btnCountry" layoutX="212.0" layoutY="579.0" mnemonicParsing="false" onAction="#saveCountry" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
-      <Label layoutX="53.0" layoutY="716.0" text="Country" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="countryComboBox" layoutX="212.0" layoutY="715.0" prefWidth="150.0" promptText="Select Country" />
-      <Label layoutX="47.0" layoutY="782.0" text="Neighbor" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <ComboBox fx:id="neighborComboBox" layoutX="212.0" layoutY="782.0" prefWidth="150.0" promptText="Select Neighbor" />
-      <Button fx:id="btnNeighbor" layoutX="212.0" layoutY="841.0" mnemonicParsing="false" onAction="#saveNeighbor" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
-      <Label layoutX="47.0" layoutY="98.0" text="Continent ID" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblContinentId" layoutX="211.0" layoutY="98.0" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="47.0" layoutY="385.0" text="Country ID" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblCountryId" layoutX="211.0" layoutY="385.0" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label layoutX="53.0" layoutY="669.0" text="ID" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblNeighbourId" layoutX="211.0" layoutY="669.0" underline="true" wrapText="true">
-         <font>
-            <Font name="System Italic" size="20.0" />
-         </font>
-      </Label>
-   </children>
-</AnchorPane>
+
+<ScrollPane prefHeight="1107.0" prefWidth="1223.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.MapController">
+   <content>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1106.0" prefWidth="1210.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1068.0" layoutX="18.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="1175.0" />
+            <TableView fx:id="continentTable" layoutX="687.0" layoutY="86.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem fx:id="deleteContinent" mnemonicParsing="false" onAction="#deleteContinent" text="Delete Continent" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+               <columns>
+                  <TableColumn fx:id="colContinentId" prefWidth="85.0" text="Continent ID" />
+                  <TableColumn fx:id="colContinentName" prefWidth="113.0" text="Continent" />
+                  <TableColumn fx:id="colContinentValue" prefWidth="103.0" text="Value" />
+                  <TableColumn fx:id="colEditContinent" prefWidth="81.0" text="Edit" />
+               </columns>
+            </TableView>
+            <TableView fx:id="countryTable" layoutX="690.0" layoutY="300.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+              <columns>
+                <TableColumn fx:id="colCountryId" prefWidth="89.0" text="Country ID" />
+                  <TableColumn fx:id="colCountryName" prefWidth="113.0" text="Country" />
+                <TableColumn fx:id="colCountryContinent" prefWidth="117.0" text="Continent" />
+                  <TableColumn fx:id="colEditCountry" prefWidth="60.0" text="Edit" />
+              </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem fx:id="deleteCountry" mnemonicParsing="false" onAction="#deleteCountry" text="Delete Country" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <TableView fx:id="neighborTable" layoutX="690.0" layoutY="524.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+              <columns>
+                <TableColumn fx:id="colNeighborId" prefWidth="51.0" text="ID" />
+                  <TableColumn fx:id="colCountryNeighbor" prefWidth="136.0" text="Country" />
+                <TableColumn fx:id="colNeighborName" prefWidth="126.0" text="Neighbor" />
+                  <TableColumn fx:id="colEditNeighbor" prefWidth="57.0" text="Edit" />
+              </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem fx:id="deleteNeighbor" mnemonicParsing="false" onAction="#deleteNeighbor" text="Delete Neighbor" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <Label layoutX="47.0" layoutY="140.0" text="Continent Name" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="53.0" layoutY="193.0" text="Value" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="continentName" layoutX="212.0" layoutY="139.0" promptText="Continent Name" />
+            <TextField fx:id="continentValue" layoutX="212.0" layoutY="193.0" promptText="Value" />
+            <Button fx:id="btnContinent" layoutX="422.0" layoutY="163.0" mnemonicParsing="false" onAction="#saveContinent" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
+            <Label layoutX="56.0" layoutY="354.0" text="Country Name" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="countryName" layoutX="215.0" layoutY="354.0" promptText="Country Name" />
+            <Label layoutX="53.0" layoutY="411.0" text="Continent" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="continentComboBox" layoutX="212.0" layoutY="411.0" prefWidth="150.0" promptText="Select Continent" />
+            <Button fx:id="btnCountry" layoutX="422.0" layoutY="385.0" mnemonicParsing="false" onAction="#saveCountry" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
+            <Label layoutX="54.0" layoutY="565.0" text="Country" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="countryComboBox" layoutX="211.0" layoutY="565.0" prefWidth="150.0" promptText="Select Country" />
+            <Label layoutX="49.0" layoutY="625.0" text="Neighbor" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="neighborComboBox" layoutX="211.0" layoutY="625.0" prefWidth="150.0" promptText="Select Neighbor" />
+            <Button fx:id="btnNeighbor" layoutX="422.0" layoutY="591.0" mnemonicParsing="false" onAction="#saveNeighbor" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
+            <Label layoutX="47.0" layoutY="98.0" text="Continent ID" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblContinentId" layoutX="211.0" layoutY="98.0" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="56.0" layoutY="300.0" text="Country ID" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblCountryId" layoutX="212.0" layoutY="300.0" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="56.0" layoutY="511.0" text="ID" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblNeighbourId" layoutX="210.0" layoutY="511.0" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="49.0" layoutY="729.0" text="Command Line" underline="true" wrapText="true">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="commandLine" layoutX="210.0" layoutY="729.0" prefHeight="27.0" prefWidth="870.0" promptText="Please Enter command" />
+            <TextArea fx:id="consoleArea" layoutX="210.0" layoutY="812.0" prefHeight="194.0" prefWidth="870.0" />
+            <Button fx:id="btnFireCommand" layoutX="213.0" layoutY="771.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Fire command" textFill="#1b0c0c" underline="true" />
+            <Button fx:id="btnEditMap" layoutX="49.0" layoutY="49.0" mnemonicParsing="false" onAction="#EditMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Edit Map" textFill="#1b0c0c" underline="true" />
+            <TextField fx:id="fileNameTextField" layoutX="210.0" layoutY="1039.0" prefHeight="27.0" prefWidth="187.0" promptText="Please Enter MapFile name" />
+            <Button fx:id="btnSaveMap" layoutX="465.0" layoutY="1039.0" mnemonicParsing="false" onAction="#saveMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save Map" textFill="#1b0c0c" underline="true" />
+         </children>
+      </AnchorPane>
+   </content>
+</ScrollPane>
