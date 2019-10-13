@@ -12,7 +12,7 @@ import lombok.ToString;
 /**
  * This class represents the state of the game on different point of time.
  * 
- * Three dependecies (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
+ * Three annotations (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
  * automatically generate getter, setter and tostring method in the code.
  *
  * @author <a href="mailto:j_banawa@encs.concordia.ca">Jaswanth Banawathu</a>
@@ -33,4 +33,9 @@ public class GamePlayPhase {
 	 * It'll store name of game phase i.e. startUp, reinforcement etc.
 	 */
 	private String gamePhase;
+	
+	/**
+	 * name of the map file
+	 */
+	private String fileName;
 }
