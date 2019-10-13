@@ -1,5 +1,8 @@
 package com.riskgame.controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -9,11 +12,12 @@ import com.riskgame.view.FxmlView;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 @Controller
-public class WelcomeController {
+public class WelcomeController implements Initializable {
 
 	@FXML
 	private Button btnEditMap;
@@ -41,6 +45,11 @@ public class WelcomeController {
 	void exitGame(ActionEvent event) {
 		Stage stage = (Stage) btnExit.getScene().getWindow();
 		stage.close();
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
 	}
 
 }
