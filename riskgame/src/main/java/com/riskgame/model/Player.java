@@ -6,21 +6,17 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 /**
- * Player class manages information of players and their territories
+ * Player class manages information of players and their territories.
+ * 
+ * Three dependecies (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
+ * automatically generate getter, setter and tostring method in the code.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a> documenation added
  * @see PlayerTerritory
  */
 
-/**
- * lombok dependency to generate automatic getter method
- */
 @Getter
-
-/**
- * lombok dependency to generate automatic setter method
- */
 @Setter
 @ToString
 public class Player {
