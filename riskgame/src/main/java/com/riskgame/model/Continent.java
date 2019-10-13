@@ -12,6 +12,8 @@ import lombok.ToString;
 @Setter
 @ToString
 public class Continent {
+	
+	private int continentIndex;
 	private String continentName;
 	private int continentValue;
 	private List<Territory> TerritoryList = new ArrayList<>();
