@@ -915,7 +915,7 @@ public class MapController implements Initializable {
 		}
 
 	}
-	
+
 	private String commandEditContinent(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String cName = "";
@@ -973,7 +973,6 @@ public class MapController implements Initializable {
 		return result.toString();
 
 	}
-	
 
 	private String commandEditCountry(String commandLine) {
 		StringBuilder result = new StringBuilder();
@@ -1041,6 +1040,119 @@ public class MapController implements Initializable {
 
 		return result.toString();
 
+	}
+
+	private String commandEditNeighbour(String commandLine) {
+		StringBuilder result = new StringBuilder();
+		String cName = "";
+		String ncName = "";
+		List<String> command = Arrays.asList(commandLine.split(" "));
+
+		for (int i = 0; i < command.size(); i++) {
+
+			if (command.get(i).equalsIgnoreCase("-add")) {
+				cName = command.get(i + 1);
+				ncName = command.get(i + 2);
+
+				String message = "-add " + cName + " " + ncName + " :=> ";
+
+				if (validateInput(cName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+						&& validateInput(ncName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+
+					final String country = cName;
+					final String neighbourCountry = ncName;
+
+					if (!country.equalsIgnoreCase(neighbourCountry)) {
+
+						CountryDto countryDto = countryList.stream().filter(x -> country.equals(x.getCountryName()))
+								.findAny().orElse(null);
+						CountryDto neighbourDto = countryList.stream()
+								.filter(x -> neighbourCountry.equals(x.getCountryName())).findAny().orElse(null);
+
+						if (countryDto != null && neighbourDto != null) {
+
+							NeighbourTerritoriesDto countryNeighbourDto = neighbourList.stream()
+									.filter((x) -> country.equalsIgnoreCase(x.getCountryName())
+											&& neighbourCountry.equalsIgnoreCase(x.getCountryNeighbourName()))
+									.findAny().orElse(null);
+							if (countryNeighbourDto == null) {
+								saveCommonNeighbour(country, neighbourCountry);
+								result.append(message + country + " " + neighbourCountry + " saved successfully")
+										.append(System.getProperty("line.separator"));
+
+							} else {
+								result.append(message + " country and neighbour country pair already exists")
+										.append(System.getProperty("line.separator"));
+							}
+
+						} else {
+							result.append(message + " country or neighbour country not found in Country's information")
+									.append(System.getProperty("line.separator"));
+						}
+
+					} else {
+						result.append(message + "Country name amd Neighbour country name should not be same")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + "Please enter valid country name or neighbour country name")
+							.append(System.getProperty("line.separator"));
+				}
+
+			} else if (command.get(i).equalsIgnoreCase("-remove")) {
+				cName = command.get(i + 1);
+				ncName = command.get(i + 2);
+				String message = "-remove " + cName + " " + ncName + " :=> ";
+
+				if (validateInput(cName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+						&& validateInput(ncName, "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+
+					if (deleteCommonNeighbour(cName, ncName)) {
+						result.append(message + " country and neighbour country's pair removed successfully")
+								.append(System.getProperty("line.separator"));
+					} else {
+						result.append(message + " country or neighbour country's pair not found")
+								.append(System.getProperty("line.separator"));
+					}
+
+				} else {
+					result.append(message + "Please enter valid country name or neighbour country name")
+							.append(System.getProperty("line.separator"));
+				}
+			}
+
+		}
+
+		return result.toString();
+
+	}
+
+	@FXML
+	void EditMapOnAction(ActionEvent event) {
+
+	}
+
+	@FXML
+	void saveMapOnAction(ActionEvent event) {
+
+	}
+
+	/*
+	 * Validations
+	 */
+	private boolean validateInput(String value, String pattern) {
+		if (!value.isEmpty()) {
+			Pattern p = Pattern.compile(pattern);
+			Matcher m = p.matcher(value);
+			if (m.find() && m.group().equals(value)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 }
