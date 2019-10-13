@@ -880,6 +880,40 @@ public class MapController implements Initializable {
 		neighborComboBox.getSelectionModel().clearSelection();
 	}
 
-	
+	@FXML
+	void fireCommand(ActionEvent event) {
+		consoleArea.clear();
+		String message = "";
+		try {
+			String command = commandLine.getText();
+			if (command != null && !command.isEmpty()) {
+
+				if (command.startsWith("editcontinent")) {
+					consoleArea.setText(commandEditContinent(command));
+				} else if (command.startsWith("editcountry")) {
+					consoleArea.setText(commandEditCountry(command));
+				} else if (command.startsWith("editneighbor") || command.startsWith("editneighbour")) {
+					consoleArea.setText(commandEditNeighbour(command));
+				} else if (command.startsWith("showmap")) {
+
+				} else if (command.startsWith("savemap")) {
+
+				} else if (command.startsWith("editmap")) {
+
+				} else if (command.startsWith("validatemap")) {
+
+				} else {
+					consoleArea.setText("Please enter valid command");
+				}
+
+			} else {
+				consoleArea.setText("Please enter valid command");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			consoleArea.setText("Please enter valid command");
+		}
+
+	}
 
 }
