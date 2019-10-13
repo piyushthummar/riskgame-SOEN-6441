@@ -2,6 +2,7 @@ package com.riskgame.controller;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -12,8 +13,8 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.dto.ContinentDto;
-import com.riskgame.dto.NeighbourTerritoriesDto;
 import com.riskgame.dto.CountryDto;
+import com.riskgame.dto.NeighbourTerritoriesDto;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -31,8 +33,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -136,6 +138,24 @@ public class MapController implements Initializable {
 	@FXML
 	private Label lblNeighbourId;
 
+	@FXML
+	private Button btnEditMap;
+
+	@FXML
+	private TextField commandLine;
+
+	@FXML
+	private TextArea consoleArea;
+
+	@FXML
+	private TextField fileNameTextField;
+
+	@FXML
+	private Button btnFireCommand;
+
+	@FXML
+	private Button btnSaveMap;
+
 	private static int continentId = 1;
 	private static int countryId = 1;
 	private static int neighbourId = 1;
@@ -153,8 +173,6 @@ public class MapController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		System.out.println("initialize call");
-		
 		continentTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		countryTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		neighborTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -168,7 +186,6 @@ public class MapController implements Initializable {
 		loadNeighbourDetails();
 	}
 
-	//load
 	private void loadContinentDetails() {
 		// TODO Auto-generated method stub
 
@@ -384,15 +401,27 @@ public class MapController implements Initializable {
 
 		if (action.get() == ButtonType.OK) {
 
-			for (int i = 0; i < continentList.size(); i++) {
-
-				if (continentList.get(i).getId() == continentDtoDel.getId()) {
-					continentList.remove(i);
-					break;
-				}
-
-			}
+			deleteCommonContinent(continentDtoDel.getContinentName());
 			alertMesage("Continent deleted successfully");
+
+		}
+
+	}
+
+	private boolean deleteCommonContinent(String continentName) {
+		boolean result = false;
+
+		for (int i = 0; i < continentList.size(); i++) {
+
+			if (continentList.get(i).getContinentName().equalsIgnoreCase(continentName)) {
+				continentList.remove(i);
+				result = true;
+				break;
+			}
+
+		}
+
+		if (result) {
 			// continentTable.setItems(continentList);
 			// loadContinentComboBox();
 			loadContinentDetails();
@@ -400,12 +429,11 @@ public class MapController implements Initializable {
 			// delete country
 			List<String> countryToDel = new ArrayList<String>();
 			for (CountryDto countryDto : countryList) {
-				if (countryDto.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName())) {
+				if (countryDto.getContinentName().equalsIgnoreCase(continentName)) {
 					countryToDel.add(countryDto.getCountryName());
 				}
 			}
-			countryList.removeIf(
-					country -> country.getContinentName().equalsIgnoreCase(continentDtoDel.getContinentName()));
+			countryList.removeIf(country -> country.getContinentName().equalsIgnoreCase(continentName));
 			loadCountryDetails();
 
 			// deleteNeighbour
@@ -414,9 +442,8 @@ public class MapController implements Initializable {
 				neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(country));
 			}
 			loadNeighbourDetails();
-
 		}
-
+		return result;
 	}
 
 	@FXML
@@ -431,16 +458,28 @@ public class MapController implements Initializable {
 		Optional<ButtonType> action = alert.showAndWait();
 
 		if (action.get() == ButtonType.OK) {
-
-			for (int i = 0; i < countryList.size(); i++) {
-
-				if (countryList.get(i).getId() == countryDto.getId()) {
-					countryList.remove(i);
-					break;
-				}
-
-			}
+			deleteCommonCountry(countryDto.getCountryName());
 			alertMesage("Country deleted successfully");
+
+		}
+
+	}
+
+	private boolean deleteCommonCountry(String countryName) {
+		boolean result = false;
+
+		for (int i = 0; i < countryList.size(); i++) {
+
+			if (countryList.get(i).getCountryName().equalsIgnoreCase(countryName)) {
+				countryList.remove(i);
+				result = true;
+				break;
+			}
+
+		}
+
+		if (result) {
+
 			// countryTable.setItems(countryList);
 			loadCountryDetails();
 
@@ -458,13 +497,12 @@ public class MapController implements Initializable {
 			//
 			// }
 
-			neighbourList
-					.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryDto.getCountryName()));
-			neighbourList.removeIf(
-					neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()));
+			neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryName));
+			neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryName));
 			loadNeighbourDetails();
-
 		}
+
+		return result;
 
 	}
 
@@ -481,44 +519,45 @@ public class MapController implements Initializable {
 
 		if (action.get() == ButtonType.OK) {
 
-			for (int i = 0; i < neighbourList.size(); i++) {
-
-				if (neighbourList.get(i).getId() == neighbourDto.getId()) {
-					neighbourList.remove(i);
-					break;
-				}
-
-			}
+			deleteCommonNeighbour(neighbourDto.getCountryName(), neighbourDto.getCountryNeighbourName());
 			alertMesage("Neighbour deleted successfully");
-			// neighborTable.setItems(neighbourList);
-			loadNeighbourDetails();
 
 		}
 
 	}
 
+	private boolean deleteCommonNeighbour(String countryName, String neighbourName) {
+		boolean result = false;
+
+		for (int i = 0; i < neighbourList.size(); i++) {
+			NeighbourTerritoriesDto dto = neighbourList.get(i);
+			if (dto.getCountryName().equalsIgnoreCase(countryName)
+					&& dto.getCountryNeighbourName().equalsIgnoreCase(neighbourName)) {
+				neighbourList.remove(i);
+				result = true;
+				break;
+			}
+
+		}
+
+		if (result) {
+			// neighborTable.setItems(neighbourList);
+			loadNeighbourDetails();
+		}
+
+		return result;
+	}
+
 	@FXML
 	void saveContinent(ActionEvent event) {
 
-		if (validate("Continent Name", continentName.getText(), "^([a-zA-Z]+\\s)*[a-zA-Z]+$")
+		if (validate("Continent Name", continentName.getText(), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 				&& validate("Continent Value", continentValue.getText(), "[1-9][0-9]*")
 				&& isValidContinentName(continentName.getText(), lblContinentId.getText())) {
 
 			if (lblContinentId.getText() == null || lblContinentId.getText() == "") {
-
-				ContinentDto continentDto = new ContinentDto();
-				continentDto.setId(continentId);
-				continentId++;
-				continentDto.setContinentName(continentName.getText());
-				continentDto.setContinentValue(Integer.parseInt(continentValue.getText()));
-
-				continentList.add(continentDto);
-
+				saveCommonContinent(continentName.getText(), continentValue.getText());
 				alertMesage("Continent saved successfully");
-				// continentTable.setItems(continentList);
-				// loadContinentComboBox();
-				loadContinentDetails();
-				loadCountryDetails();
 
 			} else {
 
@@ -560,6 +599,22 @@ public class MapController implements Initializable {
 
 	}
 
+	private void saveCommonContinent(String name, String value) {
+
+		ContinentDto continentDto = new ContinentDto();
+		continentDto.setId(continentId);
+		continentId++;
+		continentDto.setContinentName(name);
+		continentDto.setContinentValue(Integer.parseInt(value));
+
+		continentList.add(continentDto);
+
+		// continentTable.setItems(continentList);
+		// loadContinentComboBox();
+		loadContinentDetails();
+		loadCountryDetails();
+	}
+
 	private boolean isValidContinentName(String continentName, String continentId) {
 		boolean isValid = true;
 
@@ -589,23 +644,14 @@ public class MapController implements Initializable {
 	@FXML
 	void saveCountry(ActionEvent event) {
 
-		if (validate("Country Name", countryName.getText(), "^([a-zA-Z]+\\s)*[a-zA-Z]+$")
+		if (validate("Country Name", countryName.getText(), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 				&& emptyValidation("Continent", continentComboBox.getSelectionModel().getSelectedItem() == null)
 				&& isValidCountryName(countryName.getText(), lblCountryId.getText())) {
 
 			if (lblCountryId.getText() == null || lblCountryId.getText() == "") {
 
-				CountryDto countryDto = new CountryDto();
-				countryDto.setId(countryId);
-				countryId++;
-				countryDto.setCountryName(countryName.getText());
-				countryDto.setContinentName(continentComboBox.getSelectionModel().getSelectedItem());
-
-				countryList.add(countryDto);
+				saveCommonCountry(countryName.getText(), continentComboBox.getSelectionModel().getSelectedItem());
 				alertMesage("Country saved successfully");
-				// countryTable.setItems(countryList);
-				loadCountryDetails();
-				loadNeighbourDetails();
 
 			} else {
 
@@ -647,6 +693,20 @@ public class MapController implements Initializable {
 
 		}
 
+	}
+
+	private void saveCommonCountry(String countryName, String continentName) {
+		CountryDto countryDto = new CountryDto();
+		countryDto.setId(countryId);
+		countryId++;
+		countryDto.setCountryName(countryName);
+		countryDto.setContinentName(continentName);
+
+		countryList.add(countryDto);
+
+		// countryTable.setItems(countryList);
+		loadCountryDetails();
+		loadNeighbourDetails();
 	}
 
 	private boolean isValidCountryName(String countryName, String countryId) {
@@ -711,16 +771,9 @@ public class MapController implements Initializable {
 
 			if (lblNeighbourId.getText() == null || lblNeighbourId.getText() == "") {
 
-				NeighbourTerritoriesDto neighbourDto = new NeighbourTerritoriesDto();
-				neighbourDto.setId(neighbourId);
-				neighbourId++;
-				neighbourDto.setCountryName(countryComboBox.getSelectionModel().getSelectedItem());
-				neighbourDto.setCountryNeighbourName(neighborComboBox.getSelectionModel().getSelectedItem());
-
-				neighbourList.add(neighbourDto);
+				saveCommonNeighbour(countryComboBox.getSelectionModel().getSelectedItem(),
+						neighborComboBox.getSelectionModel().getSelectedItem());
 				alertMesage("Neighbour saved successfully");
-				// neighborTable.setItems(value);
-				loadNeighbourDetails();
 
 			} else {
 
@@ -745,6 +798,19 @@ public class MapController implements Initializable {
 
 		}
 
+	}
+
+	private void saveCommonNeighbour(String country, String neighbourCountry) {
+
+		NeighbourTerritoriesDto neighbourDto = new NeighbourTerritoriesDto();
+		neighbourDto.setId(neighbourId);
+		neighbourId++;
+		neighbourDto.setCountryName(country);
+		neighbourDto.setCountryNeighbourName(neighbourCountry);
+
+		neighbourList.add(neighbourDto);
+		// neighborTable.setItems(value);
+		loadNeighbourDetails();
 	}
 
 	/*
@@ -813,5 +879,7 @@ public class MapController implements Initializable {
 		countryComboBox.getSelectionModel().clearSelection();
 		neighborComboBox.getSelectionModel().clearSelection();
 	}
+
+	
 
 }
