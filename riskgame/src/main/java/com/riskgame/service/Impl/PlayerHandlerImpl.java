@@ -73,10 +73,28 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface{
 	@Override
 	public void populateTerritoriesByRoundRobbin(RiskMap riskMap) {
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
-		int totalPlayer = playerInformation.size();
-		
+		int counter =-1;
+		for (PlayerTerritory pt : territoriesOwnedByPlayer) {
+			counter++;
+			if(playerInformation.get(counter)!=null)
+			{
+				try {
+					playerInformation.get(counter).getPlayerterritories().add(pt);
+				}
+				catch (NullPointerException e) {
+					e.printStackTrace();
+				}
+			}else {
+				continue;
+			}
+			if(counter==playerInformation.size()-1)
+			{
+				counter= -1;
+			}
+		}
 	}
 	/**
+	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#getTerritories(com.riskgame.model.RiskMap)
 	 */
 	@Override
