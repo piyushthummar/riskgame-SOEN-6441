@@ -12,7 +12,15 @@ import lombok.ToString;
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a> documenation added
  * @see PlayerTerritory
  */
+
+/**
+ * lombok dependency to generate automatic getter method
+ */
 @Getter
+
+/**
+ * lombok dependency to generate automatic setter method
+ */
 @Setter
 @ToString
 public class Player {
