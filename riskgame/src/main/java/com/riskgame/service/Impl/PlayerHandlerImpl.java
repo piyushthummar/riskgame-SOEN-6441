@@ -4,11 +4,17 @@
 package com.riskgame.service.Impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
+import com.riskgame.model.RiskMap;
+import com.riskgame.model.Territory;
 import com.riskgame.service.PlayerHandlerInterface;
 
 /**
@@ -60,6 +66,40 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface{
 			armyPerPlayer = 20;
 		}
 		return armyPerPlayer;
+	}
+	/**
+	 * @see com.riskgame.service.PlayerHandlerInterface#populateTerritoriesByRoundRobbin(com.riskgame.model.RiskMap)
+	 */
+	@Override
+	public void populateTerritoriesByRoundRobbin(RiskMap riskMap) {
+		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
+		int totalPlayer = playerInformation.size();
+		
+	}
+	/**
+	 * @see com.riskgame.service.PlayerHandlerInterface#getTerritories(com.riskgame.model.RiskMap)
+	 */
+	@Override
+	public List<PlayerTerritory> getTerritories(RiskMap riskMap) {
+		Continent continent;
+		Map<Integer,Continent> continentsMap = new HashMap<>();
+		List<Territory> territoryList;
+		continentsMap = riskMap.getContinents();
+		List<PlayerTerritory> territoriesOwnedByPlayer = new ArrayList<>();
+		for(Entry<Integer,Continent> entry : continentsMap.entrySet())
+		{
+			continent = entry.getValue();
+			territoryList = continent.getTerritoryList();
+			for (Territory t : territoryList) {
+				PlayerTerritory playerTerritory = new PlayerTerritory();
+				playerTerritory.setTerritoryName(t.getTerritoryName());				
+				playerTerritory.setContinentName(continent.getContinentName());
+				playerTerritory.setArmyOnterritory(0);
+				territoriesOwnedByPlayer.add(playerTerritory);
+				
+			}
+		}
+		return territoriesOwnedByPlayer;
 	}
 
 }
