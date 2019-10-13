@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="611.0" prefWidth="674.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="608.0" prefWidth="672.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="584.0" layoutX="12.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="650.0" />
+            <Label layoutX="61.0" layoutY="41.0" text="Choose Map">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="chosenMapName" layoutX="50.0" layoutY="74.0" prefHeight="36.0" prefWidth="178.0" />
+            <Label layoutX="409.0" layoutY="41.0" text="Number of Player">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="NoOfPlayer" layoutX="409.0" layoutY="74.0" prefHeight="36.0" prefWidth="200.0" />
+            <Button fx:id="btnStartGame" layoutX="166.0" layoutY="131.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="136.0" text="Start Game">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnStartGame1" layoutX="326.0" layoutY="131.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="136.0" text="Back">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Label layoutX="50.0" layoutY="186.0" text="Command Line">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField layoutX="52.0" layoutY="221.0" prefHeight="33.0" prefWidth="566.0" promptText="showmap" />
+            <TextArea layoutX="50.0" layoutY="314.0" prefHeight="271.0" prefWidth="569.0" />
+            <Button fx:id="btnStartGame2" layoutX="252.0" layoutY="264.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="168.0" text="Fire Command">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
