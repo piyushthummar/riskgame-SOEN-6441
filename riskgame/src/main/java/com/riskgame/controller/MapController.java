@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
@@ -1137,6 +1138,36 @@ public class MapController implements Initializable {
 	@FXML
 	void EditMapOnAction(ActionEvent event) {
 
+		RiskMap riskMap = mapManagementImpl.readMap("world.map");
+		
+		Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
+		
+		List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
+		List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
+		List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
+		
+		System.out.println(riskMap);
+		System.out.println(continentDtoList);
+		System.out.println(countryDtoList);
+		System.out.println(neighbourDtoList);
+		
+		continentList.clear();
+		countryList.clear();
+		neighbourList.clear();
+		
+		continentList.addAll(continentDtoList);
+		countryList.addAll(countryDtoList);
+		neighbourList.addAll(neighbourDtoList);
+		
+		continentId = continentList.size()+1;
+		countryId = countryList.size()+1;
+		neighbourId = neighbourList.size()+1;
+		
+		loadContinentDetails();
+		loadCountryDetails();
+		loadNeighbourDetails();
+		
+		
 	}
 
 	@FXML
