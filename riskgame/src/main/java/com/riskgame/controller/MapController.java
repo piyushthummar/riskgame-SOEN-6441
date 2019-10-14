@@ -10,11 +10,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.dto.ContinentDto;
 import com.riskgame.dto.CountryDto;
 import com.riskgame.dto.NeighbourTerritoriesDto;
+import com.riskgame.model.RiskMap;
+import com.riskgame.service.Impl.MapManagementImpl;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -41,7 +44,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 /**
- * This class is the entry point of HTTP Client Library Implementation.
+ * This class is entry point of Map management related operation 
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  */
@@ -169,6 +172,9 @@ public class MapController implements Initializable {
 	private ObservableList<String> countryComboValue = FXCollections.observableArrayList();
 
 	private ObservableList<String> neighbourComboValue = FXCollections.observableArrayList();
+	
+	@Autowired
+	private MapManagementImpl mapManagementImpl;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -855,7 +861,7 @@ public class MapController implements Initializable {
 		alert.setTitle("Validation Error");
 		alert.setHeaderText(null);
 		if (empty)
-			alert.setContentText("Please Select or Enter " + field);
+			alert.setContentText("Please Select or Enter valid " + field);
 		else
 			alert.setContentText("Please Select or Enter Valid " + field);
 
@@ -1135,7 +1141,59 @@ public class MapController implements Initializable {
 
 	@FXML
 	void saveMapOnAction(ActionEvent event) {
-
+		
+//		RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
+//		System.out.println(riskMap);
+//		Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
+//		
+//		List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
+//		List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
+//		List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
+//		
+//		System.out.println(riskMap);
+//		System.out.println(continentDtoList);
+//		System.out.println(countryDtoList);
+//		System.out.println(neighbourDtoList);
+//		
+//		continentList.clear();
+//		countryList.clear();
+//		neighbourList.clear();
+//		
+//		continentList.addAll(continentDtoList);
+//		countryList.addAll(countryDtoList);
+//		neighbourList.addAll(neighbourDtoList);
+//		
+//		continentId = continentList.size()+1;
+//		countryId = countryList.size()+1;
+//		neighbourId = neighbourList.size()+1;
+//		
+//		loadContinentDetails();
+//		loadCountryDetails();
+//		loadNeighbourDetails();
+		
+		try {
+		
+		String mapName = fileNameTextField.getText();
+		if(validate("map name", mapName, "[a-zA-Z]+")) {
+			List<String> mapNameList = mapManagementImpl.getAvailableMap();
+			if(!mapNameList.contains(mapName.toLowerCase()+".map")) {
+				
+				alertMesage("Map name is valid");
+				RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
+				riskMap.setMapName(mapName);
+				Boolean result = mapManagementImpl.saveMapToFile(riskMap);
+				
+			}else {
+				alertMesage("Map Name is already in System Please enter another one");
+			}
+			
+		}
+		
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	/*
