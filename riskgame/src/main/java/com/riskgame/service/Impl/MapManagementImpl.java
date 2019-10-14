@@ -1,8 +1,10 @@
 package com.riskgame.service.Impl;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -169,7 +171,7 @@ public class MapManagementImpl implements MapManagementInterface {
 	public boolean saveMapToFile(RiskMap riskMap)throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		boolean result = false;
 
-		System.out.println(riskMap);
+		try {
 
 		StringBuilder sbContinent = new StringBuilder("[continents]").append(System.getProperty(NEW_LINE));
 		StringBuilder sbCountry = new StringBuilder("[countries]").append(System.getProperty(NEW_LINE));
@@ -239,6 +241,12 @@ public class MapManagementImpl implements MapManagementInterface {
 			writer.println(sbCountry.toString());
 			writer.println(sbNeighbour.toString());
 			
+			result = true;
+			
+		}
+		
+		}catch(Exception e) {
+			result = false;
 		}
 
 		return result;
@@ -272,8 +280,190 @@ public class MapManagementImpl implements MapManagementInterface {
 		return index;
 
 	}
+
+	@Override
+	public RiskMap readMap(String fileName) {
+		
+		String mapline = "";
+		System.out.println("files====> >" + fileName);
+		boolean isFiles = false;
+		boolean isContinents = false;
+		boolean isCountries = false;
+		boolean isBoarders = false;
+		RiskMap riskMap = new RiskMap();
+		try (BufferedReader bufferedReader = new BufferedReader(
+				new FileReader("src/main/resources/maps/" + fileName))) {
+
+			
+			Continent continent = null;
+			Territory territory = null;
+			Map<Integer, Continent> continentMap = new HashMap<>();
+			int continentCount = 1;
+
+			while ((mapline = bufferedReader.readLine()) != null) {
+
+				if (mapline != null && !mapline.isEmpty()) {
+
+					if (mapline.startsWith(";")) {
+						continue;
+					}
+					if (mapline.startsWith("name")) {
+						String name = mapline.substring(5);
+						riskMap.setMapName(name);
+						System.out.println("filename====>> " + name);
+					}
+					if (mapline.equalsIgnoreCase("[files]")) {
+						isFiles = true;
+						continue;
+					}
+					if (isFiles) {
+						System.out.println("files---> " + mapline);
+					}
+
+					if (mapline.equalsIgnoreCase("[continents]")) {
+						isFiles = false;
+						isContinents = true;
+						continue;
+					}
+					if (isContinents && !mapline.equalsIgnoreCase("[countries]")) {
+						System.out.println("Continents-------> " + mapline);
+						continent = new Continent();
+						String[] continentArray = mapline.split(" ");
+						continent.setContinentName(continentArray[0]);
+						continent.setContinentValue(Integer.parseInt(continentArray[1]));
+						continent.setContinentIndex(continentCount);
+						continentMap.put(continentCount, continent);
+						continentCount++;
+					}
+					if (mapline.equalsIgnoreCase("[countries]")) {
+						isContinents = false;
+						isCountries = true;
+						continue;
+					}
+					if (isCountries && !mapline.equalsIgnoreCase("[borders]")) {
+
+						String[] countryArray = mapline.split(" ");
+
+						int continentIndex = Integer.parseInt(countryArray[2]);
+						Continent continent1 = continentMap.get(continentIndex);
+
+						territory = new Territory();
+						territory.setTerritoryName(countryArray[1]);
+						territory.setTerritoryIndex(Integer.parseInt(countryArray[0]));
+						territory.setContinentIndex(continentIndex);
+
+						continent1.getTerritoryList().add(territory);
+
+						continentMap.put(continentIndex, continent1);
+
+						System.out.println("countries-------> " + mapline);
+
+					}
+					if (mapline.equalsIgnoreCase("[borders]")) {
+						isCountries = false;
+						isBoarders = true;
+						continue;
+					}
+					if (isBoarders) {
+						System.out.println("borders-------> " + mapline);
+						
+						String[] neighbourArray = mapline.split(" ");
+						Continent continent2 = getContinentDetailsbyCountryId(continentMap, Integer.parseInt(neighbourArray[0]));
+						
+						
+						List<String> neighbourName = new ArrayList<String>();
+						for (int i = 1; i < neighbourArray.length; i++) {
+							neighbourName.add(getNeighbourNamebyIndex(continentMap,Integer.parseInt(neighbourArray[i])));
+						}
+						
+						
+						for (int i = 0; i < continent2.getTerritoryList().size(); i++) {
+							Territory territory2 = continent2.getTerritoryList().get(i);
+							if(territory2.getTerritoryIndex()==Integer.parseInt(neighbourArray[0])) {
+								territory2.setNeighbourTerritories(neighbourName);
+								continent2.getTerritoryList().set(i, territory2);
+							}
+						}
+						
+						continentMap.put(continent2.getContinentIndex(), continent2);
+						
+						
+
+					}
+					// System.out.println(mapline);
+
+				}
+			}
+			riskMap.setContinents(continentMap);
+			System.out.println("riskMap =====> " + riskMap);
+		} catch (Exception e) {
+			riskMap.setStatus("INVALID");
+			e.printStackTrace();
+		}
+		
+		
+		return riskMap;
+	}
 	
 	
+
+	private Continent getContinentDetailsbyCountryId(Map<Integer, Continent> continentMap,int countryIndex) {
+		Continent continent = null;
+		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
+
+			continent = entry.getValue();
+
+			List<Territory> territoriList = continent.getTerritoryList();
+			for (Territory territory : territoriList) {
+
+				if (territory != null) {
+
+					if (territory.getTerritoryIndex() == countryIndex) {
+						
+						return continent;
+					}
+
+				}
+
+			}
+
+		}
+		
+		return continent;
+		
+	}
+	
+	
+	
+	private String getNeighbourNamebyIndex(Map<Integer, Continent> continentMap, int parseInt) {
+		
+		String neighbourName = "";
+
+		
+
+		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
+
+			Continent continent = entry.getValue();
+
+			List<Territory> territoriList = continent.getTerritoryList();
+			for (Territory territory : territoriList) {
+
+				if (territory != null) {
+
+					if (parseInt == territory.getTerritoryIndex()) {
+						neighbourName = territory.getTerritoryName();
+						break;
+					}
+
+				}
+
+			}
+
+		}
+
+		return neighbourName;
+		
+	}
 	
 	
 

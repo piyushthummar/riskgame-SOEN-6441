@@ -22,5 +22,6 @@ public interface MapManagementInterface {
 	public Map<String, Object> convertRiskMapToDtos (RiskMap riskMap);
 	public List<String> getAvailableMap();
 	public boolean saveMapToFile(RiskMap riskMap) throws UnsupportedEncodingException, FileNotFoundException, IOException;
+	public RiskMap readMap(String fileName);
 	
 }
