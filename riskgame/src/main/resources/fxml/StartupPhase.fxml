@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.shape.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="786.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <content>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="672.0" prefWidth="785.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="651.0" layoutX="12.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="759.0" />
+            <Label layoutX="53.0" layoutY="34.0" text="Choose Map">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="chosenMapName" layoutX="53.0" layoutY="60.0" prefHeight="36.0" prefWidth="199.0" />
+            <Label layoutX="53.0" layoutY="120.0" text="Number of Player">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="NoOfPlayer" layoutX="53.0" layoutY="151.0" prefHeight="36.0" prefWidth="200.0" />
+            <Button fx:id="btnStartGame" layoutX="586.0" layoutY="58.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="136.0" text="Start Game">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnStartGame1" layoutX="586.0" layoutY="149.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="136.0" text="Back">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Label layoutX="50.0" layoutY="231.0" text="Command Line">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField layoutX="52.0" layoutY="265.0" prefHeight="33.0" prefWidth="678.0" promptText="GamePlay Startup Phase" />
+            <TextArea layoutX="50.0" layoutY="362.0" prefHeight="287.0" prefWidth="683.0" />
+            <Button fx:id="btnStartGame2" layoutX="323.0" layoutY="310.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="168.0" text="Fire Command">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnStartGame3" layoutX="321.0" layoutY="58.0" mnemonicParsing="false" prefHeight="10.0" prefWidth="200.0" text="Populate Country">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnStartGame4" layoutX="323.0" layoutY="149.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="201.0" text="PlaceAll army">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
