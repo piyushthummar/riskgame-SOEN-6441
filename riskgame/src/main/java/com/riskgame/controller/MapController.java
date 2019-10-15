@@ -1,5 +1,6 @@
 package com.riskgame.controller;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,13 +13,16 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.riskgame.config.StageManager;
 import com.riskgame.dto.ContinentDto;
 import com.riskgame.dto.CountryDto;
 import com.riskgame.dto.NeighbourTerritoriesDto;
 import com.riskgame.model.RiskMap;
 import com.riskgame.service.Impl.MapManagementImpl;
+import com.riskgame.view.FxmlView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -42,12 +46,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 
 /**
  * This class is entry point of Map management related operation 
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
  */
 @Controller
 public class MapController implements Initializable {
@@ -159,6 +166,15 @@ public class MapController implements Initializable {
 
 	@FXML
 	private Button btnSaveMap;
+	
+	@FXML
+    private Button btnResetMap;
+	
+	@FXML
+    private Button btnback;
+	
+	@FXML
+    private Button btnplaygame;
 
 	private static int continentId = 1;
 	private static int countryId = 1;
@@ -176,10 +192,21 @@ public class MapController implements Initializable {
 	
 	@Autowired
 	private MapManagementImpl mapManagementImpl;
+	
+	@Lazy
+	@Autowired
+	private StageManager stageManager;
+	
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		initMapView();
 
+	}
+	
+	private void initMapView() {
+		
 		continentTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		countryTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		neighborTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -191,6 +218,32 @@ public class MapController implements Initializable {
 		loadContinentDetails();
 		loadCountryDetails();
 		loadNeighbourDetails();
+		
+		continentId = 1;
+		countryId = 1;
+		neighbourId = 1;
+		
+		continentList.clear();
+		lblContinentId.setText(null);
+		continentName.clear();
+		continentValue.clear();
+		
+		countryList.clear();
+		lblCountryId.setText(null);
+		countryName.clear();
+		continentComboValue.clear();
+		
+		neighbourList.clear();
+		lblNeighbourId.setText(null);
+		countryComboValue.clear();
+		neighbourComboValue.clear();
+		
+		fileNameTextField.setText(null);
+		fileNameTextField.setDisable(false);
+		
+		commandLine.setText(null);
+		consoleArea.setText(null);
+		
 	}
 
 	private void loadContinentDetails() {
@@ -902,11 +955,35 @@ public class MapController implements Initializable {
 				} else if (command.startsWith("editneighbor") || command.startsWith("editneighbour")) {
 					consoleArea.setText(commandEditNeighbour(command));
 				} else if (command.startsWith("showmap")) {
-
+					RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
+					consoleArea.setText(riskMap.toString());
 				} else if (command.startsWith("savemap")) {
-
+					String result = saveMapToFile(Arrays.asList(command.split(" ")).get(1));
+					consoleArea.setText(result);
 				} else if (command.startsWith("editmap")) {
-
+					
+					String editFileName = Arrays.asList(command.split(" ")).get(1);
+					
+					if(validateInput(editFileName, "[a-zA-Z]+")) {
+						
+						List<String> mapNameList = mapManagementImpl.getAvailableMap();
+						
+						if(mapNameList.contains(editFileName.toLowerCase()+".map")) {
+							consoleArea.setText(EditMap(editFileName+".map"));
+						}else {
+							consoleArea.setText("Map not found in system Please create New map and after editing save it");
+							fileNameTextField.setText(editFileName);
+							fileNameTextField.setDisable(true);
+							
+						}
+						
+						
+					}else {
+						consoleArea.setText("Please enter valid file name for editMap");
+					}
+					
+					
+					
 				} else if (command.startsWith("validatemap")) {
 
 				} else {
@@ -922,6 +999,8 @@ public class MapController implements Initializable {
 		}
 
 	}
+
+	
 
 	private String commandEditContinent(String commandLine) {
 		StringBuilder result = new StringBuilder();
@@ -1137,94 +1216,138 @@ public class MapController implements Initializable {
 
 	@FXML
 	void EditMapOnAction(ActionEvent event) {
-
-		RiskMap riskMap = mapManagementImpl.readMap("world.map");
-		
-		Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
-		
-		List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
-		List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
-		List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
-		
-		System.out.println(riskMap);
-		System.out.println(continentDtoList);
-		System.out.println(countryDtoList);
-		System.out.println(neighbourDtoList);
-		
-		continentList.clear();
-		countryList.clear();
-		neighbourList.clear();
-		
-		continentList.addAll(continentDtoList);
-		countryList.addAll(countryDtoList);
-		neighbourList.addAll(neighbourDtoList);
-		
-		continentId = continentList.size()+1;
-		countryId = countryList.size()+1;
-		neighbourId = neighbourList.size()+1;
-		
-		loadContinentDetails();
-		loadCountryDetails();
-		loadNeighbourDetails();
-		
-		
-	}
-
-	@FXML
-	void saveMapOnAction(ActionEvent event) {
-		
-//		RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
-//		System.out.println(riskMap);
-//		Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
-//		
-//		List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
-//		List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
-//		List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
-//		
-//		System.out.println(riskMap);
-//		System.out.println(continentDtoList);
-//		System.out.println(countryDtoList);
-//		System.out.println(neighbourDtoList);
-//		
-//		continentList.clear();
-//		countryList.clear();
-//		neighbourList.clear();
-//		
-//		continentList.addAll(continentDtoList);
-//		countryList.addAll(countryDtoList);
-//		neighbourList.addAll(neighbourDtoList);
-//		
-//		continentId = continentList.size()+1;
-//		countryId = countryList.size()+1;
-//		neighbourId = neighbourList.size()+1;
-//		
-//		loadContinentDetails();
-//		loadCountryDetails();
-//		loadNeighbourDetails();
 		
 		try {
 		
-		String mapName = fileNameTextField.getText();
-		if(validate("map name", mapName, "[a-zA-Z]+")) {
-			List<String> mapNameList = mapManagementImpl.getAvailableMap();
-			if(!mapNameList.contains(mapName.toLowerCase()+".map")) {
-				
-				alertMesage("Map name is valid");
-				RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
-				riskMap.setMapName(mapName);
-				Boolean result = mapManagementImpl.saveMapToFile(riskMap);
-				
-			}else {
-				alertMesage("Map Name is already in System Please enter another one");
-			}
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select map file");
+		fileChooser.setInitialDirectory(new File("src/main/resources/maps/"));
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Please select .map File only", "*.map"));
+		 
+		File selectedFile = fileChooser.showOpenDialog(null);
+		String selectedFileName = selectedFile.getName();
+		 
+		if (selectedFile != null) {
+			
+			System.out.println("File ==> "+ selectedFileName);
+			alertMesage(EditMap(selectedFileName));
 			
 		}
-		
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
 		
+	}
+	
+	
+	private String EditMap(String fileName) {
+		String result = "";
+		
+		try {
+			
+			RiskMap riskMap = mapManagementImpl.readMap(fileName);
+			
+			boolean validMap = mapManagementImpl.validateMap(riskMap);
+			
+			if(validMap) {
+				
+				Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
+				
+				List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
+				List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
+				List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
+				
+				System.out.println(riskMap);
+				System.out.println(continentDtoList);
+				System.out.println(countryDtoList);
+				System.out.println(neighbourDtoList);
+				
+				continentList.clear();
+				countryList.clear();
+				neighbourList.clear();
+				
+				continentList.addAll(continentDtoList);
+				countryList.addAll(countryDtoList);
+				neighbourList.addAll(neighbourDtoList);
+				
+				continentId = continentList.size()+1;
+				countryId = countryList.size()+1;
+				neighbourId = neighbourList.size()+1;
+				
+				loadContinentDetails();
+				loadCountryDetails();
+				loadNeighbourDetails();
+				
+				String fileNameWithoutExt  = fileName.replaceFirst("[.][^.]+$", "");
+				fileNameTextField.setText(fileNameWithoutExt);
+				fileNameTextField.setDisable(true);
+				
+				result = "Map loaded successfully ! Please save map after editing";
+				
+			}else {
+				result = "MapValidationError : Invalid Map Please correct Map";
+			}
+			
+		}catch(Exception e) {
+			result = "Exception in EditMap : Invalid Map Please correct Map";
+			e.printStackTrace();
+		}
+		
+		
+		return result;
+	}
+
+	@FXML
+	void saveMapOnAction(ActionEvent event) {
+		
+		String mapName = fileNameTextField.getText();
+		String result = saveMapToFile(mapName);
+		alertMesage(result);
+		
+	}
+	
+	private String saveMapToFile(String mapName) {
+		String result = "";
+		
+		try {
+			if(validateInput(mapName,  "[a-zA-Z]+")) {
+			
+				List<String> mapNameList = mapManagementImpl.getAvailableMap();
+				if(!mapNameList.contains(mapName.toLowerCase()+".map") || fileNameTextField.isDisable()) {
+					
+					RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
+					riskMap.setMapName(mapName);
+					boolean validMap = mapManagementImpl.validateMap(riskMap);
+					
+					if(validMap) {
+						Boolean bResult = mapManagementImpl.saveMapToFile(riskMap);
+						if(bResult) {
+							initMapView();
+							result = "Map successfully saved to filesystem";
+							
+						}else {
+							result = "SaveMapToFileError : Invalid Map Please correct Map";
+						}
+					}else {
+						result = "MapValidationError : Invalid Map Please correct Map";
+					}
+					
+				}else {
+					result = "Map Name is already in System Please enter another one";
+				}
+				
+			}else {
+				result = "Please select or Enter valid map name";
+			}
+			
+			}catch(Exception e) {
+				result = "Exception in savemap : Invalid Map Please correct Map";
+				e.printStackTrace();
+			}
+		
+		return result;
 	}
 
 	/*
@@ -1243,5 +1366,34 @@ public class MapController implements Initializable {
 			return false;
 		}
 	}
+
+	 	@FXML
+	    void resetMap(ActionEvent event) {
+
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Conformation Dialog");
+			alert.setHeaderText(null);
+			alert.setContentText("Are you sure you want to reset your Map? Once you reset your editable map will be removed");
+			Optional<ButtonType> action = alert.showAndWait();
+
+			if (action.get() == ButtonType.OK) {
+
+				initMapView();
+
+			}else {
+				System.out.println("cancel pressed");
+			}
+	 		
+	    }
+	 
+	 	@FXML
+	    void backToWelcome(ActionEvent event) {
+	 		stageManager.switchScene(FxmlView.WELCOME);
+	    }
+	 	
+	 	@FXML
+	    void playgame(ActionEvent event) {
+	 		stageManager.switchScene(FxmlView.STARTUPPHASE);
+	    }
 
 }
