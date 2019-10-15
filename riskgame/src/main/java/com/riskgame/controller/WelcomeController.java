@@ -20,7 +20,7 @@ import javafx.stage.Stage;
 public class WelcomeController implements Initializable {
 
 	@FXML
-	private Button btnEditMap;
+	private Button btnPlayGame;
 
 	@FXML
 	private Button btnCreateMap;
@@ -37,9 +37,10 @@ public class WelcomeController implements Initializable {
 	@Autowired
 	private StageManager stageManager;
 
-	@FXML
-	void editMap(ActionEvent event) {
-	}
+    @FXML
+    void playGame(ActionEvent event) {
+    		stageManager.switchScene(FxmlView.STARTUPPHASE);
+    }
 
 	@FXML
 	void exitGame(ActionEvent event) {

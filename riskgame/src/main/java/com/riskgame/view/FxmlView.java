@@ -25,7 +25,37 @@ public enum FxmlView {
 		public String getFxmlFile() {
 			return "/fxml/Map.fxml";
 		}
+	},
+	STARTUPPHASE{
+
+		@Override
+		public String getTitle() {
+			
+			return getStringFromResourceBundle("startupphase.title");
+		}
+
+		@Override
+		public String getFxmlFile() {
+			
+			return "/fxml/StartupPhase.fxml";
+		}
+		
+	},
+	PLAYGAME{
+
+		@Override
+		public String getTitle() {
+			return getStringFromResourceBundle("riskgame.title");
+		}
+
+		@Override
+		public String getFxmlFile() {
+			
+			return "/fxml/RiskPlayScreen.fxml";
+		}
+		
 	};
+	
 
 	public abstract String getTitle();
 
