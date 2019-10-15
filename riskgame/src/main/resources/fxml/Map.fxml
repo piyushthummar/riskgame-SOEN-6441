@@ -7,13 +7,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <ScrollPane prefHeight="1107.0" prefWidth="1223.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.MapController">
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1106.0" prefWidth="1210.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="1068.0" layoutX="18.0" layoutY="19.0" stroke="BLACK" strokeType="INSIDE" width="1175.0" />
-            <TableView fx:id="continentTable" layoutX="687.0" layoutY="86.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+            <TableView fx:id="continentTable" layoutX="618.0" layoutY="72.0" prefHeight="210.0" prefWidth="489.0" tableMenuButtonVisible="true">
                <contextMenu>
                   <ContextMenu>
                     <items>
@@ -28,7 +27,7 @@
                   <TableColumn fx:id="colEditContinent" prefWidth="81.0" text="Edit" />
                </columns>
             </TableView>
-            <TableView fx:id="countryTable" layoutX="690.0" layoutY="300.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+            <TableView fx:id="countryTable" layoutX="618.0" layoutY="300.0" prefHeight="210.0" prefWidth="489.0" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn fx:id="colCountryId" prefWidth="89.0" text="Country ID" />
                   <TableColumn fx:id="colCountryName" prefWidth="113.0" text="Country" />
@@ -43,7 +42,7 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <TableView fx:id="neighborTable" layoutX="690.0" layoutY="524.0" prefHeight="160.0" prefWidth="390.0" tableMenuButtonVisible="true">
+            <TableView fx:id="neighborTable" layoutX="618.0" layoutY="524.0" prefHeight="210.0" prefWidth="489.0" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn fx:id="colNeighborId" prefWidth="51.0" text="ID" />
                   <TableColumn fx:id="colCountryNeighbor" prefWidth="136.0" text="Country" />
@@ -96,7 +95,7 @@
                </font>
             </Label>
             <ComboBox fx:id="neighborComboBox" layoutX="211.0" layoutY="625.0" prefWidth="150.0" promptText="Select Neighbor" />
-            <Button fx:id="btnNeighbor" layoutX="422.0" layoutY="591.0" mnemonicParsing="false" onAction="#saveNeighbor" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
+            <Button fx:id="btnNeighbor" layoutX="404.0" layoutY="602.0" mnemonicParsing="false" onAction="#saveNeighbor" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save" textFill="#1b0c0c" underline="true" />
             <Label layoutX="47.0" layoutY="98.0" text="Continent ID" underline="true" wrapText="true">
                <font>
                   <Font name="System Italic" size="20.0" />
@@ -127,17 +126,20 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="49.0" layoutY="729.0" text="Command Line" underline="true" wrapText="true">
+            <Label layoutX="47.0" layoutY="775.0" text="Command Line" underline="true" wrapText="true">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="commandLine" layoutX="210.0" layoutY="729.0" prefHeight="27.0" prefWidth="870.0" promptText="Please Enter command" />
-            <TextArea fx:id="consoleArea" layoutX="210.0" layoutY="812.0" prefHeight="194.0" prefWidth="870.0" />
-            <Button fx:id="btnFireCommand" layoutX="213.0" layoutY="771.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Fire command" textFill="#1b0c0c" underline="true" />
+            <TextField fx:id="commandLine" layoutX="210.0" layoutY="774.0" prefHeight="27.0" prefWidth="870.0" promptText="Please Enter command" />
+            <TextArea fx:id="consoleArea" layoutX="210.0" layoutY="876.0" prefHeight="194.0" prefWidth="870.0" />
+            <Button fx:id="btnFireCommand" layoutX="212.0" layoutY="825.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Fire command" textFill="#1b0c0c" underline="true" />
             <Button fx:id="btnEditMap" layoutX="49.0" layoutY="49.0" mnemonicParsing="false" onAction="#EditMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Edit Map" textFill="#1b0c0c" underline="true" />
-            <TextField fx:id="fileNameTextField" layoutX="210.0" layoutY="1039.0" prefHeight="27.0" prefWidth="187.0" promptText="Please Enter MapFile name" />
-            <Button fx:id="btnSaveMap" layoutX="465.0" layoutY="1039.0" mnemonicParsing="false" onAction="#saveMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save Map" textFill="#1b0c0c" underline="true" />
+            <TextField fx:id="fileNameTextField" layoutX="212.0" layoutY="721.0" prefHeight="27.0" prefWidth="187.0" promptText="Please Enter MapFile name" />
+            <Button fx:id="btnSaveMap" layoutX="404.0" layoutY="721.0" mnemonicParsing="false" onAction="#saveMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Save Map" textFill="#1b0c0c" underline="true" />
+            <Button fx:id="btnplaygame" layoutX="501.0" layoutY="721.0" mnemonicParsing="false" onAction="#playgame" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Play Game" textFill="#1b0c0c" underline="true" />
+            <Button fx:id="btnResetMap" layoutX="157.0" layoutY="49.0" mnemonicParsing="false" onAction="#resetMap" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Reset Map" textFill="#1b0c0c" underline="true" />
+            <Button fx:id="btnback" layoutX="263.0" layoutY="49.0" mnemonicParsing="false" onAction="#backToWelcome" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Back" textFill="#1b0c0c" underline="true" />
          </children>
       </AnchorPane>
    </content>
