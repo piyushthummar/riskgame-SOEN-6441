@@ -23,5 +23,6 @@ public interface MapManagementInterface {
 	public List<String> getAvailableMap();
 	public boolean saveMapToFile(RiskMap riskMap) throws UnsupportedEncodingException, FileNotFoundException, IOException;
 	public RiskMap readMap(String fileName);
+	public boolean validateMap(RiskMap riskMap);
 	
 }
