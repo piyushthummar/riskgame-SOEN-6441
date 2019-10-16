@@ -27,6 +27,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -209,6 +210,11 @@ public class StartupPhaseController implements Initializable {
 	void startGame(ActionEvent event) {
 		
 		if(startGame) {
+			
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.PLAYGAME.getFxmlFile()));
+			RiskPlayScreenController controller = loader.getController();
+			controller.transferMessage("Ashish");
+			
 			stageManager.switchScene(FxmlView.PLAYGAME);
 		}else {
 			alertMesage("Please finish startup phase");

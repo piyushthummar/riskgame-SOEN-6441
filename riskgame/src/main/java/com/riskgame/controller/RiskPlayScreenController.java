@@ -244,5 +244,10 @@ public class RiskPlayScreenController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 
 	}
+	
+	 public void transferMessage(String message) {
+	        //Display the message
+	        System.out.println(message);
+	    }
 
 }
