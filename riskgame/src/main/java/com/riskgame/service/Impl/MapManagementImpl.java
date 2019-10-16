@@ -453,6 +453,34 @@ public class MapManagementImpl implements MapManagementInterface {
 		return neighbourName;
 
 	}
+	
+	@Override
+	public List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName){
+		
+		List<String> neightbourCountryList = new ArrayList<String>();
+		
+		for (Map.Entry<Integer, Continent> entry : riskMap.getContinents().entrySet()) {
+
+			Continent continent = entry.getValue();
+
+			List<Territory> territoriList = continent.getTerritoryList();
+			for (Territory territory : territoriList) {
+
+				if (territory != null) {
+
+					if (countryName.equalsIgnoreCase(territory.getTerritoryName())) {
+						neightbourCountryList = territory.getNeighbourTerritories();
+						break;
+					}
+
+				}
+
+			}
+
+		}
+		
+		return neightbourCountryList;
+	}
 
 	@Override
 	public boolean validateMap(RiskMap riskMap) {

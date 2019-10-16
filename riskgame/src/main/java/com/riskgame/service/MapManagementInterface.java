@@ -18,11 +18,12 @@ import com.riskgame.model.RiskMap;
  * @see com.riskgame.model.Territory */
 public interface MapManagementInterface {
 
-	public RiskMap convertToRiskMap(List<ContinentDto> continentList,List<CountryDto> countryList,List<NeighbourTerritoriesDto> neighbourList);
-	public Map<String, Object> convertRiskMapToDtos (RiskMap riskMap);
-	public List<String> getAvailableMap();
-	public boolean saveMapToFile(RiskMap riskMap) throws UnsupportedEncodingException, FileNotFoundException, IOException;
-	public RiskMap readMap(String fileName);
-	public boolean validateMap(RiskMap riskMap);
+	RiskMap convertToRiskMap(List<ContinentDto> continentList,List<CountryDto> countryList,List<NeighbourTerritoriesDto> neighbourList);
+	Map<String, Object> convertRiskMapToDtos (RiskMap riskMap);
+	List<String> getAvailableMap();
+	boolean saveMapToFile(RiskMap riskMap) throws UnsupportedEncodingException, FileNotFoundException, IOException;
+	RiskMap readMap(String fileName);
+	boolean validateMap(RiskMap riskMap);
+	List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName);
 	
 }
