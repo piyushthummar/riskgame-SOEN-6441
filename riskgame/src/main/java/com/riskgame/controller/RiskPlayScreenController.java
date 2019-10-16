@@ -9,10 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -98,6 +97,10 @@ public class RiskPlayScreenController implements Initializable {
 
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
+	
+	@Lazy
+	@Autowired
+	private StageManager stageManager;
 
 	@FXML
 	void placeReinforcement(ActionEvent event) {
@@ -280,13 +283,10 @@ public class RiskPlayScreenController implements Initializable {
 
 	}
 
-	@Lazy
-	@Autowired
-	private StageManager stageManager;
 
 	@FXML
 	void exitGame(ActionEvent event) {
-		stageManager.switchScene(FxmlView.WELCOME);
+		stageManager.switchScene(FxmlView.WELCOME,null);
 	}
 
 	/**
@@ -298,9 +298,11 @@ public class RiskPlayScreenController implements Initializable {
 
 	}
 	
-	 public void transferMessage(String message) {
+	 public void transferGamePlayPhase(Object object) {
 	        //Display the message
-	        System.out.println(message);
+		 	GamePlayPhase gamePlayPhase = (GamePlayPhase) object;
+	        System.out.println("===> "+gamePlayPhase);
+	        System.out.println(mapManagementImpl.readMap(gamePlayPhase.getFileName()));
 	    }
 
 }
