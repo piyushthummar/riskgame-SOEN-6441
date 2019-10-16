@@ -247,9 +247,7 @@ public class MapController implements Initializable {
 	}
 
 	private void loadContinentDetails() {
-		// TODO Auto-generated method stub
-
-		// continentList.clear();
+		
 		continentTable.setItems(continentList);
 
 	}
@@ -468,7 +466,7 @@ public class MapController implements Initializable {
 
 	}
 
-	private boolean deleteCommonContinent(String continentName) {
+	public boolean deleteCommonContinent(String continentName) {
 		boolean result = false;
 
 		for (int i = 0; i < continentList.size(); i++) {
@@ -525,7 +523,7 @@ public class MapController implements Initializable {
 
 	}
 
-	private boolean deleteCommonCountry(String countryName) {
+	public boolean deleteCommonCountry(String countryName) {
 		boolean result = false;
 
 		for (int i = 0; i < countryList.size(); i++) {
@@ -586,7 +584,7 @@ public class MapController implements Initializable {
 
 	}
 
-	private boolean deleteCommonNeighbour(String countryName, String neighbourName) {
+	public boolean deleteCommonNeighbour(String countryName, String neighbourName) {
 		boolean result = false;
 
 		for (int i = 0; i < neighbourList.size(); i++) {
@@ -675,7 +673,7 @@ public class MapController implements Initializable {
 		loadCountryDetails();
 	}
 
-	private boolean isValidContinentName(String continentName, String continentId) {
+	public boolean isValidContinentName(String continentName, String continentId) {
 		boolean isValid = true;
 
 		for (ContinentDto continentDto : continentList) {
@@ -769,7 +767,7 @@ public class MapController implements Initializable {
 		loadNeighbourDetails();
 	}
 
-	private boolean isValidCountryName(String countryName, String countryId) {
+	public boolean isValidCountryName(String countryName, String countryId) {
 		boolean isValid = true;
 
 		for (CountryDto countryDto : countryList) {
@@ -795,7 +793,7 @@ public class MapController implements Initializable {
 		return isValid;
 	}
 
-	private boolean isValidNeighbour(String countryName, String neighbourCountryName) {
+	public boolean isValidNeighbour(String countryName, String neighbourCountryName) {
 		boolean isValid = true;
 
 		if (countryName.equalsIgnoreCase(neighbourCountryName)) {
@@ -1002,7 +1000,7 @@ public class MapController implements Initializable {
 
 	
 
-	private String commandEditContinent(String commandLine) {
+	public String commandEditContinent(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String cName = "";
 		String cValue = "";
@@ -1060,7 +1058,7 @@ public class MapController implements Initializable {
 
 	}
 
-	private String commandEditCountry(String commandLine) {
+	public String commandEditCountry(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String countryName = "";
 		String continentName = "";
@@ -1128,7 +1126,7 @@ public class MapController implements Initializable {
 
 	}
 
-	private String commandEditNeighbour(String commandLine) {
+	public String commandEditNeighbour(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String cName = "";
 		String ncName = "";
