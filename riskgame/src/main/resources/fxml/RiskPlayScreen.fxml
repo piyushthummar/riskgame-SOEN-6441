@@ -11,7 +11,7 @@
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1659.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="823.0" layoutX="99.0" layoutY="40.0" stroke="BLACK" strokeType="INSIDE" width="1543.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="833.0" layoutX="38.0" layoutY="30.0" stroke="BLACK" strokeType="INSIDE" width="1604.0" />
             <ListView fx:id="lvLog" layoutX="117.0" layoutY="428.0" prefHeight="416.0" prefWidth="302.0" />
             <ListView fx:id="lvCurrentLog" layoutX="118.0" layoutY="100.0" prefHeight="274.0" prefWidth="300.0" />
             <Label layoutX="223.0" layoutY="70.0" text="Current Log" textAlignment="CENTER">

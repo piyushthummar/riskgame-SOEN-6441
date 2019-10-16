@@ -22,17 +22,17 @@
                </contextMenu>
                <columns>
                   <TableColumn fx:id="colContinentId" prefWidth="85.0" text="Continent ID" />
-                  <TableColumn fx:id="colContinentName" prefWidth="113.0" text="Continent" />
-                  <TableColumn fx:id="colContinentValue" prefWidth="103.0" text="Value" />
-                  <TableColumn fx:id="colEditContinent" prefWidth="81.0" text="Edit" />
+                  <TableColumn fx:id="colContinentName" prefWidth="241.0" text="Continent" />
+                  <TableColumn fx:id="colContinentValue" prefWidth="73.0" text="Value" />
+                  <TableColumn fx:id="colEditContinent" prefWidth="68.0" text="Edit" />
                </columns>
             </TableView>
             <TableView fx:id="countryTable" layoutX="618.0" layoutY="300.0" prefHeight="210.0" prefWidth="489.0" tableMenuButtonVisible="true">
               <columns>
-                <TableColumn fx:id="colCountryId" prefWidth="89.0" text="Country ID" />
-                  <TableColumn fx:id="colCountryName" prefWidth="113.0" text="Country" />
-                <TableColumn fx:id="colCountryContinent" prefWidth="117.0" text="Continent" />
-                  <TableColumn fx:id="colEditCountry" prefWidth="60.0" text="Edit" />
+                <TableColumn fx:id="colCountryId" prefWidth="77.0" text="Country ID" />
+                  <TableColumn fx:id="colCountryName" prefWidth="175.0" text="Country" />
+                <TableColumn fx:id="colCountryContinent" prefWidth="146.0" text="Continent" />
+                  <TableColumn fx:id="colEditCountry" prefWidth="67.0" text="Edit" />
               </columns>
                <contextMenu>
                   <ContextMenu>
@@ -45,9 +45,9 @@
             <TableView fx:id="neighborTable" layoutX="618.0" layoutY="524.0" prefHeight="210.0" prefWidth="489.0" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn fx:id="colNeighborId" prefWidth="51.0" text="ID" />
-                  <TableColumn fx:id="colCountryNeighbor" prefWidth="136.0" text="Country" />
-                <TableColumn fx:id="colNeighborName" prefWidth="126.0" text="Neighbor" />
-                  <TableColumn fx:id="colEditNeighbor" prefWidth="57.0" text="Edit" />
+                  <TableColumn fx:id="colCountryNeighbor" prefWidth="179.0" text="Country" />
+                <TableColumn fx:id="colNeighborName" prefWidth="163.0" text="Neighbor" />
+                  <TableColumn fx:id="colEditNeighbor" prefWidth="72.0" text="Edit" />
               </columns>
                <contextMenu>
                   <ContextMenu>
@@ -131,7 +131,7 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="commandLine" layoutX="210.0" layoutY="774.0" prefHeight="27.0" prefWidth="870.0" promptText="Please Enter command" />
+            <TextField fx:id="commandLine" layoutX="210.0" layoutY="774.0" prefHeight="27.0" prefWidth="870.0" promptText="Please Enter command for Map Editor" />
             <TextArea fx:id="consoleArea" layoutX="210.0" layoutY="876.0" prefHeight="194.0" prefWidth="870.0" />
             <Button fx:id="btnFireCommand" layoutX="212.0" layoutY="825.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="27.0" prefWidth="118.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Fire command" textFill="#1b0c0c" underline="true" />
             <Button fx:id="btnEditMap" layoutX="49.0" layoutY="49.0" mnemonicParsing="false" onAction="#EditMapOnAction" prefHeight="27.0" prefWidth="86.0" style="-fx-background-color: #3cbc53;" styleClass="btnGreen" text="Edit Map" textFill="#1b0c0c" underline="true" />

@@ -6,51 +6,72 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="676.0" prefWidth="786.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.StartupPhaseController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="895.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.StartupPhaseController">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="672.0" prefWidth="785.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="875.0" prefWidth="1001.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="651.0" layoutX="12.0" layoutY="12.0" stroke="BLACK" strokeType="INSIDE" width="759.0" />
-            <Label layoutX="53.0" layoutY="34.0" text="Choose Map">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="856.0" layoutX="35.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="956.0" />
+            <Label layoutX="54.0" layoutY="36.0" text="Choose Map">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comboBoxchosenMap" layoutX="53.0" layoutY="60.0" prefHeight="36.0" prefWidth="199.0" />
-            <Label layoutX="53.0" layoutY="120.0" text="Number of Player">
+            <ComboBox fx:id="comboBoxchosenMap" layoutX="211.0" layoutY="31.0" prefHeight="36.0" prefWidth="170.0" promptText="Select Map" />
+            <Label layoutX="62.0" layoutY="116.0" text="Add Player">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="comboBoxNoOfPlayer" layoutX="53.0" layoutY="151.0" prefHeight="36.0" prefWidth="200.0" />
-            <Button fx:id="btnStartGame" layoutX="586.0" layoutY="58.0" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="136.0" text="Start Game">
+            <Button fx:id="btnStartGame" layoutX="732.0" layoutY="29.0" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="136.0" text="Start Game">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnback" layoutX="586.0" layoutY="149.0" mnemonicParsing="false" onAction="#backToMainPage" prefHeight="40.0" prefWidth="136.0" text="Back">
+            <Button fx:id="btnback" layoutX="732.0" layoutY="109.0" mnemonicParsing="false" onAction="#backToMainPage" prefHeight="40.0" prefWidth="136.0" text="Back">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Label layoutX="50.0" layoutY="231.0" text="Command Line">
+            <Label layoutX="182.0" layoutY="426.0" text="Command Line">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtCommandLine" layoutX="52.0" layoutY="265.0" prefHeight="33.0" prefWidth="678.0" promptText="GamePlay Startup Phase" />
-            <TextArea fx:id="txtConsoleLog" layoutX="50.0" layoutY="362.0" prefHeight="287.0" prefWidth="683.0" />
-            <Button fx:id="btnFireCommand" layoutX="323.0" layoutY="310.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="40.0" prefWidth="168.0" text="Fire Command">
+            <TextField fx:id="txtCommandLine" layoutX="182.0" layoutY="465.0" prefHeight="33.0" prefWidth="678.0" promptText="Please Enter command for GamePlay and Startup Phase" />
+            <TextArea fx:id="txtConsoleLog" layoutX="193.0" layoutY="566.0" prefHeight="258.0" prefWidth="657.0" />
+            <Button fx:id="btnFireCommand" layoutX="398.0" layoutY="513.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="40.0" prefWidth="168.0" text="Fire Command">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnPopulatecountry" layoutX="321.0" layoutY="58.0" mnemonicParsing="false" onAction="#populateCountries" prefHeight="10.0" prefWidth="200.0" text="Populate Country">
+            <Button fx:id="btnPopulatecountry" layoutX="457.0" layoutY="29.0" mnemonicParsing="false" onAction="#populateCountries" prefHeight="10.0" prefWidth="200.0" text="Populate Country">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnPlaceAll" layoutX="323.0" layoutY="149.0" mnemonicParsing="false" onAction="#placeAllArmy" prefHeight="40.0" prefWidth="201.0" text="PlaceAll army">
+            <Button fx:id="btnPlaceAll" layoutX="457.0" layoutY="109.0" mnemonicParsing="false" onAction="#placeAllArmy" prefHeight="40.0" prefWidth="201.0" text="PlaceAll army">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <TextField fx:id="playerNameText" layoutX="211.0" layoutY="111.0" prefHeight="36.0" prefWidth="170.0" promptText="Player Name" />
+            <Button fx:id="btnAddPlayer" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#addPlayer" prefHeight="28.0" prefWidth="65.0" text="Add" />
+            <TableView fx:id="playertable" layoutX="211.0" layoutY="204.0" prefHeight="201.0" prefWidth="351.0" tableMenuButtonVisible="true">
+              <columns>
+                <TableColumn fx:id="id" prefWidth="47.0" text="id" />
+                <TableColumn fx:id="name" prefWidth="135.0" text="Name" />
+                  <TableColumn fx:id="army" prefWidth="73.0" text="Army" />
+                  <TableColumn fx:id="view" prefWidth="71.0" text="View" />
+              </columns>
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      <MenuItem fx:id="delPlayer" mnemonicParsing="false" onAction="#deletePlayer" text="Delete Player" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu>
+            </TableView>
+            <Button fx:id="btnReset" layoutX="732.0" layoutY="184.0" mnemonicParsing="false" onAction="#btnReset" prefHeight="40.0" prefWidth="136.0" text="Reset">
                <font>
                   <Font size="20.0" />
                </font>
