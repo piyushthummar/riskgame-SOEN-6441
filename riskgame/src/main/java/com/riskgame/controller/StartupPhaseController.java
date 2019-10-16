@@ -3,6 +3,7 @@
  */
 package com.riskgame.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +28,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -132,12 +132,16 @@ public class StartupPhaseController implements Initializable {
 
 		playertable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		setPlayerTableColumnProperties();
+		playerList.clear();
 		loadPlayerDetails();
 		
+		mapComboValue.clear();
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 		mapComboValue.addAll(mapNameList);
 		comboBoxchosenMap.setItems(mapComboValue);
 		
+		startGame = false;
+		mapFileName = "";
 
 	}
 
@@ -207,15 +211,23 @@ public class StartupPhaseController implements Initializable {
 	}
 
 	@FXML
-	void startGame(ActionEvent event) {
+	void startGame(ActionEvent event) throws IOException {
 		
 		if(startGame) {
 			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(FxmlView.PLAYGAME.getFxmlFile()));
-			RiskPlayScreenController controller = loader.getController();
-			controller.transferMessage("Ashish");
 			
-			stageManager.switchScene(FxmlView.PLAYGAME);
+			GamePlayPhase gamePlayPhase = new GamePlayPhase();
+			gamePlayPhase.setGameState(playerList);
+			gamePlayPhase.setGamePhase("Startup");
+			if(mapFileName != null && !mapFileName.isEmpty()) {
+				gamePlayPhase.setFileName(mapFileName);
+			}else {
+				gamePlayPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
+			}
+			
+			stageManager.switchScene(FxmlView.PLAYGAME,gamePlayPhase);
+			
+			
 		}else {
 			alertMesage("Please finish startup phase");
 		}
@@ -224,7 +236,7 @@ public class StartupPhaseController implements Initializable {
 
 	@FXML
 	void backToMainPage(ActionEvent event) {
-		stageManager.switchScene(FxmlView.MAP);
+		stageManager.switchScene(FxmlView.MAP,null);
 	}
 
 	@FXML
@@ -691,5 +703,6 @@ public class StartupPhaseController implements Initializable {
 		
 		
     }
+	
 
 }
