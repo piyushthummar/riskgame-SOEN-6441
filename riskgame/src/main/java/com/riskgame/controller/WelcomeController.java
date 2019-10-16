@@ -30,7 +30,7 @@ public class WelcomeController implements Initializable {
 
 	@FXML
 	void createMap(ActionEvent event) {
-		stageManager.switchScene(FxmlView.MAP);
+		stageManager.switchScene(FxmlView.MAP,null);
 	}
 
 	@Lazy
@@ -39,7 +39,7 @@ public class WelcomeController implements Initializable {
 
     @FXML
     void playGame(ActionEvent event) {
-    		stageManager.switchScene(FxmlView.STARTUPPHASE);
+    		stageManager.switchScene(FxmlView.STARTUPPHASE,null);
     }
 
 	@FXML
