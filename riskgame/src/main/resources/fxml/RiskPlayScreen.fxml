@@ -12,97 +12,86 @@
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="864.0" prefWidth="1659.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="833.0" layoutX="38.0" layoutY="30.0" stroke="BLACK" strokeType="INSIDE" width="1604.0" />
-            <ListView fx:id="lvLog" layoutX="117.0" layoutY="428.0" prefHeight="416.0" prefWidth="302.0" />
-            <ListView fx:id="lvCurrentLog" layoutX="118.0" layoutY="100.0" prefHeight="274.0" prefWidth="300.0" />
-            <Label layoutX="223.0" layoutY="70.0" text="Current Log" textAlignment="CENTER">
+            <Label layoutX="117.0" layoutY="57.0" text="Territory List" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="250.0" layoutY="394.0" text="Log" textAlignment="CENTER">
+            <Label layoutX="415.0" layoutY="57.0" text="Adjacent Territory" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="552.0" layoutY="70.0" text="Territory List" textAlignment="CENTER">
-               <font>
-                  <Font name="System Italic" size="20.0" />
-               </font>
-            </Label>
-            <ListView fx:id="lvTerritoryList" layoutX="455.0" layoutY="103.0" prefHeight="270.0" prefWidth="295.0" />
-            <Label layoutX="521.0" layoutY="394.0" text="Adjacent Territory" textAlignment="CENTER">
-               <font>
-                  <Font name="System Italic" size="20.0" />
-               </font>
-            </Label>
-            <ListView fx:id="lvContinent" layoutX="796.0" layoutY="103.0" prefHeight="270.0" prefWidth="309.0" />
+            <ListView fx:id="continentArea" layoutX="795.0" layoutY="98.0" prefHeight="281.0" prefWidth="310.0" />
             <Label layoutX="904.0" layoutY="70.0" text="Continent" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <ListView fx:id="lvAdjTerritoryList" layoutX="455.0" layoutY="429.0" prefHeight="245.0" prefWidth="300.0" />
             <Label layoutX="1267.0" layoutY="70.0" text="Territory-Player-Army" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <ListView fx:id="lvTerritoryPlayerArmy" layoutX="1160.0" layoutY="103.0" prefHeight="270.0" prefWidth="454.0" />
-            <Button fx:id="btnReinforcement" layoutX="456.0" layoutY="687.0" mnemonicParsing="false" onAction="#placeReinforcement" prefHeight="40.0" prefWidth="298.0" text="Place Reinforcement">
+            <ListView fx:id="lvTerritoryPlayerArmy" layoutX="1155.0" layoutY="98.0" prefHeight="281.0" prefWidth="459.0" />
+            <Button fx:id="btnReinforcement" layoutX="68.0" layoutY="688.0" mnemonicParsing="false" onAction="#placeReinforcement" prefHeight="40.0" prefWidth="298.0" text="Place Reinforcement">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnAttack" layoutX="455.0" layoutY="744.0" mnemonicParsing="false" onAction="#attack" prefHeight="40.0" prefWidth="300.0" text="Attack">
+            <Button fx:id="btnAttack" layoutX="66.0" layoutY="742.0" mnemonicParsing="false" onAction="#attack" prefHeight="40.0" prefWidth="300.0" text="Attack">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnFortify" layoutX="803.0" layoutY="740.0" mnemonicParsing="false" onAction="#fortify" prefHeight="44.0" prefWidth="303.0" text="Fortify">
+            <Button fx:id="btnFortify" layoutX="436.0" layoutY="708.0" mnemonicParsing="false" onAction="#fortify" prefHeight="44.0" prefWidth="303.0" text="Fortify">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnEndTurn" layoutX="456.0" layoutY="804.0" mnemonicParsing="false" onAction="#endTurn" prefHeight="40.0" prefWidth="299.0" text="End Turn">
+            <Button fx:id="btnEndTurn" layoutX="67.0" layoutY="799.0" mnemonicParsing="false" onAction="#endTurn" prefHeight="40.0" prefWidth="299.0" text="End Turn">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnFireCommand" layoutX="1258.0" layoutY="509.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="37.0" prefWidth="269.0" text="Fire Command">
+            <Button fx:id="btnFireCommand" layoutX="1051.0" layoutY="496.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="37.0" prefWidth="269.0" text="Fire Command">
                <font>
                   <Font name="System Italic" size="22.0" />
                </font>
             </Button>
-            <TextArea fx:id="txtConsoleLog" layoutX="1163.0" layoutY="572.0" prefHeight="271.0" prefWidth="455.0" />
-            <Label layoutX="1312.0" layoutY="402.0" text="Command Line" textAlignment="CENTER">
+            <TextArea fx:id="txtConsoleLog" layoutX="788.0" layoutY="551.0" prefHeight="292.0" prefWidth="830.0" />
+            <Label layoutX="1105.0" layoutY="415.0" text="Command Line" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnExit" layoutX="803.0" layoutY="795.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="47.0" prefWidth="304.0" text="Exit Game">
+            <Button fx:id="btnExit" layoutX="434.0" layoutY="792.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="47.0" prefWidth="304.0" text="Exit Game">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <ComboBox fx:id="cbTerritoryList" layoutX="801.0" layoutY="437.0" prefHeight="45.0" prefWidth="300.0" promptText="Select Territory" />
-            <Label layoutX="881.0" layoutY="407.0" text="Territory List" textAlignment="CENTER">
+            <ComboBox fx:id="cbTerritoryList" layoutX="436.0" layoutY="447.0" prefHeight="45.0" prefWidth="300.0" promptText="Select Territory" />
+            <Label layoutX="525.0" layoutY="415.0" text="Territory List" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="856.0" layoutY="505.0" text="Adjacent Territory List" textAlignment="CENTER">
+            <Label layoutX="501.0" layoutY="505.0" text="Adjacent Territory List" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <ComboBox fx:id="cbAdjTerritoryList" layoutX="803.0" layoutY="535.0" prefHeight="45.0" prefWidth="301.0" promptText="Select Territory" />
-            <Label layoutX="854.0" layoutY="599.0" text="Move Number Of Army" textAlignment="CENTER">
+            <ComboBox fx:id="cbAdjTerritoryList" layoutX="436.0" layoutY="537.0" prefHeight="45.0" prefWidth="301.0" promptText="Select Territory" />
+            <Label layoutX="489.0" layoutY="602.0" text="Move Number Of Army" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <TextField fx:id="txtMoveNumArmy" layoutX="803.0" layoutY="634.0" prefHeight="45.0" prefWidth="304.0" promptText="Enter Number of Armies to Fortify" />
-            <TextField fx:id="txtCommandLine" layoutX="1160.0" layoutY="437.0" prefHeight="47.0" prefWidth="452.0" promptText="Reinforcement and Fortification command" />
+            <TextField fx:id="txtMoveNumArmy" layoutX="435.0" layoutY="634.0" prefHeight="45.0" prefWidth="304.0" promptText="Enter Number of Armies to Fortify" />
+            <TextField fx:id="txtCommandLine" layoutX="796.0" layoutY="446.0" prefHeight="39.0" prefWidth="820.0" promptText="Reinforcement and Fortification command" />
+            <TextArea fx:id="territoryArea" layoutX="64.0" layoutY="97.0" prefHeight="283.0" prefWidth="304.0" />
+            <TextArea fx:id="adjacentTerritoryArea" layoutX="389.0" layoutY="97.0" prefHeight="283.0" prefWidth="378.0" />
+            <TextField layoutX="68.0" layoutY="505.0" prefHeight="38.0" prefWidth="292.0" />
          </children>
       </AnchorPane>
    </content>

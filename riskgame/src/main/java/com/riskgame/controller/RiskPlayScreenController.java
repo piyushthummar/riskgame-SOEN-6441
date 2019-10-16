@@ -93,37 +93,42 @@ public class RiskPlayScreenController implements Initializable {
 	@FXML
 	private Button btnExit;
 
+	@FXML
+	private TextArea territoryArea;
+
+	@FXML
+	private TextArea adjacentTerritoryArea;
+
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
-	
+
 	@Autowired
 	public RiskPlayImpl riskPlayImpl;
-	
+
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
-	
+
 	private GamePlayPhase GamePlayPhase;
-	
+
 	private RiskMap riskMap;
-	
+
 	private StringBuilder sb;
-	
+
 	private int playerIndex = 0;
-	private String playerName  = "";
-	//private int playerLeftArmy = 0;
+	private String playerName = "";
+	// private int playerLeftArmy = 0;
 	private int playerReinforceArmy = 0;
-	
-	private static String turnStartedMsg  = "";
+
+	private static String turnStartedMsg = "";
 	private static String leftArmyMsg = "";
-	
+
 	public static final String NEUTRAL = "NEUTRAL";
-	
+
 	private static String NEWLINE = System.getProperty("line.separator");
-	
+
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
-	
-	
+
 	/**
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
@@ -134,8 +139,9 @@ public class RiskPlayScreenController implements Initializable {
 		GamePlayPhase = new GamePlayPhase();
 		riskMap = new RiskMap();
 		sb = new StringBuilder();
-		
-		
+
+		territoryArea.clear();
+		adjacentTerritoryArea.clear();
 	}
 
 	@FXML
@@ -160,39 +166,42 @@ public class RiskPlayScreenController implements Initializable {
 
 	@FXML
 	void fireCommand(ActionEvent event) {
-		
-		//txtConsoleLog.clear();
-		
-		System.out.println("playerIndex => "+playerIndex);
-		System.out.println("playerName => "+playerName);
-		System.out.println("playerReinforceArmy => "+playerReinforceArmy);
-		
-		System.out.println("List = > "+ playerList);
-		
-		
-		
+
+		// txtConsoleLog.clear();
+
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+
+		System.out.println("playerIndex => " + playerIndex);
+		System.out.println("playerName => " + playerName);
+		System.out.println("playerReinforceArmy => " + playerReinforceArmy);
+
+		System.out.println("List = > " + playerList);
+
 		try {
 			String command = txtCommandLine.getText();
 			if (command != null && !command.isEmpty()) {
 				if (command.startsWith("reinforce")) {
-					
-					if(playerReinforceArmy !=0) {
+
+					if (playerReinforceArmy != 0) {
 						txtConsoleLog.setText(placeReinforcement(command));
-					}else {
-						sb.append(playerName).append(" 's Reinforcement Phase done please go to the Fortification phase").append(NEWLINE);
+					} else {
+						sb.append(playerName)
+								.append(" 's Reinforcement Phase done please go to the Fortification phase")
+								.append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
 					}
-					
+
 				} else if (command.startsWith("fortify")) {
-					
-					if(playerReinforceArmy == 0){
+
+					if (playerReinforceArmy == 0) {
 						txtConsoleLog.setText(fortification(command));
-					}else {
-						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+					} else {
+						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
+								.append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
 					}
-					
-					
+
 				} else
 					txtConsoleLog.setText("Please Enter Valid Command");
 			} else {
@@ -205,141 +214,116 @@ public class RiskPlayScreenController implements Initializable {
 		}
 	}
 
-	
 	private String fortification(String command) {
 
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
-		
+
 		if (commandData.get(0).equalsIgnoreCase("fortify")) {
-			
+
 			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
-				
-				
+
 				sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
-				
-				System.out.println("FORTIFY ====> "+playerList);
-				
-				if(playerIndex<playerList.size()-1) {
-					
-					playerIndex++;
-					
-					if(playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
-						playerIndex = 0;
-					}
-					
-				}else {
-					playerIndex = 0;
-				}
-				
-			    txtCommandLine.clear();
-		        txtConsoleLog.clear();
-		        
-		        playerName = playerList.get(playerIndex).getPlayerName();
-		        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
-		        
-		        
-		        turnStartedMsg = playerName +"'s turn is started";
-		        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
-		        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-		    
-		        txtConsoleLog.setText(sb.toString());
-				
+
+				System.out.println("FORTIFY ====> " + playerList);
+
+				fillTerritoryList();
+				fillAdjacentTerritoryList();
+
+				changeUserTurn();
+
 			} else {
-				
+
 				if (commandData.size() != 4) {
-					
+
 					sb.append("Please Enter Valid command").append(NEWLINE);
-					
+
 				} else {
-					
-					if (validateInput(commandData.get(3), "[1-9][0-9]*") 							
+
+					if (validateInput(commandData.get(3), "[1-9][0-9]*")
 							&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 							&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
-						
+
 						String fromCountry = commandData.get(1);
 						String toCountry = commandData.get(2);
 						int armytoMove = Integer.parseInt(commandData.get(3));
-						
-						PlayerTerritory fromTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
-								filter(x -> fromCountry.equals(x.getTerritoryName())).findAny().orElse(null);
-						
-						PlayerTerritory toTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
-								filter(x -> toCountry.equals(x.getTerritoryName())).findAny().orElse(null);
-						
-						if(fromTerritory != null && toTerritory != null) {
-							
-							List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap, fromCountry);
-							
-							System.out.println("neighbourCountriesList ==> "+ neighbourCountriesList);
-							
-							if(neighbourCountriesList.contains(toCountry)) {
-								
-								if(fromTerritory.getArmyOnterritory()>armytoMove ) {
-									
+
+						PlayerTerritory fromTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
+								.filter(x -> fromCountry.equals(x.getTerritoryName())).findAny().orElse(null);
+
+						PlayerTerritory toTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
+								.filter(x -> toCountry.equals(x.getTerritoryName())).findAny().orElse(null);
+
+						if (fromTerritory != null && toTerritory != null) {
+
+							List<String> neighbourCountriesList = mapManagementImpl
+									.getNeighbourCountriesListByCountryName(riskMap, fromCountry);
+
+							System.out.println("neighbourCountriesList ==> " + neighbourCountriesList);
+
+							if (neighbourCountriesList.contains(toCountry)) {
+
+								if (fromTerritory.getArmyOnterritory() > armytoMove) {
+
 									int left = fromTerritory.getArmyOnterritory() - armytoMove;
+
+									System.out.println("left => " + left);
+
 									fromTerritory.setArmyOnterritory(left);
-									toTerritory.setArmyOnterritory(toTerritory.getArmyOnterritory()+armytoMove);
-									
+
+									System.out.println(
+											"from taratory army after => " + fromTerritory.getArmyOnterritory());
+
+									System.out.println("To taratory before => " + toTerritory.getArmyOnterritory());
+
+									int armyBefore = toTerritory.getArmyOnterritory();
+
+									System.out.println("armyBefore=> " + armyBefore);
+
+									toTerritory.setArmyOnterritory(armyBefore + armytoMove);
+
+									int armyAfter = toTerritory.getArmyOnterritory();
+
+									System.out.println("armyAfter=> " + armyAfter);
+
 									sb.append(playerName).append("s fortification done").append(NEWLINE);
 									sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
-									
-									System.out.println("FORTIFY ====> "+playerList);
-									
-									if(playerIndex<playerList.size()-1) {
-										
-										playerIndex++;
-										
-										if(playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
-											playerIndex = 0;
-										}
-										
-									}else {
-										playerIndex = 0;
-									}
-									
-								    txtCommandLine.clear();
-							        txtConsoleLog.clear();
-							        
-							        playerName = playerList.get(playerIndex).getPlayerName();
-							        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
-							        
-							        
-							        turnStartedMsg = playerName +"'s turn is started";
-							        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
-							        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-							    
-							        txtConsoleLog.setText(sb.toString());
-									
-									
-									
-									
-								}else {
-									sb.append("you should have at least one army in your territory after fortification").append(fromCountry).append(NEWLINE);
+
+									System.out.println("FORTIFY ====> " + playerList);
+
+									fillTerritoryList();
+									fillAdjacentTerritoryList();
+
+									changeUserTurn();
+
+								} else {
+									sb.append("you should have at least one army in your territory after fortification")
+											.append(fromCountry).append(NEWLINE);
 								}
-								
-							}else {
-								sb.append(toCountry).append(" is not neighbour country of ").append(fromCountry).append(NEWLINE);
+
+							} else {
+								sb.append(toCountry).append(" is not neighbour country of ").append(fromCountry)
+										.append(NEWLINE);
 							}
-							
-						}else {
-							sb.append("fromcountry or tocountry not found : Please Enter Valid country Name").append(NEWLINE);
+
+						} else {
+							sb.append("fromcountry or tocountry not found : Please Enter Valid country Name")
+									.append(NEWLINE);
 						}
 
 					} else {
 						sb.append("Please Enter Valid command").append(NEWLINE);
 					}
-						
+
 				}
 			}
 		} else {
-			
+
 			sb.append("Please Enter Valid command").append(NEWLINE);
 		}
-			
+
 		return sb.toString();
 	}
-
 
 	private boolean validateInput(String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -366,94 +350,182 @@ public class RiskPlayScreenController implements Initializable {
 		int armyToPlace;
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
-		if (commandData.size() == 3 
-			&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") 
-			&& validateInput(commandData.get(2), "[1-9][0-9]*") ) {
-			
+		if (commandData.size() == 3 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+				&& validateInput(commandData.get(2), "[1-9][0-9]*")) {
+
 			countryName = commandData.get(1);
 			armyToPlace = Integer.parseInt(commandData.get(2));
-			
+
 			final String cName = countryName;
-			
-			PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
-					filter(x -> cName.equals(x.getTerritoryName())).findAny().orElse(null);
-			
-			if(playerTerritory != null) {
-				
-				if(armyToPlace<=playerReinforceArmy && armyToPlace !=0 && playerReinforceArmy != 0) {
-					
-					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory()+ armyToPlace);
+
+			PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
+					.filter(x -> cName.equals(x.getTerritoryName())).findAny().orElse(null);
+
+			if (playerTerritory != null) {
+
+				if (armyToPlace <= playerReinforceArmy && armyToPlace != 0 && playerReinforceArmy != 0) {
+
+					System.out.println("playerTerritory before ==> " + playerTerritory);
+
+					int army = playerTerritory.getArmyOnterritory() + 1;
+
+					playerTerritory.setArmyOnterritory(army);
+
+					System.out.println("playerTerritory After ==> " + playerTerritory);
+
+					// playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory() +
+					// armyToPlace);
+
 					playerReinforceArmy = playerReinforceArmy - armyToPlace;
-					
-					String message = armyToPlace +" Assigned to "+cName;
-					
+
+					String message = armyToPlace + " Assigned to " + cName;
+
 					sb.append(message).append(NEWLINE);
 					sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
-					if(playerReinforceArmy ==0) {
-						sb.append(playerName).append(" 's Reinforcement Phase done please go to the Fortification phase").append(NEWLINE);
+					if (playerReinforceArmy == 0) {
+						sb.append(playerName)
+								.append(" 's Reinforcement Phase done please go to the Fortification phase")
+								.append(NEWLINE);
 					}
-					
-					System.out.println("REINFORCEMENT ====> "+playerList);
-					
-				}else {
-					sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ").append(playerReinforceArmy)
-					.append(" to reinforcement").append(NEWLINE);
+
+					System.out.println("REINFORCEMENT ====> " + playerList);
+
+					fillTerritoryList();
+					fillAdjacentTerritoryList();
+
+				} else {
+					sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ")
+							.append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
 				}
-				
-				
-			}else {
+
+			} else {
 				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
 			}
-			
-			//reinforce(armyToPlace, countryName, player);
-			
+
+			// reinforce(armyToPlace, countryName, player);
+
 		} else {
-			
+
 			sb.append("Please Enter Valid Command").append(NEWLINE);
-			
-			
+
 		}
 		return sb.toString();
 	}
 
-	
-
-
-
-
 	@FXML
 	void exitGame(ActionEvent event) {
-		stageManager.switchScene(FxmlView.WELCOME,null);
+		stageManager.switchScene(FxmlView.WELCOME, null);
 	}
 
+	public void transferGamePlayPhase(Object object) {
 
-	
-	 public void transferGamePlayPhase(Object object) {
-		 
-	        //Display the message
-		 	gameplayphase = (GamePlayPhase) object;
-		 	riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
-	        System.out.println("===> "+gameplayphase);
-	        System.out.println(riskMap);
-	        
-	        playerList.addAll(gameplayphase.getGameState());
-	        
-	        txtCommandLine.clear();
-	        txtConsoleLog.clear();
-	        
-	        playerName = playerList.get(playerIndex).getPlayerName();
-	        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
-	        
-	        
-	        turnStartedMsg = playerName +"'s turn is started";
-	        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
-	        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-	    
-	        txtConsoleLog.setText(sb.toString());
-	        
-	        
-	        
-	        
-	    }
+		playerList.clear();
+		// Display the message
+		gameplayphase = (GamePlayPhase) object;
+		riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+		System.out.println("===> " + gameplayphase);
+		System.out.println(riskMap);
+
+		playerList.addAll(gameplayphase.getGameState());
+
+		txtCommandLine.clear();
+		txtConsoleLog.clear();
+
+		playerName = playerList.get(playerIndex).getPlayerName();
+		playerReinforceArmy = riskPlayImpl
+				.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
+
+		turnStartedMsg = playerName + "'s turn is started";
+		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+
+		txtConsoleLog.setText(sb.toString());
+
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+
+	}
+
+	private void changeUserTurn() {
+
+		if (playerIndex < playerList.size() - 1) {
+
+			playerIndex++;
+
+			if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+				playerIndex = 0;
+			}
+
+		} else {
+			playerIndex = 0;
+		}
+
+		txtCommandLine.clear();
+		txtConsoleLog.clear();
+
+		playerName = playerList.get(playerIndex).getPlayerName();
+		playerReinforceArmy = riskPlayImpl
+				.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
+
+		turnStartedMsg = playerName + "'s turn is started";
+		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+		txtConsoleLog.setText(sb.toString());
+
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+
+	}
+
+	private void fillTerritoryList() {
+
+		territoryArea.clear();
+		StringBuilder sbBuilder = new StringBuilder();
+		Player player = playerList.get(playerIndex);
+		if (player != null) {
+			int count = 1;
+			for (PlayerTerritory territory : player.getPlayerterritories()) {
+
+				sbBuilder.append(count).append(") ").append(territory.getTerritoryName()).append(" : ")
+						.append(territory.getArmyOnterritory()).append(NEWLINE);
+				count++;
+			}
+			territoryArea.setText(sbBuilder.toString());
+		}
+	}
+
+	private void fillAdjacentTerritoryList() {
+
+		adjacentTerritoryArea.clear();
+		StringBuilder sbBuilder = new StringBuilder();
+		Player player = playerList.get(playerIndex);
+		if (player != null) {
+
+			List<PlayerTerritory> playerTerritories = player.getPlayerterritories();
+			int count = 1;
+			for (PlayerTerritory territory : playerList.get(playerIndex).getPlayerterritories()) {
+
+				String country = territory.getTerritoryName();
+				sbBuilder.append(count).append(") ").append(country).append("-").append(territory.getArmyOnterritory());
+				List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap,
+						country);
+				for (String neighbour : neighbourCountriesList) {
+
+					PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
+							.filter(x -> neighbour.equals(x.getTerritoryName())).findAny().orElse(null);
+
+					if (playerTerritory != null) {
+						sbBuilder.append(" ==> ").append(playerTerritory.getTerritoryName());
+					}
+
+				}
+				sbBuilder.append(NEWLINE);
+				count++;
+			}
+
+			adjacentTerritoryArea.setText(sbBuilder.toString());
+		}
+
+	}
 
 }
