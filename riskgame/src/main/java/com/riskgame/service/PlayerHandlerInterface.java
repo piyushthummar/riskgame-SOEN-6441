@@ -4,6 +4,7 @@
 package com.riskgame.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.PlayerTerritory;
@@ -16,9 +17,9 @@ import com.riskgame.model.RiskMap;
  * 
  */
 public interface PlayerHandlerInterface {
-	GamePlayPhase createPlayer(int noOfPlayer);
 	int findTotalArmy(int noOfPlayer);
-	void populateTerritoriesByRoundRobbin(RiskMap riskMap);
+	GamePlayPhase populateTerritoriesByRoundRobbin(GamePlayPhase playPhase);
 	List<PlayerTerritory> getTerritories(RiskMap riskMap);
+	GamePlayPhase placeAll(GamePlayPhase gamePlayPhase);
 	
 }

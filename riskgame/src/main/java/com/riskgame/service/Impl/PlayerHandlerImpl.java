@@ -4,10 +4,14 @@
 package com.riskgame.service.Impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
@@ -25,30 +29,14 @@ import com.riskgame.service.PlayerHandlerInterface;
  * @see com.riskgame.service.PlayerHandlerInterface
  * @see com.riskgame.model.GamePlayPhase
  */
-public class PlayerHandlerImpl implements PlayerHandlerInterface{
-	private List<Player> playerInformation;
-	/** 
-	 * @see com.riskgame.service.PlayerHandlerInterface#createPlayer(int)
-	 */
-	@Override
-	public GamePlayPhase createPlayer(int noOfPlayer) {
-		playerInformation = new ArrayList<Player>();
-		int armyPerPlayer = findTotalArmy(noOfPlayer);
-		for(int i=0;i<noOfPlayer;i++)
-		{
-			
-			List<PlayerTerritory> playerTerritoryList = new ArrayList<>();
-			String playerName = "player" + i;
-			Player player = new Player();
-			player.setPlayerId(i);
-			player.setPlayerName(playerName);
-			player.setPlayerterritories(playerTerritoryList);
-			player.setArmyOwns(armyPerPlayer);
-			playerInformation.add(player);
-		}
-		return null;
-	}
-	/** 
+
+@Service
+public class PlayerHandlerImpl implements PlayerHandlerInterface {
+
+	@Autowired
+	private MapManagementImpl mapManagementImpl;
+
+	/**
 	 * @see com.riskgame.service.PlayerHandlerInterface#findTotalArmy(int)
 	 */
 	@Override
@@ -67,32 +55,36 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface{
 		}
 		return armyPerPlayer;
 	}
+
 	/**
 	 * @see com.riskgame.service.PlayerHandlerInterface#populateTerritoriesByRoundRobbin(com.riskgame.model.RiskMap)
 	 */
 	@Override
-	public void populateTerritoriesByRoundRobbin(RiskMap riskMap) {
+	public GamePlayPhase populateTerritoriesByRoundRobbin(GamePlayPhase playPhase) {
+
+		List<Player> playerInformation = playPhase.getGameState();
+		RiskMap riskMap = mapManagementImpl.readMap(playPhase.getFileName());
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
-		int counter =-1;
+		Collections.shuffle(territoriesOwnedByPlayer);
+		int counter = -1;
 		for (PlayerTerritory pt : territoriesOwnedByPlayer) {
 			counter++;
-			if(playerInformation.get(counter)!=null)
-			{
+			if (playerInformation.get(counter) != null) {
 				try {
 					playerInformation.get(counter).getPlayerterritories().add(pt);
-				}
-				catch (NullPointerException e) {
+				} catch (NullPointerException e) {
 					e.printStackTrace();
 				}
-			}else {
+			} else {
 				continue;
 			}
-			if(counter==playerInformation.size()-1)
-			{
-				counter= -1;
+			if (counter == playerInformation.size() - 1) {
+				counter = -1;
 			}
 		}
+		return playPhase;
 	}
+
 	/**
 	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#getTerritories(com.riskgame.model.RiskMap)
@@ -100,24 +92,55 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface{
 	@Override
 	public List<PlayerTerritory> getTerritories(RiskMap riskMap) {
 		Continent continent;
-		Map<Integer,Continent> continentsMap = new HashMap<>();
+		Map<Integer, Continent> continentsMap = new HashMap<>();
 		List<Territory> territoryList;
 		continentsMap = riskMap.getContinents();
 		List<PlayerTerritory> territoriesOwnedByPlayer = new ArrayList<>();
-		for(Entry<Integer,Continent> entry : continentsMap.entrySet())
-		{
+		for (Entry<Integer, Continent> entry : continentsMap.entrySet()) {
 			continent = entry.getValue();
 			territoryList = continent.getTerritoryList();
 			for (Territory t : territoryList) {
 				PlayerTerritory playerTerritory = new PlayerTerritory();
-				playerTerritory.setTerritoryName(t.getTerritoryName());				
+				playerTerritory.setTerritoryName(t.getTerritoryName());
 				playerTerritory.setContinentName(continent.getContinentName());
 				playerTerritory.setArmyOnterritory(0);
 				territoriesOwnedByPlayer.add(playerTerritory);
-				
+
 			}
 		}
 		return territoriesOwnedByPlayer;
+	}
+
+	@Override
+	public GamePlayPhase placeAll(GamePlayPhase gamePlayPhase) {
+		
+		int armyPerPlayer = findTotalArmy(gamePlayPhase.getGameState().size());
+		
+		
+		for (int index = 0; index < gamePlayPhase.getGameState().size(); index++) {
+			gamePlayPhase.getGameState().get(index).setArmyOwns(armyPerPlayer);
+			int track = 0;
+			for (int territoryIndex = 0; territoryIndex < gamePlayPhase.getGameState().get(index).getPlayerterritories().size(); territoryIndex++) {
+				if (armyPerPlayer >= gamePlayPhase.getGameState().get(index).getPlayerterritories().size()) {
+					if (track < armyPerPlayer) {
+						int armies = gamePlayPhase.getGameState().get(index).getPlayerterritories().get(territoryIndex).getArmyOnterritory() + 1;
+						gamePlayPhase.getGameState().get(index).getPlayerterritories().get(territoryIndex).setArmyOnterritory(armies);
+						if (territoryIndex + 1 == gamePlayPhase.getGameState().get(index).getPlayerterritories().size()) {
+							territoryIndex = -1;
+						}
+						track++;
+					} else {
+						break;
+					}
+				} else {
+					int armies = gamePlayPhase.getGameState().get(index).getPlayerterritories().get(territoryIndex).getArmyOnterritory() + 1;
+					gamePlayPhase.getGameState().get(index).getPlayerterritories().get(territoryIndex).setArmyOnterritory(armies);
+				}
+			}
+		}
+		
+		
+		return gamePlayPhase;
 	}
 
 }

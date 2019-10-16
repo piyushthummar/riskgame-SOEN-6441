@@ -1,14 +1,14 @@
 package com.riskgame.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 /**
  * Player class manages information of players and their territories.
  * 
- * Three dependecies (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
+ * Two annotations (Getter, Setter) you can see on the top of the class are lombok dependencies to 
  * automatically generate getter, setter and tostring method in the code.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
@@ -18,7 +18,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 public class Player {
 	/**
 	 * Stores the id of player
@@ -38,5 +37,13 @@ public class Player {
 	/**
 	 * List of Territories owns by player
 	 */
-	private List<PlayerTerritory> playerterritories;
+	private List<PlayerTerritory> playerterritories = new ArrayList<PlayerTerritory>();
+
+	@Override
+	public String toString() {
+		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns
+				+ ", playerterritories=" + playerterritories + "]"+"\n";
+	}
+	
+	
 }

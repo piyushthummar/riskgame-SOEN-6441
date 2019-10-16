@@ -7,12 +7,11 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * This class represents the state of the game on different point of time.
  * 
- * Three annotations (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
+ * Two annotations (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
  * automatically generate getter, setter and tostring method in the code.
  *
  * @author <a href="mailto:j_banawa@encs.concordia.ca">Jaswanth Banawathu</a>
@@ -21,7 +20,6 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
 public class GamePlayPhase {
 	
 	/**
@@ -38,4 +36,11 @@ public class GamePlayPhase {
 	 * name of the map file
 	 */
 	private String fileName;
+
+	@Override
+	public String toString() {
+		return "GamePlayPhase [gameState= \n" + gameState +"\n"+ ", gamePhase=" + gamePhase + ", fileName=" + fileName + "]"+"\n";
+	}
+	
+	
 }
