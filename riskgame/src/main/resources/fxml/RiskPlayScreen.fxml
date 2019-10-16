@@ -68,7 +68,7 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnExecute" layoutX="1258.0" layoutY="509.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="37.0" prefWidth="269.0" text="Fire Command">
+            <Button fx:id="btnFireCommand" layoutX="1258.0" layoutY="509.0" mnemonicParsing="false" onAction="#fireCommand" prefHeight="37.0" prefWidth="269.0" text="Fire Command">
                <font>
                   <Font name="System Italic" size="22.0" />
                </font>

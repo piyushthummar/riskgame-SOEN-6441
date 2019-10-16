@@ -4,11 +4,8 @@
 package com.riskgame.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,15 +15,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.config.StageManager;
-import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskMap;
-import com.riskgame.model.Territory;
 import com.riskgame.service.Impl.MapManagementImpl;
+import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.view.FxmlView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,7 +52,7 @@ public class RiskPlayScreenController implements Initializable {
 	private ListView<?> lvTerritoryPlayerArmy;
 
 	@FXML
-	private Button btnExecute;
+	private Button btnFireCommand;
 
 	@FXML
 	private Button btnReinforcement;
@@ -98,9 +96,47 @@ public class RiskPlayScreenController implements Initializable {
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
 	
+	@Autowired
+	public RiskPlayImpl riskPlayImpl;
+	
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
+	
+	private GamePlayPhase GamePlayPhase;
+	
+	private RiskMap riskMap;
+	
+	private StringBuilder sb;
+	
+	private int playerIndex = 0;
+	private String playerName  = "";
+	//private int playerLeftArmy = 0;
+	private int playerReinforceArmy = 0;
+	
+	private static String turnStartedMsg  = "";
+	private static String leftArmyMsg = "";
+	
+	public static final String NEUTRAL = "NEUTRAL";
+	
+	private static String NEWLINE = System.getProperty("line.separator");
+	
+	private ObservableList<Player> playerList = FXCollections.observableArrayList();
+	
+	
+	/**
+	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
+	 *      java.util.ResourceBundle)
+	 */
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
+		GamePlayPhase = new GamePlayPhase();
+		riskMap = new RiskMap();
+		sb = new StringBuilder();
+		
+		
+	}
 
 	@FXML
 	void placeReinforcement(ActionEvent event) {
@@ -124,14 +160,39 @@ public class RiskPlayScreenController implements Initializable {
 
 	@FXML
 	void fireCommand(ActionEvent event) {
-		txtConsoleLog.clear();
+		
+		//txtConsoleLog.clear();
+		
+		System.out.println("playerIndex => "+playerIndex);
+		System.out.println("playerName => "+playerName);
+		System.out.println("playerReinforceArmy => "+playerReinforceArmy);
+		
+		System.out.println("List = > "+ playerList);
+		
+		
+		
 		try {
 			String command = txtCommandLine.getText();
 			if (command != null && !command.isEmpty()) {
 				if (command.startsWith("reinforce")) {
-					txtConsoleLog.setText(placeReinforcement(command));
+					
+					if(playerReinforceArmy !=0) {
+						txtConsoleLog.setText(placeReinforcement(command));
+					}else {
+						sb.append(playerName).append(" 's Reinforcement Phase done please go to the Fortification phase").append(NEWLINE);
+						txtConsoleLog.setText(sb.toString());
+					}
+					
 				} else if (command.startsWith("fortify")) {
-					txtConsoleLog.setText(fortification(command));
+					
+					if(playerReinforceArmy == 0){
+						txtConsoleLog.setText(fortification(command));
+					}else {
+						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+						txtConsoleLog.setText(sb.toString());
+					}
+					
+					
 				} else
 					txtConsoleLog.setText("Please Enter Valid Command");
 			} else {
@@ -144,49 +205,141 @@ public class RiskPlayScreenController implements Initializable {
 		}
 	}
 
-	/**
-	 * @param command
-	 * @return
-	 */
+	
 	private String fortification(String command) {
-		String[] data = command.split("\\s+");
-		StringBuilder sb = new StringBuilder();
-		List<String> commandData = Arrays.asList(data);
-		if (commandData.get(0).equals("fortify")) {
+
+		String[] dataArray = command.split(" ");
+		List<String> commandData = Arrays.asList(dataArray);
+		
+		if (commandData.get(0).equalsIgnoreCase("fortify")) {
+			
 			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
-				txtConsoleLog.setText(sb.append("PlayerName's turn ended").toString());
+				
+				
+				sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
+				
+				System.out.println("FORTIFY ====> "+playerList);
+				
+				if(playerIndex<playerList.size()-1) {
+					
+					playerIndex++;
+					
+					if(playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+						playerIndex = 0;
+					}
+					
+				}else {
+					playerIndex = 0;
+				}
+				
+			    txtCommandLine.clear();
+		        txtConsoleLog.clear();
+		        
+		        playerName = playerList.get(playerIndex).getPlayerName();
+		        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
+		        
+		        
+		        turnStartedMsg = playerName +"'s turn is started";
+		        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
+		        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+		    
+		        txtConsoleLog.setText(sb.toString());
+				
 			} else {
+				
 				if (commandData.size() != 4) {
-					txtConsoleLog.setText("Please Enter Valid command");
+					
+					sb.append("Please Enter Valid command").append(NEWLINE);
+					
 				} else {
-					if (validateInput(commandData.get(3), "[1-9][0-9]*")
-							&& validateInput(commandData.get(1), "[a-zA-Z]+")
-							&& validateInput(commandData.get(2), "[a-zA-Z]+")) {
+					
+					if (validateInput(commandData.get(3), "[1-9][0-9]*") 							
+							&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+							&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+						
 						String fromCountry = commandData.get(1);
 						String toCountry = commandData.get(2);
 						int armytoMove = Integer.parseInt(commandData.get(3));
-						fortify(fromCountry, toCountry, armytoMove);
+						
+						PlayerTerritory fromTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
+								filter(x -> fromCountry.equals(x.getTerritoryName())).findAny().orElse(null);
+						
+						PlayerTerritory toTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
+								filter(x -> toCountry.equals(x.getTerritoryName())).findAny().orElse(null);
+						
+						if(fromTerritory != null && toTerritory != null) {
+							
+							List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap, fromCountry);
+							
+							System.out.println("neighbourCountriesList ==> "+ neighbourCountriesList);
+							
+							if(neighbourCountriesList.contains(toCountry)) {
+								
+								if(fromTerritory.getArmyOnterritory()>armytoMove ) {
+									
+									int left = fromTerritory.getArmyOnterritory() - armytoMove;
+									fromTerritory.setArmyOnterritory(left);
+									toTerritory.setArmyOnterritory(toTerritory.getArmyOnterritory()+armytoMove);
+									
+									sb.append(playerName).append("s fortification done").append(NEWLINE);
+									sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
+									
+									System.out.println("FORTIFY ====> "+playerList);
+									
+									if(playerIndex<playerList.size()-1) {
+										
+										playerIndex++;
+										
+										if(playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+											playerIndex = 0;
+										}
+										
+									}else {
+										playerIndex = 0;
+									}
+									
+								    txtCommandLine.clear();
+							        txtConsoleLog.clear();
+							        
+							        playerName = playerList.get(playerIndex).getPlayerName();
+							        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
+							        
+							        
+							        turnStartedMsg = playerName +"'s turn is started";
+							        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
+							        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+							    
+							        txtConsoleLog.setText(sb.toString());
+									
+									
+									
+									
+								}else {
+									sb.append("you should have at least one army in your territory after fortification").append(fromCountry).append(NEWLINE);
+								}
+								
+							}else {
+								sb.append(toCountry).append(" is not neighbour country of ").append(fromCountry).append(NEWLINE);
+							}
+							
+						}else {
+							sb.append("fromcountry or tocountry not found : Please Enter Valid country Name").append(NEWLINE);
+						}
 
-					} else
-						txtConsoleLog.setText("Please Enter Valid command");
+					} else {
+						sb.append("Please Enter Valid command").append(NEWLINE);
+					}
+						
 				}
 			}
-		} else
-			txtConsoleLog.setText("Please Enter Valid command");
-		return null;
+		} else {
+			
+			sb.append("Please Enter Valid command").append(NEWLINE);
+		}
+			
+		return sb.toString();
 	}
 
-	/**
-	 * @param fromCountry
-	 * @param toCountry
-	 * @param armytoMove
-	 */
-	private void fortify(String fromCountry, String toCountry, int armytoMove) {
-		List<Player> playerList = gameplayphase.getGameState();
-		List<PlayerTerritory> playerTerritories = (List<PlayerTerritory>) playerList.stream()
-				.map(Player::getPlayerterritories);
-		
-	}
 
 	private boolean validateInput(String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -213,75 +366,59 @@ public class RiskPlayScreenController implements Initializable {
 		int armyToPlace;
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
-		if (commandData.size() != 3) {
-			result.append("Please Enter Valid Command");
-		} else {
+		if (commandData.size() == 3 
+			&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") 
+			&& validateInput(commandData.get(2), "[1-9][0-9]*") ) {
+			
 			countryName = commandData.get(1);
 			armyToPlace = Integer.parseInt(commandData.get(2));
-			reinforce(armyToPlace, countryName, player);
-		}
-		return result.toString();
-	}
-
-	/**
-	 * @param armyToMove
-	 * @param countryName
-	 * @param playerName
-	 */
-
-	private void reinforce(int armyToPlace, String countryName, Player player) {
-		GamePlayPhase gPhase = new GamePlayPhase();
-		int addExtraArmy = 0;
-		RiskMap riskmap = mapManagementImpl.readMap(gPhase.getFileName());
-		Map<Integer, Continent> continentMap = riskmap.getContinents();
-		List<Continent> continentList = new ArrayList<Continent>();
-		for (Entry<Integer, Continent> e : continentMap.entrySet()) {
-			continentList.add(e.getValue());
-		}
-		List<Player> playerList = gPhase.getGameState();
-		for (Player ply : playerList) {
-			List<PlayerTerritory> playerTerritories = ply.getPlayerterritories();
-			List<String> playerTerritoriesStringList = new ArrayList<>();
-			for (PlayerTerritory p : playerTerritories) {
-				playerTerritoriesStringList.add(p.getTerritoryName());
-			}
-			int totalOwnedCountries = playerTerritories.size();
-			for (PlayerTerritory playerTerritory : playerTerritories) {
-				if (countryName.equals(playerTerritory.getTerritoryName())) {
-					for (Continent ct : continentList) {
-						List<Territory> territoryList = ct.getTerritoryList();
-						int count = 0;
-						for (Territory territory : territoryList) {
-							if (playerTerritoriesStringList.contains(territory.getTerritoryName())) {
-								count++;
-							}
-						}
-						if (count == territoryList.size()) {
-							addExtraArmy = ct.getContinentValue();
-							break;
-						}
+			
+			final String cName = countryName;
+			
+			PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream().
+					filter(x -> cName.equals(x.getTerritoryName())).findAny().orElse(null);
+			
+			if(playerTerritory != null) {
+				
+				if(armyToPlace<=playerReinforceArmy && armyToPlace !=0 && playerReinforceArmy != 0) {
+					
+					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory()+ armyToPlace);
+					playerReinforceArmy = playerReinforceArmy - armyToPlace;
+					
+					String message = armyToPlace +" Assigned to "+cName;
+					
+					sb.append(message).append(NEWLINE);
+					sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+					if(playerReinforceArmy ==0) {
+						sb.append(playerName).append(" 's Reinforcement Phase done please go to the Fortification phase").append(NEWLINE);
 					}
-					int totalArmyforReinforce = checkForReinforcement(totalOwnedCountries);
-
+					
+					System.out.println("REINFORCEMENT ====> "+playerList);
+					
+				}else {
+					sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ").append(playerReinforceArmy)
+					.append(" to reinforcement").append(NEWLINE);
 				}
-				break;
+				
+				
+			}else {
+				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
 			}
-			break;
+			
+			//reinforce(armyToPlace, countryName, player);
+			
+		} else {
+			
+			sb.append("Please Enter Valid Command").append(NEWLINE);
+			
+			
 		}
+		return sb.toString();
 	}
 
-	/**
-	 * @param armyToPlace
-	 * @param totalOwnedCountries
-	 * @param addExtraArmy
-	 * @return
-	 */
-	private int checkForReinforcement(int totalOwnedCountries) {
-		int total = Math.floorDiv(totalOwnedCountries, 3);
-		int totalArmyforReinforce = Math.max(total, 3);
-		return totalArmyforReinforce;
+	
 
-	}
+
 
 
 	@FXML
@@ -289,20 +426,34 @@ public class RiskPlayScreenController implements Initializable {
 		stageManager.switchScene(FxmlView.WELCOME,null);
 	}
 
-	/**
-	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
-	 *      java.util.ResourceBundle)
-	 */
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
 
-	}
 	
 	 public void transferGamePlayPhase(Object object) {
+		 
 	        //Display the message
-		 	GamePlayPhase gamePlayPhase = (GamePlayPhase) object;
-	        System.out.println("===> "+gamePlayPhase);
-	        System.out.println(mapManagementImpl.readMap(gamePlayPhase.getFileName()));
+		 	gameplayphase = (GamePlayPhase) object;
+		 	riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+	        System.out.println("===> "+gameplayphase);
+	        System.out.println(riskMap);
+	        
+	        playerList.addAll(gameplayphase.getGameState());
+	        
+	        txtCommandLine.clear();
+	        txtConsoleLog.clear();
+	        
+	        playerName = playerList.get(playerIndex).getPlayerName();
+	        playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size());
+	        
+	        
+	        turnStartedMsg = playerName +"'s turn is started";
+	        leftArmyMsg = "You have "+playerReinforceArmy+" armies to Reinforcement";
+	        sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+	    
+	        txtConsoleLog.setText(sb.toString());
+	        
+	        
+	        
+	        
 	    }
 
 }
