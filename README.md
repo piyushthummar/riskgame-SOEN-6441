@@ -1,5 +1,5 @@
 # SOEN 6441 team Project
-Here, Risk Domination Game is implemented, where players can play turn by turn. Whoever dominates or owns the whole world first, that player wins the game.
+Here, Risk Domination Game is implemented, where players can play turn by turn. Whoever dominates or owns all the territories first, that player wins the game.
 
 Here, the user may use the GUI to play game or there are set of commands by which the game can be played. 
 
