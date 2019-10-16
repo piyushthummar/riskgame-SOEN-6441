@@ -6,9 +6,11 @@ import java.util.Objects;
 
 import org.slf4j.Logger;
 
+import com.riskgame.controller.RiskPlayScreenController;
 import com.riskgame.view.FxmlView;
 
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -27,8 +29,8 @@ public class StageManager {
         this.primaryStage = stage;
     }
 
-    public void switchScene(final FxmlView view) {
-        Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile());
+    public void switchScene(final FxmlView view,Object object) {
+        Parent viewRootNodeHierarchy = loadViewNodeHierarchy(view.getFxmlFile(),object);
         show(viewRootNodeHierarchy, view.getTitle());
     }
     
@@ -65,10 +67,21 @@ public class StageManager {
      *
      * @return Parent root node of the FXML document hierarchy
      */
-    private Parent loadViewNodeHierarchy(String fxmlFilePath) {
+    private Parent loadViewNodeHierarchy(String fxmlFilePath,Object object) {
         Parent rootNode = null;
         try {
-            rootNode = springFXMLLoader.load(fxmlFilePath);
+            FXMLLoader loader = springFXMLLoader.load(fxmlFilePath);
+            
+            if(fxmlFilePath.contains("RiskPlayScreen")) {
+            	//FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFilePath));
+            	//loader.setLocation(getClass().getResource(fxmlFilePath));
+            	rootNode = loader.load();
+            	RiskPlayScreenController riskPlayScreenController = loader.getController();
+            	riskPlayScreenController.transferGamePlayPhase(object);
+            }else {
+            	rootNode = loader.load();
+            }
+            
             Objects.requireNonNull(rootNode, "A Root FXML node must not be null");
         } catch (Exception exception) {
             logAndExit("Unable to load FXML view" + fxmlFilePath, exception);
