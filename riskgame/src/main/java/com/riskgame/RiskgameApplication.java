@@ -42,7 +42,7 @@ public class RiskgameApplication extends Application {
 	     * window.
 	     */
 	    protected void displayInitialScene() {
-	        stageManager.switchScene(FxmlView.WELCOME);
+	        stageManager.switchScene(FxmlView.WELCOME,null);
 	    }
 
 	    
