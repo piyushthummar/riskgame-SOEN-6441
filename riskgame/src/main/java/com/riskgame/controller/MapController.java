@@ -1388,12 +1388,12 @@ public class MapController implements Initializable {
 	 
 	 	@FXML
 	    void backToWelcome(ActionEvent event) {
-	 		stageManager.switchScene(FxmlView.WELCOME);
+	 		stageManager.switchScene(FxmlView.WELCOME,null);
 	    }
 	 	
 	 	@FXML
 	    void playgame(ActionEvent event) {
-	 		stageManager.switchScene(FxmlView.STARTUPPHASE);
+	 		stageManager.switchScene(FxmlView.STARTUPPHASE,null);
 	    }
 
 }
