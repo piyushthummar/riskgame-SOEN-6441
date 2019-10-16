@@ -9,6 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.ResourceBundle;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,7 @@ import javafx.scene.control.TextField;
 @Controller
 public class RiskPlayScreenController implements Initializable {
 
+	GamePlayPhase gameplayphase = new GamePlayPhase();
 	@FXML
 	private ListView<?> lvTerritoryList;
 
@@ -142,8 +146,57 @@ public class RiskPlayScreenController implements Initializable {
 	 * @return
 	 */
 	private String fortification(String command) {
+		String[] data = command.split("\\s+");
+		StringBuilder sb = new StringBuilder();
+		List<String> commandData = Arrays.asList(data);
+		if (commandData.get(0).equals("fortify")) {
+			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
+				txtConsoleLog.setText(sb.append("PlayerName's turn ended").toString());
+			} else {
+				if (commandData.size() != 4) {
+					txtConsoleLog.setText("Please Enter Valid command");
+				} else {
+					if (validateInput(commandData.get(3), "[1-9][0-9]*")
+							&& validateInput(commandData.get(1), "[a-zA-Z]+")
+							&& validateInput(commandData.get(2), "[a-zA-Z]+")) {
+						String fromCountry = commandData.get(1);
+						String toCountry = commandData.get(2);
+						int armytoMove = Integer.parseInt(commandData.get(3));
+						fortify(fromCountry, toCountry, armytoMove);
 
+					} else
+						txtConsoleLog.setText("Please Enter Valid command");
+				}
+			}
+		} else
+			txtConsoleLog.setText("Please Enter Valid command");
 		return null;
+	}
+
+	/**
+	 * @param fromCountry
+	 * @param toCountry
+	 * @param armytoMove
+	 */
+	private void fortify(String fromCountry, String toCountry, int armytoMove) {
+		List<Player> playerList = gameplayphase.getGameState();
+		List<PlayerTerritory> playerTerritories = (List<PlayerTerritory>) playerList.stream()
+				.map(Player::getPlayerterritories);
+		
+	}
+
+	private boolean validateInput(String value, String pattern) {
+		if (!value.isEmpty()) {
+			Pattern p = Pattern.compile(pattern);
+			Matcher m = p.matcher(value);
+			if (m.find() && m.group().equals(value)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -206,7 +259,7 @@ public class RiskPlayScreenController implements Initializable {
 						}
 					}
 					int totalArmyforReinforce = checkForReinforcement(totalOwnedCountries);
-					
+
 				}
 				break;
 			}
@@ -218,13 +271,13 @@ public class RiskPlayScreenController implements Initializable {
 	 * @param armyToPlace
 	 * @param totalOwnedCountries
 	 * @param addExtraArmy
-	 * @return 
+	 * @return
 	 */
 	private int checkForReinforcement(int totalOwnedCountries) {
 		int total = Math.floorDiv(totalOwnedCountries, 3);
 		int totalArmyforReinforce = Math.max(total, 3);
 		return totalArmyforReinforce;
-		
+
 	}
 
 	@Lazy
