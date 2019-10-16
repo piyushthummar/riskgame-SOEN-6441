@@ -51,7 +51,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 
 /**
- * This class is entry point of Map management related operation 
+ * This class is entry point of Map management related operation
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
@@ -59,122 +59,239 @@ import javafx.util.Callback;
 @Controller
 public class MapController implements Initializable {
 
+	/**
+	 * It represents Column ContinentId in the table
+	 */
 	@FXML
 	private TableColumn<ContinentDto, Integer> colContinentId;
 
+	/**
+	 * It represents Cpmbobox of Continent
+	 */
 	@FXML
 	private ComboBox<String> continentComboBox;
 
+	/**
+	 * It represents Column ContinentValue in the table
+	 */
 	@FXML
 	private TableColumn<ContinentDto, Integer> colContinentValue;
 
+	/**
+	 * It represents Column Edit Country in the table
+	 */
 	@FXML
 	private TableColumn<CountryDto, Boolean> colEditCountry;
 
+	/**
+	 * It represents deleteCountry menu
+	 */
 	@FXML
 	private MenuItem deleteCountry;
 
+	/**
+	 * It represents Column CountryName in the table
+	 */
 	@FXML
 	private TableColumn<CountryDto, String> colCountryName;
 
+	/**
+	 * It represents Column NeighbourId in the table
+	 */
 	@FXML
 	private TableColumn<NeighbourTerritoriesDto, Integer> colNeighborId;
 
+	/**
+	 * It represents Column NeighbourId in the table
+	 */
 	@FXML
 	private ComboBox<String> countryComboBox;
 
+	/**
+	 * It represents Column NeighbourId in the table
+	 */
 	@FXML
 	private TableColumn<NeighbourTerritoriesDto, String> colCountryNeighbor;
 
+	/**
+	 * It represents menu deleteContinent
+	 */
 	@FXML
 	private MenuItem deleteContinent;
 
+	/**
+	 * It represents TableView of neighborTable
+	 */
 	@FXML
 	private TableView<NeighbourTerritoriesDto> neighborTable;
 
+	/**
+	 * It represents Column countryIdId in the table
+	 */
 	@FXML
 	private TableColumn<CountryDto, Integer> colCountryId;
 
+	/**
+	 * It represents neighbor button to set neighbor
+	 */
 	@FXML
 	private Button btnNeighbor;
 
+	/**
+	 * It represents Column ContinentName in the table
+	 */
 	@FXML
 	private TableColumn<ContinentDto, String> colContinentName;
 
+	/**
+	 * It represents Column ContinentName in the table
+	 */
 	@FXML
 	private TableColumn<NeighbourTerritoriesDto, Boolean> colEditNeighbor;
 
+	/**
+	 * It represents Column ContinentName in the table
+	 */
 	@FXML
 	private TableColumn<CountryDto, String> colCountryContinent;
 
+	/**
+	 * It represents Column Edit Continent in the table
+	 */
 	@FXML
 	private TableColumn<ContinentDto, Boolean> colEditContinent;
 
+	/**
+	 * It represents button country to add country
+	 */
 	@FXML
 	private Button btnCountry;
 
+	/**
+	 * It represents the TextField of continentValue
+	 */
 	@FXML
 	private TextField continentValue;
 
+	/**
+	 * It represents Column Edit Continent in the table
+	 */
 	@FXML
 	private TableView<ContinentDto> continentTable;
 
+	/**
+	 * It represents button add Continent in the table
+	 */
 	@FXML
 	private Button btnContinent;
 
+	/**
+	 * It represents Table view of CountryDto
+	 */
 	@FXML
 	private TableView<CountryDto> countryTable;
 
+	/**
+	 * It represents TextField of countryName
+	 */
 	@FXML
 	private TextField countryName;
 
+	/**
+	 * It represents menuItem for deleteNeighbor
+	 */
 	@FXML
 	private MenuItem deleteNeighbor;
 
+	/**
+	 * It represents TextField of continentName
+	 */
 	@FXML
 	private TextField continentName;
 
+	/**
+	 * It represents column of NeighborName
+	 */
 	@FXML
 	private TableColumn<NeighbourTerritoriesDto, String> colNeighborName;
 
+	/**
+	 * It represents comboBox of neighbor
+	 */
 	@FXML
 	private ComboBox<String> neighborComboBox;
 
+	/**
+	 * It represents label of continentId
+	 */
 	@FXML
 	private Label lblContinentId;
 
+	/**
+	 * It represents label of countryId
+	 */
 	@FXML
 	private Label lblCountryId;
 
+	/**
+	 * It represents label of neighbourId
+	 */
 	@FXML
 	private Label lblNeighbourId;
 
+	/**
+	 * It represents button to edit map
+	 */
 	@FXML
 	private Button btnEditMap;
 
+	/**
+	 * It represents TextField of command
+	 */
 	@FXML
 	private TextField commandLine;
 
+	/**
+	 * It represents textArea of console
+	 */
 	@FXML
 	private TextArea consoleArea;
 
+	/**
+	 * It represents TextField of fileName
+	 */
 	@FXML
 	private TextField fileNameTextField;
 
+	/**
+	 * It represents button fire command
+	 */
 	@FXML
 	private Button btnFireCommand;
 
+	/**
+	 * It represents button savemap
+	 */
 	@FXML
 	private Button btnSaveMap;
-	
+
+	/**
+	 * It represents button reset map
+	 */
 	@FXML
-    private Button btnResetMap;
-	
+	private Button btnResetMap;
+
+	/**
+	 * It represents back button
+	 */
 	@FXML
-    private Button btnback;
-	
+	private Button btnback;
+
+	/**
+	 * It represents button of playgame
+	 */
 	@FXML
-    private Button btnplaygame;
+	private Button btnplaygame;
 
 	private static int continentId = 1;
 	private static int countryId = 1;
@@ -189,24 +306,32 @@ public class MapController implements Initializable {
 	private ObservableList<String> countryComboValue = FXCollections.observableArrayList();
 
 	private ObservableList<String> neighbourComboValue = FXCollections.observableArrayList();
-	
+
 	@Autowired
 	private MapManagementImpl mapManagementImpl;
-	
+
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
-	
 
+	/**
+	 * To initialize controller
+	 * 
+	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
+	 *      java.util.ResourceBundle)
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		initMapView();
 
 	}
-	
+
+	/**
+	 * This method will initialize the MapView by loading all details
+	 */
 	private void initMapView() {
-		
+
 		continentTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		countryTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		neighborTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -218,40 +343,45 @@ public class MapController implements Initializable {
 		loadContinentDetails();
 		loadCountryDetails();
 		loadNeighbourDetails();
-		
+
 		continentId = 1;
 		countryId = 1;
 		neighbourId = 1;
-		
+
 		continentList.clear();
 		lblContinentId.setText(null);
 		continentName.clear();
 		continentValue.clear();
-		
+
 		countryList.clear();
 		lblCountryId.setText(null);
 		countryName.clear();
 		continentComboValue.clear();
-		
+
 		neighbourList.clear();
 		lblNeighbourId.setText(null);
 		countryComboValue.clear();
 		neighbourComboValue.clear();
-		
+
 		fileNameTextField.setText(null);
 		fileNameTextField.setDisable(false);
-		
+
 		commandLine.setText(null);
 		consoleArea.setText(null);
-		
+
 	}
 
+	/**
+	 * This method will load the ContinentDetails from the map
+	 */
 	private void loadContinentDetails() {
-		
-		continentTable.setItems(continentList);
 
+		continentTable.setItems(continentList);
 	}
 
+	/**
+	 * This method will load country details from map
+	 */
 	private void loadCountryDetails() {
 
 		List<String> continentInfo = continentList.stream().map(ContinentDto::getContinentName)
@@ -259,17 +389,12 @@ public class MapController implements Initializable {
 		continentComboValue.clear();
 		continentComboValue.addAll(continentInfo);
 		continentComboBox.setItems(continentComboValue);
-		// countryList.clear();
 		countryTable.setItems(countryList);
-
 	}
 
-	// private void loadContinentComboBox() {
-	//
-	//
-	//
-	// }
-
+	/**
+	 * This method will load neighbor details from map
+	 */
 	private void loadNeighbourDetails() {
 
 		List<String> countryInfo = countryList.stream().map(CountryDto::getCountryName).collect(Collectors.toList());
@@ -281,22 +406,24 @@ public class MapController implements Initializable {
 		neighbourComboValue.clear();
 		neighbourComboValue.addAll(countryInfo);
 		neighborComboBox.setItems(neighbourComboValue);
-
-		// neighbourList.clear();
 		neighborTable.setItems(neighbourList);
 
 	}
 
+	/**
+	 * This method will set column name of ContinentTable from ContinentDTO
+	 */
 	private void setContinentTableColumnProperties() {
-		// TODO Auto-generated method stub
 		colContinentId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colContinentName.setCellValueFactory(new PropertyValueFactory<>("continentName"));
 		colContinentValue.setCellValueFactory(new PropertyValueFactory<>("continentValue"));
 		colEditContinent.setCellFactory(continentCellFactory);
 	}
 
+	/**
+	 * This method will set column name of CountryTable from CountryDTO
+	 */
 	private void setCountryTableColumnProperties() {
-		// TODO Auto-generated method stub
 		colCountryId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCountryName.setCellValueFactory(new PropertyValueFactory<>("countryName"));
 		colCountryContinent.setCellValueFactory(new PropertyValueFactory<>("continentName"));
@@ -304,8 +431,10 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will set column name of NeighborTable from NeighborDTO
+	 */
 	private void setNeighborTableColumnProperties() {
-		// TODO Auto-generated method stub
 		colNeighborId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colCountryNeighbor.setCellValueFactory(new PropertyValueFactory<>("countryName"));
 		colNeighborName.setCellValueFactory(new PropertyValueFactory<>("countryNeighbourName"));
@@ -313,6 +442,9 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * It will return selected value from ContinentTable
+	 */
 	Callback<TableColumn<ContinentDto, Boolean>, TableCell<ContinentDto, Boolean>> continentCellFactory = new Callback<TableColumn<ContinentDto, Boolean>, TableCell<ContinentDto, Boolean>>() {
 		@Override
 		public TableCell<ContinentDto, Boolean> call(final TableColumn<ContinentDto, Boolean> param) {
@@ -357,6 +489,9 @@ public class MapController implements Initializable {
 		}
 	};
 
+	/**
+	 * It will return selected value from CountryTable
+	 */
 	Callback<TableColumn<CountryDto, Boolean>, TableCell<CountryDto, Boolean>> countryCellFactory = new Callback<TableColumn<CountryDto, Boolean>, TableCell<CountryDto, Boolean>>() {
 		@Override
 		public TableCell<CountryDto, Boolean> call(final TableColumn<CountryDto, Boolean> param) {
@@ -401,6 +536,9 @@ public class MapController implements Initializable {
 		}
 	};
 
+	/**
+	 * It will return selected value from NeighborTable
+	 */
 	Callback<TableColumn<NeighbourTerritoriesDto, Boolean>, TableCell<NeighbourTerritoriesDto, Boolean>> neighbourCellFactory = new Callback<TableColumn<NeighbourTerritoriesDto, Boolean>, TableCell<NeighbourTerritoriesDto, Boolean>>() {
 		@Override
 		public TableCell<NeighbourTerritoriesDto, Boolean> call(
@@ -446,6 +584,12 @@ public class MapController implements Initializable {
 		}
 	};
 
+	/**
+	 * This method will delete continent before saveMap got clicked
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void deleteContinent(ActionEvent event) {
 
@@ -466,6 +610,14 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will return true and break if duplicate name of continent got
+	 * found.
+	 * 
+	 * @param continentName
+	 *            the name of the continent you want to check duplicate for
+	 * @return false if duplicate not found
+	 */
 	public boolean deleteCommonContinent(String continentName) {
 		boolean result = false;
 
@@ -480,8 +632,6 @@ public class MapController implements Initializable {
 		}
 
 		if (result) {
-			// continentTable.setItems(continentList);
-			// loadContinentComboBox();
 			loadContinentDetails();
 
 			// delete country
@@ -504,6 +654,12 @@ public class MapController implements Initializable {
 		return result;
 	}
 
+	/**
+	 * This method will delete country before saveMap got clicked
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void deleteCountry(ActionEvent event) {
 
@@ -523,6 +679,15 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will return true and break if duplicate name of country got
+	 * found.
+	 * 
+	 * @param countryName
+	 *            the name of the country you want to check duplicate for
+	 * 
+	 * @return false if duplicate not found
+	 */
 	public boolean deleteCommonCountry(String countryName) {
 		boolean result = false;
 
@@ -533,37 +698,23 @@ public class MapController implements Initializable {
 				result = true;
 				break;
 			}
-
 		}
 
 		if (result) {
-
-			// countryTable.setItems(countryList);
 			loadCountryDetails();
-
-			// for (int i = 0; i < neighbourList.size(); i++) {
-			// NeighbourTerritoriesDto neighbourDto = neighbourList.get(i);
-			// if
-			// (neighbourDto.getCountryName().equalsIgnoreCase(countryDto.getCountryName()))
-			// {
-			// neighbourList.remove(i);
-			// } else if
-			// (neighbourDto.getCountryNeighbourName().equalsIgnoreCase(countryDto.getCountryName()))
-			// {
-			// neighbourList.remove(i);
-			// }
-			//
-			// }
-
 			neighbourList.removeIf(neighbour -> neighbour.getCountryName().equalsIgnoreCase(countryName));
 			neighbourList.removeIf(neighbour -> neighbour.getCountryNeighbourName().equalsIgnoreCase(countryName));
 			loadNeighbourDetails();
 		}
-
 		return result;
-
 	}
 
+	/**
+	 * This method will delete Neighbor before saveMap got clicked
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void deleteNeighbor(ActionEvent event) {
 
@@ -584,6 +735,16 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will return true and break if duplicate name of Neighbor and
+	 * country duo found
+	 * 
+	 * @param countryName
+	 *            the name of the country you want to check duplicate for
+	 * @param neighbourName
+	 *            the name of the neighbor you want to check duplicate for
+	 * @return
+	 */
 	public boolean deleteCommonNeighbour(String countryName, String neighbourName) {
 		boolean result = false;
 
@@ -595,17 +756,21 @@ public class MapController implements Initializable {
 				result = true;
 				break;
 			}
-
 		}
 
 		if (result) {
-			// neighborTable.setItems(neighbourList);
 			loadNeighbourDetails();
 		}
 
 		return result;
 	}
 
+	/**
+	 * This method will save Continent when saveMap got clicked or command got fired
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void saveContinent(ActionEvent event) {
 
@@ -645,18 +810,21 @@ public class MapController implements Initializable {
 						countryDto.setContinentName(continentName.getText());
 						countryList.set(i, countryDto);
 					}
-
 				}
-
 				loadCountryDetails();
 			}
-
 			clearContinentFields();
-
 		}
-
 	}
 
+	/**
+	 * This method will save data for both commandLine and GUI
+	 * 
+	 * @param name
+	 *            name of continent
+	 * @param value
+	 *            value of Continent
+	 */
 	private void saveCommonContinent(String name, String value) {
 
 		ContinentDto continentDto = new ContinentDto();
@@ -664,20 +832,22 @@ public class MapController implements Initializable {
 		continentId++;
 		continentDto.setContinentName(name);
 		continentDto.setContinentValue(Integer.parseInt(value));
-
 		continentList.add(continentDto);
-
-		// continentTable.setItems(continentList);
-		// loadContinentComboBox();
 		loadContinentDetails();
 		loadCountryDetails();
 	}
 
+	/**
+	 * @param continentName
+	 *            name of continent to validate
+	 * @param continentId
+	 *            name of continentId to valid
+	 * @return true if validation got succeed
+	 */
 	public boolean isValidContinentName(String continentName, String continentId) {
 		boolean isValid = true;
 
 		for (ContinentDto continentDto : continentList) {
-
 			// for create
 			if (continentName.equalsIgnoreCase(continentDto.getContinentName())
 					&& (continentId == null || continentId.isEmpty())) {
@@ -699,6 +869,12 @@ public class MapController implements Initializable {
 		return isValid;
 	}
 
+	/**
+	 * This method will save Country when saveMap got clicked or command got fired
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void saveCountry(ActionEvent event) {
 
@@ -744,15 +920,19 @@ public class MapController implements Initializable {
 					neighbourList.set(i, neighbourDto);
 				}
 				loadNeighbourDetails();
-
 			}
-
 			clearCountryFields();
-
 		}
-
 	}
 
+	/**
+	 * This method will save country given from both GUI and command line
+	 * 
+	 * @param countryName
+	 *            name of the country
+	 * @param continentName
+	 *            name of continent
+	 */
 	private void saveCommonCountry(String countryName, String continentName) {
 		CountryDto countryDto = new CountryDto();
 		countryDto.setId(countryId);
@@ -767,6 +947,13 @@ public class MapController implements Initializable {
 		loadNeighbourDetails();
 	}
 
+	/**
+	 * This method will check if CountryName and Id is valid or not
+	 * 
+	 * @param countryName
+	 * @param countryId
+	 * @return true if countryName and countryId got validated
+	 */
 	public boolean isValidCountryName(String countryName, String countryId) {
 		boolean isValid = true;
 
@@ -793,6 +980,14 @@ public class MapController implements Initializable {
 		return isValid;
 	}
 
+	/**
+	 * This method will check if CountryName and Neighborcountry name is valid or
+	 * not
+	 * 
+	 * @param countryName
+	 * @param neighbourCountryName
+	 * @return true if countryName and Neighborcountry name got validated
+	 */
 	public boolean isValidNeighbour(String countryName, String neighbourCountryName) {
 		boolean isValid = true;
 
@@ -817,6 +1012,12 @@ public class MapController implements Initializable {
 		return isValid;
 	}
 
+	/**
+	 * This method will save neighbor when saveMap got clicked or command got fired
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void saveNeighbor(ActionEvent event) {
 
@@ -858,6 +1059,12 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will save neighbor country given from both GUI and command line
+	 * 
+	 * @param country
+	 * @param neighbourCountry
+	 */
 	private void saveCommonNeighbour(String country, String neighbourCountry) {
 
 		NeighbourTerritoriesDto neighbourDto = new NeighbourTerritoriesDto();
@@ -871,8 +1078,16 @@ public class MapController implements Initializable {
 		loadNeighbourDetails();
 	}
 
-	/*
-	 * Validations
+	/**
+	 * This is common validate method used for all commands and inputs
+	 * 
+	 * @param field
+	 *            the name of the field to be display in alert
+	 * @param value
+	 *            String to be validated
+	 * @param pattern
+	 *            regex for validation
+	 * @return
 	 */
 	private boolean validate(String field, String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -890,8 +1105,13 @@ public class MapController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method used to print alert message with given string
+	 * 
+	 * @param alertMessage
+	 *            is the message to print
+	 */
 	private void alertMesage(String alertMessage) {
-
 		Alert alert = new Alert(AlertType.INFORMATION);
 		// alert.setTitle("Saved successfully.");
 		alert.setHeaderText(null);
@@ -899,6 +1119,14 @@ public class MapController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * This method will validate the comboBox if they are empty or not
+	 * 
+	 * @param field
+	 *            the name of the field to be display in alert
+	 * @param empty
+	 * @return false if dropDown menu is empty
+	 */
 	private boolean emptyValidation(String field, boolean empty) {
 		if (!empty) {
 			return true;
@@ -908,6 +1136,13 @@ public class MapController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method is used to give alert message if validation is not true
+	 * 
+	 * @param field
+	 *            the name of the field to be display in alert
+	 * @param empty
+	 */
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
@@ -920,28 +1155,44 @@ public class MapController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * This method is used to clear continent field in GUI after particular
+	 * operation
+	 */
 	private void clearContinentFields() {
 		lblContinentId.setText(null);
 		continentName.clear();
 		continentValue.clear();
 	}
 
+	/**
+	 * This method is used to clear country field in GUI after particular operation
+	 */
 	private void clearCountryFields() {
 		lblCountryId.setText(null);
 		countryName.clear();
 		continentComboBox.getSelectionModel().clearSelection();
 	}
 
+	/**
+	 * This method is used to clear neighbor field in GUI after particular operation
+	 */
 	private void clearNeighbourFields() {
 		lblNeighbourId.setText(null);
 		countryComboBox.getSelectionModel().clearSelection();
 		neighborComboBox.getSelectionModel().clearSelection();
 	}
 
+	/**
+	 * This method represent fire command button onAction where all commands got
+	 * separated and sent it to respective methods
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
 		consoleArea.clear();
-		String message = "";
 		try {
 			String command = commandLine.getText();
 			if (command != null && !command.isEmpty()) {
@@ -959,29 +1210,26 @@ public class MapController implements Initializable {
 					String result = saveMapToFile(Arrays.asList(command.split(" ")).get(1));
 					consoleArea.setText(result);
 				} else if (command.startsWith("editmap")) {
-					
+
 					String editFileName = Arrays.asList(command.split(" ")).get(1);
-					
-					if(validateInput(editFileName, "[a-zA-Z]+")) {
-						
+
+					if (validateInput(editFileName, "[a-zA-Z]+")) {
+
 						List<String> mapNameList = mapManagementImpl.getAvailableMap();
-						
-						if(mapNameList.contains(editFileName.toLowerCase()+".map")) {
-							consoleArea.setText(EditMap(editFileName+".map"));
-						}else {
-							consoleArea.setText("Map not found in system Please create New map and after editing save it");
+
+						if (mapNameList.contains(editFileName.toLowerCase() + ".map")) {
+							consoleArea.setText(EditMap(editFileName + ".map"));
+						} else {
+							consoleArea
+									.setText("Map not found in system Please create New map and after editing save it");
 							fileNameTextField.setText(editFileName);
 							fileNameTextField.setDisable(true);
-							
 						}
-						
-						
-					}else {
+
+					} else {
 						consoleArea.setText("Please enter valid file name for editMap");
 					}
-					
-					
-					
+
 				} else if (command.startsWith("validatemap")) {
 
 				} else {
@@ -998,8 +1246,14 @@ public class MapController implements Initializable {
 
 	}
 
-	
-
+	/**
+	 * This method will analyze edit Continent command, validate and then call
+	 * particular method for next operation
+	 * 
+	 * @param commandLine
+	 *            is edit command sent from user
+	 * @return proper message of result after edit Continent
+	 */
 	public String commandEditContinent(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String cName = "";
@@ -1058,6 +1312,14 @@ public class MapController implements Initializable {
 
 	}
 
+	/**
+	 * This method will analyze edit Country command, validate and then call
+	 * particular method for next operation
+	 * 
+	 * @param commandLine
+	 *            is edit command sent from user
+	 * @return proper message of result after edit Country
+	 */
 	public String commandEditCountry(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String countryName = "";
@@ -1121,11 +1383,17 @@ public class MapController implements Initializable {
 			}
 
 		}
-
 		return result.toString();
-
 	}
 
+	/**
+	 * This method will analyze edit Neighbor command, validate and then call
+	 * particular method for next operation
+	 * 
+	 * @param commandLine
+	 *            is edit command sent from user
+	 * @return proper message of result after edit neighbor country
+	 */
 	public String commandEditNeighbour(String commandLine) {
 		StringBuilder result = new StringBuilder();
 		String cName = "";
@@ -1205,151 +1473,181 @@ public class MapController implements Initializable {
 							.append(System.getProperty("line.separator"));
 				}
 			}
-
 		}
-
 		return result.toString();
-
 	}
 
+	/**
+	 * This is OnAction method of edit Map. When editmap got clicked or given
+	 * command from GUI then particular method will be calld for next operation
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void EditMapOnAction(ActionEvent event) {
-		
-		try {
-		
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select map file");
-		fileChooser.setInitialDirectory(new File("src/main/resources/maps/"));
-		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Please select .map File only", "*.map"));
-		 
-		File selectedFile = fileChooser.showOpenDialog(null);
-		String selectedFileName = selectedFile.getName();
-		 
-		if (selectedFile != null) {
-			
-			System.out.println("File ==> "+ selectedFileName);
-			alertMesage(EditMap(selectedFileName));
-			
-		}
 
-		}catch(Exception e) {
+		try {
+
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Select map file");
+			fileChooser.setInitialDirectory(new File("src/main/resources/maps/"));
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("Please select .map File only", "*.map"));
+
+			File selectedFile = fileChooser.showOpenDialog(null);
+			String selectedFileName = selectedFile.getName();
+
+			if (selectedFile != null) {
+
+				System.out.println("File ==> " + selectedFileName);
+				alertMesage(EditMap(selectedFileName));
+
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
 	}
-	
-	
+
+	/**
+	 * This method will accept file name to edit and call next methods to edit the
+	 * map and return result whether it's done or some error got occured.
+	 * 
+	 * @param fileName
+	 * @return message of result then what happened after EditMap got fired or
+	 *         clicked from GUI
+	 */
 	private String EditMap(String fileName) {
 		String result = "";
-		
+
 		try {
-			
+
 			RiskMap riskMap = mapManagementImpl.readMap(fileName);
-			
+
 			boolean validMap = mapManagementImpl.validateMap(riskMap);
-			
-			if(validMap) {
-				
-				Map<String,Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
-				
+
+			if (validMap) {
+
+				Map<String, Object> mapDtos = mapManagementImpl.convertRiskMapToDtos(riskMap);
+
 				List<ContinentDto> continentDtoList = (List<ContinentDto>) mapDtos.get("ContinentList");
 				List<CountryDto> countryDtoList = (List<CountryDto>) mapDtos.get("CountryList");
-				List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos.get("NeighbourList");
-				
+				List<NeighbourTerritoriesDto> neighbourDtoList = (List<NeighbourTerritoriesDto>) mapDtos
+						.get("NeighbourList");
+
 				System.out.println(riskMap);
 				System.out.println(continentDtoList);
 				System.out.println(countryDtoList);
 				System.out.println(neighbourDtoList);
-				
+
 				continentList.clear();
 				countryList.clear();
 				neighbourList.clear();
-				
+
 				continentList.addAll(continentDtoList);
 				countryList.addAll(countryDtoList);
 				neighbourList.addAll(neighbourDtoList);
-				
-				continentId = continentList.size()+1;
-				countryId = countryList.size()+1;
-				neighbourId = neighbourList.size()+1;
-				
+
+				continentId = continentList.size() + 1;
+				countryId = countryList.size() + 1;
+				neighbourId = neighbourList.size() + 1;
+
 				loadContinentDetails();
 				loadCountryDetails();
 				loadNeighbourDetails();
-				
-				String fileNameWithoutExt  = fileName.replaceFirst("[.][^.]+$", "");
+
+				String fileNameWithoutExt = fileName.replaceFirst("[.][^.]+$", "");
 				fileNameTextField.setText(fileNameWithoutExt);
 				fileNameTextField.setDisable(true);
-				
+
 				result = "Map loaded successfully ! Please save map after editing";
-				
-			}else {
+
+			} else {
 				result = "MapValidationError : Invalid Map Please correct Map";
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			result = "Exception in EditMap : Invalid Map Please correct Map";
 			e.printStackTrace();
 		}
-		
-		
+
 		return result;
 	}
 
+	/**
+	 * This is OnAction method of savemap button, when this button got clicked this
+	 * method will be called.
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void saveMapOnAction(ActionEvent event) {
-		
+
 		String mapName = fileNameTextField.getText();
 		String result = saveMapToFile(mapName);
 		alertMesage(result);
-		
+
 	}
-	
+
+	/**
+	 * This method will save edited map to file after savemap button got clicked
+	 * 
+	 * @param mapName
+	 * @return message of result then what happened after saveMap got fired or
+	 *         clicked from GUI
+	 */
 	private String saveMapToFile(String mapName) {
 		String result = "";
-		
+
 		try {
-			if(validateInput(mapName,  "[a-zA-Z]+")) {
-			
+			if (validateInput(mapName, "[a-zA-Z]+")) {
+
 				List<String> mapNameList = mapManagementImpl.getAvailableMap();
-				if(!mapNameList.contains(mapName.toLowerCase()+".map") || fileNameTextField.isDisable()) {
-					
+				if (!mapNameList.contains(mapName.toLowerCase() + ".map") || fileNameTextField.isDisable()) {
+
 					RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
 					riskMap.setMapName(mapName);
 					boolean validMap = mapManagementImpl.validateMap(riskMap);
-					
-					if(validMap) {
+
+					if (validMap) {
 						Boolean bResult = mapManagementImpl.saveMapToFile(riskMap);
-						if(bResult) {
+						if (bResult) {
 							initMapView();
 							result = "Map successfully saved to filesystem";
-							
-						}else {
+
+						} else {
 							result = "SaveMapToFileError : Invalid Map Please correct Map";
 						}
-					}else {
+					} else {
 						result = "MapValidationError : Invalid Map Please correct Map";
 					}
-					
-				}else {
+
+				} else {
 					result = "Map Name is already in System Please enter another one";
 				}
-				
-			}else {
+
+			} else {
 				result = "Please select or Enter valid map name";
 			}
-			
-			}catch(Exception e) {
-				result = "Exception in savemap : Invalid Map Please correct Map";
-				e.printStackTrace();
-			}
-		
+
+		} catch (Exception e) {
+			result = "Exception in savemap : Invalid Map Please correct Map";
+			e.printStackTrace();
+		}
+
 		return result;
 	}
 
-	/*
-	 * Validations
+	/**
+	 * This method will validate the input given from GUI or console
+	 * 
+	 * @param value
+	 *            is string for which you want to check validation
+	 * @param pattern
+	 *            regex for validation
+	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -1365,33 +1663,49 @@ public class MapController implements Initializable {
 		}
 	}
 
-	 	@FXML
-	    void resetMap(ActionEvent event) {
+	/**
+	 * This method is OnAction method of resetMap button. When resetMap got clicked
+	 * this method will be called and it will reset some feilds.
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
+	@FXML
+	void resetMap(ActionEvent event) {
 
-			Alert alert = new Alert(AlertType.CONFIRMATION);
-			alert.setTitle("Conformation Dialog");
-			alert.setHeaderText(null);
-			alert.setContentText("Are you sure you want to reset your Map? Once you reset your editable map will be removed");
-			Optional<ButtonType> action = alert.showAndWait();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Conformation Dialog");
+		alert.setHeaderText(null);
+		alert.setContentText(
+				"Are you sure you want to reset your Map? Once you reset your editable map will be removed");
+		Optional<ButtonType> action = alert.showAndWait();
 
-			if (action.get() == ButtonType.OK) {
+		if (action.get() == ButtonType.OK) {
 
-				initMapView();
+			initMapView();
 
-			}else {
-				System.out.println("cancel pressed");
-			}
-	 		
-	    }
-	 
-	 	@FXML
-	    void backToWelcome(ActionEvent event) {
-	 		stageManager.switchScene(FxmlView.WELCOME,null);
-	    }
-	 	
-	 	@FXML
-	    void playgame(ActionEvent event) {
-	 		stageManager.switchScene(FxmlView.STARTUPPHASE,null);
-	    }
+		} else {
+			System.out.println("cancel pressed");
+		}
+
+	}
+
+	/**
+	 * This method will redirect user to welcome page
+	 * @param event will represents value sent from view
+	 */
+	@FXML
+	void backToWelcome(ActionEvent event) {
+		stageManager.switchScene(FxmlView.WELCOME, null);
+	}
+
+	/**
+	 * This method will redirect user to play game screen
+	 * @param event will represents value sent from view
+	 */
+	@FXML
+	void playgame(ActionEvent event) {
+		stageManager.switchScene(FxmlView.STARTUPPHASE, null);
+	}
 
 }
