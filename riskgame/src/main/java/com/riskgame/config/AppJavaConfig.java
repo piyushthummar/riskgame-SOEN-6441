@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.riskgame.config;
 
 import java.io.IOException;
@@ -17,6 +12,11 @@ import org.springframework.context.annotation.Scope;
 
 import com.riskgame.logging.ExceptionWriter;
 
+/**
+ * Configure JavaFx with springBoot
+ * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
+ * @version 1.0.0
+ */
 @Configuration
 public class AppJavaConfig {
 	
@@ -33,13 +33,23 @@ public class AppJavaConfig {
         return new ExceptionWriter(new StringWriter());
     }
 
+    /**
+     * It'll take data from bundle properties
+     * @return data from bundle properties
+     */
     @Bean
     public ResourceBundle resourceBundle() {
         return ResourceBundle.getBundle("Bundle");
     }
     
+    /**
+     * Stage only created after Spring context bootstap
+     * @param stage Given FXML scene
+     * @return object of stageManager
+     * @throws IOException
+     */
     @Bean
-    @Lazy(value = true) //Stage only created after Spring context bootstap
+    @Lazy(value = true) 
     public StageManager stageManager(Stage stage) throws IOException {
         return new StageManager(springFXMLLoader, stage);
     }

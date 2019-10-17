@@ -38,7 +38,7 @@ public class Continent {
 	/**
 	 * List of territories this continent is having
 	 */
-	private List<Territory> TerritoryList = new ArrayList<>();
+	private List<Territory> territoryList = new ArrayList<>();
 
 }
 
