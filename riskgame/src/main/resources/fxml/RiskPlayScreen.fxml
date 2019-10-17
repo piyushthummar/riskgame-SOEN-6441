@@ -17,7 +17,7 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="415.0" layoutY="57.0" text="Adjacent Territory" textAlignment="CENTER">
+            <Label layoutX="415.0" layoutY="57.0" text="Adjacent Owned Territory" textAlignment="CENTER">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>

@@ -759,7 +759,7 @@ public class StartupPhaseController implements Initializable {
 			playPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
 		}
 
-		playPhase = playerHandlerImpl.populateTerritoriesByRoundRobbin(playPhase);
+		playPhase = playerHandlerImpl.populateTerritoriesRandomly(playPhase);
 
 		playerList = FXCollections.observableArrayList();
 		playerList.addAll(playPhase.getGameState());
@@ -838,7 +838,7 @@ public class StartupPhaseController implements Initializable {
 		} else {
 			playPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
 		}
-		playPhase = playerHandlerImpl.placeAll(playPhase);
+		playPhase = playerHandlerImpl.placeAllArmyByRoundRobin(playPhase);
 		playerList = FXCollections.observableArrayList();
 		playerList.addAll(playPhase.getGameState());
 		playertable.getItems().clear();

@@ -37,6 +37,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 	private MapManagementImpl mapManagementImpl;
 
 	/**
+	 * {@inheritDoc}
 	 * @see com.riskgame.service.PlayerHandlerInterface#findTotalArmy(int)
 	 */
 	@Override
@@ -57,10 +58,11 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 	}
 
 	/**
-	 * @see com.riskgame.service.PlayerHandlerInterface#populateTerritoriesByRoundRobbin(com.riskgame.model.RiskMap)
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.PlayerHandlerInterface#populateTerritoriesRandomly(com.riskgame.model.RiskMap)
 	 */
 	@Override
-	public GamePlayPhase populateTerritoriesByRoundRobbin(GamePlayPhase playPhase) {
+	public GamePlayPhase populateTerritoriesRandomly(GamePlayPhase playPhase) {
 
 		List<Player> playerInformation = playPhase.getGameState();
 		RiskMap riskMap = mapManagementImpl.readMap(playPhase.getFileName());
@@ -86,7 +88,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 	}
 
 	/**
-	 * 
+	 * {@inheritDoc}
 	 * @see com.riskgame.service.PlayerHandlerInterface#getTerritories(com.riskgame.model.RiskMap)
 	 */
 	@Override
@@ -111,8 +113,12 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 		return territoriesOwnedByPlayer;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.PlayerHandlerInterface#placeAllArmyByRoundRobin(com.riskgame.model.GamePlayPhase)
+	 */
 	@Override
-	public GamePlayPhase placeAll(GamePlayPhase gamePlayPhase) {
+	public GamePlayPhase placeAllArmyByRoundRobin(GamePlayPhase gamePlayPhase) {
 		
 		int armyPerPlayer = findTotalArmy(gamePlayPhase.getGameState().size());
 		
@@ -138,8 +144,6 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 				}
 			}
 		}
-		
-		
 		return gamePlayPhase;
 	}
 

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import com.riskgame.service.RiskPlayInterface;
 
 /**
+ * This is a implementation class of RiskPlayInterface where all buisness logic.
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @see com.riskgame.model.RiskMap
  * @see com.riskgame.model.Player
@@ -16,10 +17,8 @@ import com.riskgame.service.RiskPlayInterface;
 public class RiskPlayImpl implements RiskPlayInterface {
 	
 	/**
-	 * @param armyToPlace
-	 * @param totalOwnedCountries
-	 * @param addExtraArmy
-	 * @return
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.RiskPlayInterface#checkForReinforcement(int)
 	 */
 	@Override
 	public int checkForReinforcement(int totalOwnedCountries) {
