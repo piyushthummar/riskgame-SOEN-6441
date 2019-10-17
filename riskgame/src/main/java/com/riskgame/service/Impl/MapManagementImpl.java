@@ -182,8 +182,8 @@ public class MapManagementImpl implements MapManagementInterface {
 			StringBuilder sbCountry = new StringBuilder(COUNTRIES).append(System.getProperty(NEW_LINE));
 			StringBuilder sbNeighbour = new StringBuilder(BORDERS).append(System.getProperty(NEW_LINE));
 
-			try (PrintWriter writer = new PrintWriter(new BufferedWriter(
-					new OutputStreamWriter(new FileOutputStream(MAP_DIR_PATH + riskMap.getMapName()+".map"), "utf-8")))) {
+			try (PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(MAP_DIR_PATH + riskMap.getMapName() + ".map"), "utf-8")))) {
 
 				Map<Integer, Continent> continentMap = riskMap.getContinents();
 
@@ -299,8 +299,7 @@ public class MapManagementImpl implements MapManagementInterface {
 		boolean isBoarders = false;
 		RiskMap riskMap = new RiskMap();
 
-		try (BufferedReader bufferedReader = new BufferedReader(
-				new FileReader(MAP_DIR_PATH + fileName))) {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(MAP_DIR_PATH + fileName))) {
 
 			Continent continent = null;
 			Territory territory = null;
@@ -313,21 +312,25 @@ public class MapManagementImpl implements MapManagementInterface {
 
 					if (mapline.startsWith(";")) {
 						continue;
-					} 
+					}
 					if (mapline.startsWith(NAME)) {
 						String name = mapline.substring(5);
 						riskMap.setMapName(name);
 						System.out.println("filename====>> " + name);
-					}if (mapline.equalsIgnoreCase(FILES)) {
+					}
+					if (mapline.equalsIgnoreCase(FILES)) {
 						isFiles = true;
 						continue;
-					}if (isFiles) {
+					}
+					if (isFiles) {
 						System.out.println("files---> " + mapline);
-					}if (mapline.equalsIgnoreCase(CONTINENTS)) {
+					}
+					if (mapline.equalsIgnoreCase(CONTINENTS)) {
 						isFiles = false;
 						isContinents = true;
 						continue;
-					}if (isContinents && !mapline.equalsIgnoreCase(COUNTRIES)) {
+					}
+					if (isContinents && !mapline.equalsIgnoreCase(COUNTRIES)) {
 						System.out.println("Continents-------> " + mapline);
 						continent = new Continent();
 						String[] continentArray = mapline.split(" ");
@@ -336,11 +339,13 @@ public class MapManagementImpl implements MapManagementInterface {
 						continent.setContinentIndex(continentCount);
 						continentMap.put(continentCount, continent);
 						continentCount++;
-					}if (mapline.equalsIgnoreCase(COUNTRIES)) {
+					}
+					if (mapline.equalsIgnoreCase(COUNTRIES)) {
 						isContinents = false;
 						isCountries = true;
 						continue;
-					}if (isCountries && !mapline.equalsIgnoreCase(BORDERS)) {
+					}
+					if (isCountries && !mapline.equalsIgnoreCase(BORDERS)) {
 
 						String[] countryArray = mapline.split(" ");
 
@@ -358,11 +363,13 @@ public class MapManagementImpl implements MapManagementInterface {
 
 						System.out.println("countries-------> " + mapline);
 
-					}if (mapline.equalsIgnoreCase(BORDERS)) {
+					}
+					if (mapline.equalsIgnoreCase(BORDERS)) {
 						isCountries = false;
 						isBoarders = true;
 						continue;
-					}if (isBoarders) {
+					}
+					if (isBoarders) {
 						System.out.println("borders-------> " + mapline);
 
 						String[] neighbourArray = mapline.split(" ");
@@ -453,12 +460,12 @@ public class MapManagementImpl implements MapManagementInterface {
 		return neighbourName;
 
 	}
-	
+
 	@Override
-	public List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName){
-		
+	public List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName) {
+
 		List<String> neightbourCountryList = new ArrayList<String>();
-		
+
 		for (Map.Entry<Integer, Continent> entry : riskMap.getContinents().entrySet()) {
 
 			Continent continent = entry.getValue();
@@ -478,14 +485,56 @@ public class MapManagementImpl implements MapManagementInterface {
 			}
 
 		}
-		
+
 		return neightbourCountryList;
 	}
 
 	@Override
 	public boolean validateMap(RiskMap riskMap) {
-		
-		return true;
+		boolean result = true;
+		try {
+			if (riskMap != null && riskMap.getContinents().size() > 0) {
+
+				for (Map.Entry<Integer, Continent> entry : riskMap.getContinents().entrySet()) {
+
+					Continent continent = entry.getValue();
+
+					if (continent.getContinentIndex() != 0 && continent.getContinentValue() != 0
+							&& continent.getContinentName() != null && !continent.getContinentName().isEmpty()
+							&& continent.getTerritoryList() != null && !continent.getTerritoryList().isEmpty()) {
+
+						List<Territory> territoriList = continent.getTerritoryList();
+
+						for (Territory territory : territoriList) {
+
+							if (territory.getContinentIndex() != 0 && territory.getTerritoryIndex() != 0
+									&& territory.getTerritoryName() != null && !territory.getTerritoryName().isEmpty()
+									&& territory.getNeighbourTerritories() != null
+									&& !territory.getNeighbourTerritories().isEmpty()
+									&& !territory.getNeighbourTerritories().contains(territory.getTerritoryName())) {
+
+								result = true;
+
+							} else {
+								result = false;
+								break;
+							}
+						}
+
+					} else {
+						result = false;
+						break;
+					}
+
+				}
+
+			} else {
+				result = false;
+			}
+		} catch (Exception e) {
+			result = false;
+		}
+		return result;
 	}
 
 }
