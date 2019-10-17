@@ -30,10 +30,17 @@ import com.riskgame.model.Territory;
 import com.riskgame.service.MapManagementInterface;
 
 /**
+ * This is the implementation class of MapManagementInterface having business
+ * logic of map management including create map, update map,edit map, validate
+ * map etc.
+ * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
+ * 
  * @see com.riskgame.model.RiskMap
  * @see com.riskgame.model.Continent
  * @see com.riskgame.model.Territory
+ * @see com.riskgame.service.MapManagementInterface
  */
 
 @Service
@@ -48,6 +55,12 @@ public class MapManagementImpl implements MapManagementInterface {
 	public static final String COUNTRIES = "[countries]";
 	public static final String BORDERS = "[borders]";
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.MapManagementInterface#convertToRiskMap(java.util.List,
+	 *      java.util.List, java.util.List)
+	 */
 	public RiskMap convertToRiskMap(List<ContinentDto> continentList, List<CountryDto> countryList,
 			List<NeighbourTerritoriesDto> neighbourList) {
 		RiskMap riskMap = new RiskMap();
@@ -100,6 +113,11 @@ public class MapManagementImpl implements MapManagementInterface {
 		return riskMap;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.MapManagementInterface#convertRiskMapToDtos(com.riskgame.model.RiskMap)
+	 */
 	@Override
 	public Map<String, Object> convertRiskMapToDtos(RiskMap riskMap) {
 
@@ -155,6 +173,11 @@ public class MapManagementImpl implements MapManagementInterface {
 		return map;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.MapManagementInterface#getAvailableMap()
+	 */
 	@Override
 	public List<String> getAvailableMap() {
 		List<String> mapList = new ArrayList<String>();
@@ -171,6 +194,11 @@ public class MapManagementImpl implements MapManagementInterface {
 		return mapList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.MapManagementInterface#saveMapToFile(com.riskgame.model.RiskMap)
+	 */
 	@Override
 	public boolean saveMapToFile(RiskMap riskMap)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
@@ -259,6 +287,13 @@ public class MapManagementImpl implements MapManagementInterface {
 		return result;
 	}
 
+	/**
+	 * This method will return index of neighbor country from given RiskMap
+	 * 
+	 * @param riskMap
+	 * @param neighbourName
+	 * @return index of neighbor
+	 */
 	private int getNeighbourIndexFromMap(RiskMap riskMap, String neighbourName) {
 		int index = 0;
 
@@ -277,17 +312,17 @@ public class MapManagementImpl implements MapManagementInterface {
 						index = territory.getTerritoryIndex();
 						break;
 					}
-
 				}
-
 			}
-
 		}
-
 		return index;
-
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.MapManagementInterface#readMap(java.lang.String)
+	 */
 	@Override
 	public RiskMap readMap(String fileName) {
 
@@ -407,6 +442,16 @@ public class MapManagementImpl implements MapManagementInterface {
 		return riskMap;
 	}
 
+	/**
+	 * This method will return whole Continent model from given map and given
+	 * ContinentId or index
+	 * 
+	 * @param continentMap
+	 *            is map of continentIndex and Continent model
+	 * @param countryIndex
+	 *            is index of country for which you want the details
+	 * @return
+	 */
 	private Continent getContinentDetailsbyCountryId(Map<Integer, Continent> continentMap, int countryIndex) {
 		Continent continent = null;
 		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
@@ -422,17 +467,18 @@ public class MapManagementImpl implements MapManagementInterface {
 
 						return continent;
 					}
-
 				}
-
 			}
-
 		}
-
 		return continent;
-
 	}
 
+	/**
+	 * This method will return name of neighbor by given index from continent map
+	 * @param continentMap is map of continentIndex and Continent model
+	 * @param parseInt is an index of neighbor 
+	 * @return name of neighbor
+	 */
 	private String getNeighbourNamebyIndex(Map<Integer, Continent> continentMap, int parseInt) {
 
 		String neighbourName = "";
@@ -450,17 +496,17 @@ public class MapManagementImpl implements MapManagementInterface {
 						neighbourName = territory.getTerritoryName();
 						break;
 					}
-
 				}
-
 			}
-
 		}
-
 		return neighbourName;
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.MapManagementInterface#getNeighbourCountriesListByCountryName(com.riskgame.model.RiskMap, java.lang.String)
+	 */
 	@Override
 	public List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName) {
 
@@ -479,16 +525,16 @@ public class MapManagementImpl implements MapManagementInterface {
 						neightbourCountryList = territory.getNeighbourTerritories();
 						break;
 					}
-
 				}
-
 			}
-
 		}
-
 		return neightbourCountryList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.MapManagementInterface#validateMap(com.riskgame.model.RiskMap)
+	 */
 	@Override
 	public boolean validateMap(RiskMap riskMap) {
 		boolean result = true;
@@ -520,14 +566,11 @@ public class MapManagementImpl implements MapManagementInterface {
 								break;
 							}
 						}
-
 					} else {
 						result = false;
 						break;
 					}
-
 				}
-
 			} else {
 				result = false;
 			}
@@ -536,5 +579,4 @@ public class MapManagementImpl implements MapManagementInterface {
 		}
 		return result;
 	}
-
 }
