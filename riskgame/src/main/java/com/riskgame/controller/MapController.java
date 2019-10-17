@@ -51,7 +51,8 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 
 /**
- * This class is entry point of Map management related operation
+ * This class is entry point of Map management related operation like edit
+ * map,create map, load map, validate map etc.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
@@ -66,7 +67,7 @@ public class MapController implements Initializable {
 	private TableColumn<ContinentDto, Integer> colContinentId;
 
 	/**
-	 * It represents Cpmbobox of Continent
+	 * It represents Combobox of Continent
 	 */
 	@FXML
 	private ComboBox<String> continentComboBox;
@@ -317,6 +318,10 @@ public class MapController implements Initializable {
 	/**
 	 * To initialize controller
 	 * 
+	 * @param location
+	 *            of the FXML file
+	 * @param resources
+	 *            is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 */
@@ -587,7 +592,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will delete continent before saveMap got clicked
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void deleteContinent(ActionEvent event) {
@@ -610,11 +616,11 @@ public class MapController implements Initializable {
 	}
 
 	/**
-	 * This method will return true and break if duplicate name of continent got
-	 * found.
+	 * This method will return true and break if continent got removed and this
+	 * method is common for both commandline and GUI
 	 * 
-	 * @param continentName the name of the continent you want to check duplicate
-	 *                      for
+	 * @param continentName
+	 *            the name of the continent you want to check duplicate for
 	 * @return false if duplicate not found
 	 */
 	public boolean deleteCommonContinent(String continentName) {
@@ -632,7 +638,6 @@ public class MapController implements Initializable {
 
 		if (result) {
 			loadContinentDetails();
-
 			// delete country
 			List<String> countryToDel = new ArrayList<String>();
 			for (CountryDto countryDto : countryList) {
@@ -656,7 +661,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will delete country before saveMap got clicked
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void deleteCountry(ActionEvent event) {
@@ -678,10 +684,11 @@ public class MapController implements Initializable {
 	}
 
 	/**
-	 * This method will return true and break if duplicate name of country got
-	 * found.
+	 * This method will return true and break if country got removed and this
+	 * method is common for both commandline and GUI
 	 * 
-	 * @param countryName the name of the country you want to check duplicate for
+	 * @param countryName
+	 *            the name of the country you want to check duplicate for
 	 * 
 	 * @return false if duplicate not found
 	 */
@@ -709,7 +716,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will delete Neighbor before saveMap got clicked
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void deleteNeighbor(ActionEvent event) {
@@ -732,11 +740,13 @@ public class MapController implements Initializable {
 	}
 
 	/**
-	 * This method will return true and break if duplicate name of Neighbor and
-	 * country duo found
+	 * This method will return true and break if neighbor country got removed and this
+	 * method is common for both commandline and GUI
 	 * 
-	 * @param countryName   the name of the country you want to check duplicate for
-	 * @param neighbourName the name of the neighbor you want to check duplicate for
+	 * @param countryName
+	 *            the name of the country you want to check duplicate for
+	 * @param neighbourName
+	 *            the name of the neighbor you want to check duplicate for
 	 * @return
 	 */
 	public boolean deleteCommonNeighbour(String countryName, String neighbourName) {
@@ -762,7 +772,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will save Continent when saveMap got clicked or command got fired
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void saveContinent(ActionEvent event) {
@@ -813,8 +824,10 @@ public class MapController implements Initializable {
 	/**
 	 * This method will save data for both commandLine and GUI
 	 * 
-	 * @param name  name of continent
-	 * @param value value of Continent
+	 * @param name
+	 *            name of continent
+	 * @param value
+	 *            value of Continent
 	 */
 	private void saveCommonContinent(String name, String value) {
 
@@ -829,8 +842,10 @@ public class MapController implements Initializable {
 	}
 
 	/**
-	 * @param continentName name of continent to validate
-	 * @param continentId   name of continentId to valid
+	 * @param continentName
+	 *            name of continent to validate
+	 * @param continentId
+	 *            name of continentId to valid
 	 * @return true if validation got succeed
 	 */
 	public boolean isValidContinentName(String continentName, String continentId) {
@@ -861,7 +876,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will save Country when saveMap got clicked or command got fired
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void saveCountry(ActionEvent event) {
@@ -916,8 +932,10 @@ public class MapController implements Initializable {
 	/**
 	 * This method will save country given from both GUI and command line
 	 * 
-	 * @param countryName   name of the country
-	 * @param continentName name of continent
+	 * @param countryName
+	 *            name of the country
+	 * @param continentName
+	 *            name of continent
 	 */
 	private void saveCommonCountry(String countryName, String continentName) {
 		CountryDto countryDto = new CountryDto();
@@ -1001,7 +1019,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will save neighbor when saveMap got clicked or command got fired
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void saveNeighbor(ActionEvent event) {
@@ -1066,9 +1085,12 @@ public class MapController implements Initializable {
 	/**
 	 * This is common validate method used for all commands and inputs
 	 * 
-	 * @param field   the name of the field to be display in alert
-	 * @param value   String to be validated
-	 * @param pattern regex for validation
+	 * @param field
+	 *            the name of the field to be display in alert
+	 * @param value
+	 *            String to be validated
+	 * @param pattern
+	 *            regex for validation
 	 * @return
 	 */
 	private boolean validate(String field, String value, String pattern) {
@@ -1090,7 +1112,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method used to print alert message with given string
 	 * 
-	 * @param alertMessage is the message to print
+	 * @param alertMessage
+	 *            is the message to print
 	 */
 	private void alertMesage(String alertMessage) {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -1103,7 +1126,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will validate the comboBox if they are empty or not
 	 * 
-	 * @param field the name of the field to be display in alert
+	 * @param field
+	 *            the name of the field to be display in alert
 	 * @param empty
 	 * @return false if dropDown menu is empty
 	 */
@@ -1119,7 +1143,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method is used to give alert message if validation is not true
 	 * 
-	 * @param field the name of the field to be display in alert
+	 * @param field
+	 *            the name of the field to be display in alert
 	 * @param empty
 	 */
 	private void validationAlert(String field, boolean empty) {
@@ -1166,7 +1191,8 @@ public class MapController implements Initializable {
 	 * This method represent fire command button onAction where all commands got
 	 * separated and sent it to respective methods
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
@@ -1237,7 +1263,8 @@ public class MapController implements Initializable {
 	 * This method will analyze edit Continent command, validate and then call
 	 * particular method for next operation
 	 * 
-	 * @param commandLine is edit command sent from user
+	 * @param commandLine
+	 *            is edit command sent from user
 	 * @return proper message of result after edit Continent
 	 */
 	public String commandEditContinent(String commandLine) {
@@ -1302,7 +1329,8 @@ public class MapController implements Initializable {
 	 * This method will analyze edit Country command, validate and then call
 	 * particular method for next operation
 	 * 
-	 * @param commandLine is edit command sent from user
+	 * @param commandLine
+	 *            is edit command sent from user
 	 * @return proper message of result after edit Country
 	 */
 	public String commandEditCountry(String commandLine) {
@@ -1375,7 +1403,8 @@ public class MapController implements Initializable {
 	 * This method will analyze edit Neighbor command, validate and then call
 	 * particular method for next operation
 	 * 
-	 * @param commandLine is edit command sent from user
+	 * @param commandLine
+	 *            is edit command sent from user
 	 * @return proper message of result after edit neighbor country
 	 */
 	public String commandEditNeighbour(String commandLine) {
@@ -1465,7 +1494,8 @@ public class MapController implements Initializable {
 	 * This is OnAction method of edit Map. When editmap got clicked or given
 	 * command from GUI then particular method will be calld for next operation
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void EditMapOnAction(ActionEvent event) {
@@ -1562,7 +1592,8 @@ public class MapController implements Initializable {
 	 * This is OnAction method of savemap button, when this button got clicked this
 	 * method will be called.
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void saveMapOnAction(ActionEvent event) {
@@ -1625,8 +1656,10 @@ public class MapController implements Initializable {
 	/**
 	 * This method will validate the input given from GUI or console
 	 * 
-	 * @param value   is string for which you want to check validation
-	 * @param pattern regex for validation
+	 * @param value
+	 *            is string for which you want to check validation
+	 * @param pattern
+	 *            regex for validation
 	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -1647,7 +1680,8 @@ public class MapController implements Initializable {
 	 * This method is OnAction method of resetMap button. When resetMap got clicked
 	 * this method will be called and it will reset some feilds.
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void resetMap(ActionEvent event) {
@@ -1672,7 +1706,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will redirect user to welcome page
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void backToWelcome(ActionEvent event) {
@@ -1682,7 +1717,8 @@ public class MapController implements Initializable {
 	/**
 	 * This method will redirect user to play game screen
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void playgame(ActionEvent event) {
