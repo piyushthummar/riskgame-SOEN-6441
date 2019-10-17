@@ -20,6 +20,7 @@ import com.riskgame.config.StageManager;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
+import com.riskgame.model.RiskMap;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.PlayerHandlerImpl;
 import com.riskgame.view.FxmlView;
@@ -57,7 +58,7 @@ import javafx.util.Callback;
 
 @Controller
 public class StartupPhaseController implements Initializable {
-	
+
 	@FXML
 	private Button btnback;
 
@@ -135,13 +136,13 @@ public class StartupPhaseController implements Initializable {
 
 	public boolean startGame = false;
 
+	public boolean placeAll = false;
+
 	/**
 	 * This method will use to initialize the controller of this class
 	 * 
-	 * @param location
-	 *            of the FXML file
-	 * @param resources
-	 *            is properties information
+	 * @param location  of the FXML file
+	 * @param resources is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 * 
@@ -161,6 +162,7 @@ public class StartupPhaseController implements Initializable {
 
 		startGame = false;
 		mapFileName = "";
+		placeAll = false;
 
 	}
 
@@ -243,8 +245,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will start the game and redirect to playgame screen
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 * @throws IOException
 	 */
 	@FXML
@@ -269,8 +270,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will redirect user to welcome screen
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void backToMainPage(ActionEvent event) {
@@ -281,8 +281,7 @@ public class StartupPhaseController implements Initializable {
 	 * This method represent fire command button onAction where all commands got
 	 * separated and sent it to respective methods.
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
@@ -310,6 +309,18 @@ public class StartupPhaseController implements Initializable {
 					txtConsoleLog.setText(commandPopulateCountries());
 				} else if (command.startsWith("placearmy")) {
 
+					if (!placeAll) {
+						if (globGamePlayPhase != null) {
+
+							txtConsoleLog.setText(placeArmy(command));
+
+						} else {
+							txtConsoleLog.setText("Please fire populatecountries command first");
+						}
+					} else {
+						txtConsoleLog.setText("Placeall command previously executed. Army already assigned");
+					}
+
 				} else if (command.startsWith("placeall")) {
 
 					if (globGamePlayPhase != null) {
@@ -336,11 +347,42 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
+	private String placeArmy(String commandLine) {
+
+		String result = "";
+		List<String> command = Arrays.asList(commandLine.split(" "));
+		String countryName = command.get(1);
+		PlayerTerritory pTerritory = null;
+
+		for (Player player : playerList) {
+
+			List<PlayerTerritory> ptList = player.getPlayerterritories();
+			for (PlayerTerritory playerTerritory : ptList) {
+
+				if (playerTerritory.getTerritoryName().equalsIgnoreCase(countryName)) {
+
+					pTerritory = playerTerritory;
+				}
+			}
+
+		}
+
+		if (pTerritory != null) {
+			int army = pTerritory.getArmyOnterritory();
+			pTerritory.setArmyOnterritory(army + 1);
+			result = "Army Successfully Assign to " + countryName;
+
+		} else {
+			result = "Country not found. Please provide valid country";
+		}
+
+		return result;
+	}
+
 	/**
 	 * This method will load the map and give the appropriate message string
 	 * 
-	 * @param commandLine
-	 *            is the loadMap command given from user
+	 * @param commandLine is the loadMap command given from user
 	 * @return proper message of result after LoadMap command
 	 */
 	private String commandloadMapCommand(String commandLine) {
@@ -351,8 +393,15 @@ public class StartupPhaseController implements Initializable {
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 
 		if (mapNameList.contains(fileName.toLowerCase() + ".map")) {
-			result = fileName + " map loaded successfully!";
-			mapFileName = fileName + ".map";
+
+			RiskMap map = mapManagementImpl.readMap(fileName.toLowerCase() + ".map");
+			boolean validMap = mapManagementImpl.validateMap(map);
+			if (validMap) {
+				result = fileName + " map loaded successfully!";
+				mapFileName = fileName + ".map";
+			} else {
+				result = "Map validation fail. Invalid map loaded. Please correct map";
+			}
 
 		} else {
 			result = "Map not found in system Please enter valid name";
@@ -365,8 +414,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will add player in the game
 	 * 
-	 * @param commandLine
-	 *            is the command given from user to add user
+	 * @param commandLine is the command given from user to add user
 	 * @return proper message of result after player addition
 	 */
 	private String commandGamePlayer(String commandLine) {
@@ -441,8 +489,7 @@ public class StartupPhaseController implements Initializable {
 	 * This is onAction method of button addPlayer of GUI. It'll add player
 	 * according to the rules
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void addPlayer(ActionEvent event) {
@@ -471,8 +518,7 @@ public class StartupPhaseController implements Initializable {
 	 * This is the common method for both GUI and command line to save player in the
 	 * game
 	 * 
-	 * @param name
-	 *            of the player
+	 * @param name of the player
 	 */
 	private void saveCommonPlayer(String name) {
 		Player player = new Player();
@@ -516,8 +562,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will delete player from the game
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	private
 
@@ -566,12 +611,9 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This is the common method for controller to validate all field passed in it
 	 * 
-	 * @param field
-	 *            is the name you want to print in alert box
-	 * @param value
-	 *            is the string you want to validate
-	 * @param pattern
-	 *            is regex
+	 * @param field   is the name you want to print in alert box
+	 * @param value   is the string you want to validate
+	 * @param pattern is regex
 	 * @return true is validation got succeed
 	 */
 	private boolean validate(String field, String value, String pattern) {
@@ -594,10 +636,8 @@ public class StartupPhaseController implements Initializable {
 	 * This method will validate all types of input given by user through
 	 * commandLine or GUI
 	 * 
-	 * @param value
-	 *            is a string to be matched
-	 * @param pattern
-	 *            is a regex
+	 * @param value   is a string to be matched
+	 * @param pattern is a regex
 	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -617,8 +657,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will give alertBox in some operation when needed
 	 * 
-	 * @param alertMessage
-	 *            is message you want to give in alertBox
+	 * @param alertMessage is message you want to give in alertBox
 	 */
 	private void alertMesage(String alertMessage) {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -631,10 +670,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will return true if field is empty and false if not.
 	 * 
-	 * @param field
-	 *            is a string to be validated
-	 * @param empty
-	 *            false if not empty
+	 * @param field is a string to be validated
+	 * @param empty false if not empty
 	 * @return
 	 */
 	private boolean emptyValidation(String field, boolean empty) {
@@ -649,10 +686,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will be used to give alert message at the time of validation
 	 * 
-	 * @param field
-	 *            is a string you want to print in alert message
-	 * @param empty
-	 *            will return true check if alertContext is settled.
+	 * @param field is a string you want to print in alert message
+	 * @param empty will return true check if alertContext is settled.
 	 */
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
@@ -669,15 +704,25 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will assign countries to the user in random fashion
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void populateCountries(ActionEvent event) {
 		if (emptyValidation("Map", comboBoxchosenMap.getSelectionModel().getSelectedItem() == null)) {
 			if (playerList.size() >= 2) {
-				commonPopulateCountries();
-				alertMesage("All countries are randomly assigned to players. Please click on view column on usertable");
+
+				RiskMap map = mapManagementImpl.readMap(comboBoxchosenMap.getSelectionModel().getSelectedItem());
+				boolean validMap = mapManagementImpl.validateMap(map);
+
+				if (validMap) {
+
+					commonPopulateCountries();
+					alertMesage(
+							"All countries are randomly assigned to players. Please click on view column on usertable");
+				} else {
+					alertMesage("Map validation fail. Invalid map selected. Please select validmap");
+				}
+
 			} else {
 				alertMesage("Atleast 2 pleayers are requiredd for the game");
 			}
@@ -752,8 +797,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will place initial army to all player created in the game at once
 	 * 
-	 * @param even
-	 *            will represents value sent from view
+	 * @param even will represents value sent from view
 	 */
 	@FXML
 	void placeAllArmy(ActionEvent event) {
@@ -776,6 +820,17 @@ public class StartupPhaseController implements Initializable {
 	 * once.
 	 */
 	private void commonPlaceAllArmy() {
+
+		for (Player player : playerList) {
+
+			List<PlayerTerritory> ptList = player.getPlayerterritories();
+			for (PlayerTerritory playerTerritory : ptList) {
+				playerTerritory.setArmyOnterritory(0);
+
+			}
+
+		}
+
 		GamePlayPhase playPhase = new GamePlayPhase();
 		playPhase.setGameState(playerList);
 		if (mapFileName != null && !mapFileName.isEmpty()) {
@@ -790,13 +845,14 @@ public class StartupPhaseController implements Initializable {
 		playertable.setItems(playerList);
 		playerId = playerList.size() + 1;
 		startGame = true;
+		placeAll = true;
+
 	}
 
 	/**
 	 * This method will reset all buttons and fields once it got clicked
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void btnReset(ActionEvent event) {
