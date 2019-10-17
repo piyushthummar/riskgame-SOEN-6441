@@ -47,11 +47,17 @@ import javafx.scene.image.ImageView;
 import javafx.util.Callback;
 
 /**
+ * This class is a controller for the screen which used to choose map, add
+ * player, populate countries, place army and command for startup phase. It'll
+ * redirect user to main playscreen. This screen got redirected from welcome
+ * screen and map create screen both side.
  * 
  * @author <a href="mailto:r_istry@encs.concordia.ca">Raj Mistry</a>
  */
+
 @Controller
 public class StartupPhaseController implements Initializable {
+	
 	@FXML
 	private Button btnback;
 
@@ -99,33 +105,46 @@ public class StartupPhaseController implements Initializable {
 
 	private static int playerId = 1;
 
+	/**
+	 * Initialization of state manager
+	 */
 	@Lazy
 	@Autowired
 	private StageManager stageManager;
-	
+
+	/**
+	 * Initialization of MapManagementImpl
+	 */
 	@Autowired
 	private MapManagementImpl mapManagementImpl;
-	
+
 	@Autowired
 	private PlayerHandlerImpl playerHandlerImpl;
 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 	private ObservableList<String> mapComboValue = FXCollections.observableArrayList();
-	
+
 	private GamePlayPhase globGamePlayPhase;
-	
+
 	@FXML
-    private Button btnReset;
-	
+	private Button btnReset;
+
 	private String mapFileName;
-	
+
 	public static final String NEUTRAL = "NEUTRAL";
-	
+
 	public boolean startGame = false;
 
 	/**
+	 * This method will use to initialize the controller of this class
+	 * 
+	 * @param location
+	 *            of the FXML file
+	 * @param resources
+	 *            is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
+	 * 
 	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -134,17 +153,20 @@ public class StartupPhaseController implements Initializable {
 		setPlayerTableColumnProperties();
 		playerList.clear();
 		loadPlayerDetails();
-		
+
 		mapComboValue.clear();
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 		mapComboValue.addAll(mapNameList);
 		comboBoxchosenMap.setItems(mapComboValue);
-		
+
 		startGame = false;
 		mapFileName = "";
 
 	}
 
+	/**
+	 * This method will set Column name for player table
+	 */
 	private void setPlayerTableColumnProperties() {
 
 		id.setCellValueFactory(new PropertyValueFactory<>("playerId"));
@@ -154,6 +176,9 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
+	/**
+	 * This method will return selected value from the player table to console log
+	 */
 	Callback<TableColumn<Player, Boolean>, TableCell<Player, Boolean>> playerViewCellFactory = new Callback<TableColumn<Player, Boolean>, TableCell<Player, Boolean>>() {
 		@Override
 		public TableCell<Player, Boolean> call(final TableColumn<Player, Boolean> param) {
@@ -192,53 +217,73 @@ public class StartupPhaseController implements Initializable {
 					List<PlayerTerritory> ptList = player.getPlayerterritories();
 					StringBuilder builder = new StringBuilder();
 					for (PlayerTerritory pTerritory : ptList) {
-						if(pTerritory != null) {
-							builder.append("Continent:=> "+pTerritory.getContinentName()).append(" Territory:=> "+pTerritory.getTerritoryName()).append(" Army:=> "+pTerritory.getArmyOnterritory()).append(System.getProperty("line.separator"));
+						if (pTerritory != null) {
+							builder.append("Continent:=> " + pTerritory.getContinentName())
+									.append(" Territory:=> " + pTerritory.getTerritoryName())
+									.append(" Army:=> " + pTerritory.getArmyOnterritory())
+									.append(System.getProperty("line.separator"));
 						}
 					}
 					txtConsoleLog.clear();
 					txtConsoleLog.setText(builder.toString());
-					
-					
+
 				}
 			};
 			return cell;
 		}
 	};
 
+	/**
+	 * This method will load the details of the player
+	 */
 	private void loadPlayerDetails() {
 		playertable.setItems(playerList);
 	}
 
+	/**
+	 * This method will start the game and redirect to playgame screen
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 * @throws IOException
+	 */
 	@FXML
 	void startGame(ActionEvent event) throws IOException {
-		
-		if(startGame) {
-			
-			
+
+		if (startGame) {
 			GamePlayPhase gamePlayPhase = new GamePlayPhase();
 			gamePlayPhase.setGameState(playerList);
 			gamePlayPhase.setGamePhase("Startup");
-			if(mapFileName != null && !mapFileName.isEmpty()) {
+			if (mapFileName != null && !mapFileName.isEmpty()) {
 				gamePlayPhase.setFileName(mapFileName);
-			}else {
+			} else {
 				gamePlayPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
 			}
-			
-			stageManager.switchScene(FxmlView.PLAYGAME,gamePlayPhase);
-			
-			
-		}else {
+
+			stageManager.switchScene(FxmlView.PLAYGAME, gamePlayPhase);
+		} else {
 			alertMesage("Please finish startup phase");
 		}
-		
 	}
 
+	/**
+	 * This method will redirect user to welcome screen
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void backToMainPage(ActionEvent event) {
-		stageManager.switchScene(FxmlView.MAP,null);
+		stageManager.switchScene(FxmlView.MAP, null);
 	}
 
+	/**
+	 * This method represent fire command button onAction where all commands got
+	 * separated and sent it to respective methods.
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
 
@@ -254,29 +299,29 @@ public class StartupPhaseController implements Initializable {
 					gamePlayPhase.setGamePhase("Startup");
 					gamePlayPhase.setFileName(mapFileName);
 					txtConsoleLog.setText(gamePlayPhase.toString());
-					
+
 				} else if (command.startsWith("loadmap")) {
 
 					txtConsoleLog.setText(commandloadMapCommand(command));
-										
+
 				} else if (command.startsWith("gameplayer")) {
 					txtConsoleLog.setText(commandGamePlayer(command));
 				} else if (command.startsWith("populatecountries")) {
 					txtConsoleLog.setText(commandPopulateCountries());
 				} else if (command.startsWith("placearmy")) {
-					
+
 				} else if (command.startsWith("placeall")) {
-					
-					if(globGamePlayPhase != null) {
-						
+
+					if (globGamePlayPhase != null) {
+
 						commonPlaceAllArmy();
-						txtConsoleLog.setText("Armies are assigned to players. Please click on view column on usertable");
-						
-					}else {
+						txtConsoleLog
+								.setText("Armies are assigned to players. Please click on view column on usertable");
+
+					} else {
 						txtConsoleLog.setText("Please fire populatecountries command first");
 					}
-					
-					
+
 				} else {
 					txtConsoleLog.setText("Please enter valid command");
 				}
@@ -291,8 +336,13 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
-
-
+	/**
+	 * This method will load the map and give the appropriate message string
+	 * 
+	 * @param commandLine
+	 *            is the loadMap command given from user
+	 * @return proper message of result after LoadMap command
+	 */
 	private String commandloadMapCommand(String commandLine) {
 		String result = "";
 		List<String> command = Arrays.asList(commandLine.split(" "));
@@ -301,11 +351,8 @@ public class StartupPhaseController implements Initializable {
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 
 		if (mapNameList.contains(fileName.toLowerCase() + ".map")) {
-
-			//RiskMap map = mapManagementImpl.readMap(fileName + ".map");
-			//result = map.toString();
 			result = fileName + " map loaded successfully!";
-			mapFileName = fileName+".map";
+			mapFileName = fileName + ".map";
 
 		} else {
 			result = "Map not found in system Please enter valid name";
@@ -315,6 +362,13 @@ public class StartupPhaseController implements Initializable {
 		return result;
 	}
 
+	/**
+	 * This method will add player in the game
+	 * 
+	 * @param commandLine
+	 *            is the command given from user to add user
+	 * @return proper message of result after player addition
+	 */
 	private String commandGamePlayer(String commandLine) {
 
 		StringBuilder result = new StringBuilder();
@@ -327,7 +381,7 @@ public class StartupPhaseController implements Initializable {
 				playerName = command.get(i + 1);
 				String message = "-add " + playerName + " :=> ";
 				if (validateInput(playerName, "[a-zA-Z]+")) {
-					if(!playerName.equalsIgnoreCase(NEUTRAL)) {
+					if (!playerName.equalsIgnoreCase(NEUTRAL)) {
 						boolean isvalidName = true;
 						for (Player player : playerList) {
 							if (player != null && playerName.equalsIgnoreCase(player.getPlayerName())) {
@@ -338,22 +392,20 @@ public class StartupPhaseController implements Initializable {
 							}
 						}
 						if (isvalidName) {
-							if(playerList.size()<=5) {
+							if (playerList.size() <= 5) {
 								saveCommonPlayer(playerName);
 								result.append(message + playerName + " player saved successfully")
 										.append(System.getProperty("line.separator"));
-							}else {
+							} else {
 								result.append(message + playerName + " Max 6 Playes are allowed in the game")
-								.append(System.getProperty("line.separator"));
+										.append(System.getProperty("line.separator"));
 							}
-							
+
 						}
-					}else {
-						result.append(message +playerName+ " playername not allowed. This is system generated user")
-						.append(System.getProperty("line.separator"));
+					} else {
+						result.append(message + playerName + " playername not allowed. This is system generated user")
+								.append(System.getProperty("line.separator"));
 					}
-					
-					
 
 				} else {
 					result.append(message + "Please enter valid PlayerName")
@@ -385,32 +437,43 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
-
-
+	/**
+	 * This is onAction method of button addPlayer of GUI. It'll add player
+	 * according to the rules
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void addPlayer(ActionEvent event) {
 
 		if (validate("Player Name", playerNameText.getText(), "[a-zA-Z]+")
 				&& isValidPlayerName(playerNameText.getText())) {
-			if(!playerNameText.getText().equalsIgnoreCase(NEUTRAL)) {
-					
-				if(playerList.size()<=5) {
+			if (!playerNameText.getText().equalsIgnoreCase(NEUTRAL)) {
+
+				if (playerList.size() <= 5) {
 					saveCommonPlayer(playerNameText.getText());
 					alertMesage("Player saved successfully");
 					clearPlayerFields();
-				}else {
+				} else {
 					alertMesage("Max 6 Playes are allowed in the game");
 				}
-				
-				
-			}else {
-				alertMesage(NEUTRAL+ " name not allowed. this is system generated user");
+
+			} else {
+				alertMesage(NEUTRAL + " name not allowed. this is system generated user");
 			}
-			
+
 		}
 
 	}
 
+	/**
+	 * This is the common method for both GUI and command line to save player in the
+	 * game
+	 * 
+	 * @param name
+	 *            of the player
+	 */
 	private void saveCommonPlayer(String name) {
 		Player player = new Player();
 		player.setPlayerId(playerId);
@@ -421,11 +484,20 @@ public class StartupPhaseController implements Initializable {
 		loadPlayerDetails();
 	}
 
+	/**
+	 * This method will clear add player field after first user
+	 */
 	private void clearPlayerFields() {
 		playerNameText.clear();
 
 	}
 
+	/**
+	 * This method validates the name of player i.e. error if already exists
+	 * 
+	 * @param playerName
+	 * @return true if validation is correct
+	 */
 	private boolean isValidPlayerName(String playerName) {
 		boolean isValid = true;
 
@@ -436,14 +508,17 @@ public class StartupPhaseController implements Initializable {
 				alertMesage("Player name already exists");
 				isValid = false;
 				break;
-
 			}
-
 		}
-
 		return isValid;
 	}
 
+	/**
+	 * This method will delete player from the game
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	private
 
 	@FXML void deletePlayer(ActionEvent event) {
@@ -461,11 +536,15 @@ public class StartupPhaseController implements Initializable {
 			deleteCommonplayer(player.getPlayerName());
 			clearPlayerFields();
 			alertMesage("Player deleted successfully");
-
 		}
-
 	}
 
+	/**
+	 * This is the common method for both GUI and command line fro delete player
+	 * 
+	 * @param playerName
+	 * @return true is player got deleted successfully
+	 */
 	private boolean deleteCommonplayer(String playerName) {
 		boolean result = false;
 
@@ -480,13 +559,20 @@ public class StartupPhaseController implements Initializable {
 				loadPlayerDetails();
 				clearPlayerFields();
 			}
-
 		}
 		return result;
 	}
 
-	/*
-	 * Validations
+	/**
+	 * This is the common method for controller to validate all field passed in it
+	 * 
+	 * @param field
+	 *            is the name you want to print in alert box
+	 * @param value
+	 *            is the string you want to validate
+	 * @param pattern
+	 *            is regex
+	 * @return true is validation got succeed
 	 */
 	private boolean validate(String field, String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -504,8 +590,15 @@ public class StartupPhaseController implements Initializable {
 		}
 	}
 
-	/*
-	 * Validations
+	/**
+	 * This method will validate all types of input given by user through
+	 * commandLine or GUI
+	 * 
+	 * @param value
+	 *            is a string to be matched
+	 * @param pattern
+	 *            is a regex
+	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
 		if (!value.isEmpty()) {
@@ -521,8 +614,13 @@ public class StartupPhaseController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method will give alertBox in some operation when needed
+	 * 
+	 * @param alertMessage
+	 *            is message you want to give in alertBox
+	 */
 	private void alertMesage(String alertMessage) {
-
 		Alert alert = new Alert(AlertType.INFORMATION);
 		// alert.setTitle("Saved successfully.");
 		alert.setHeaderText(null);
@@ -530,6 +628,15 @@ public class StartupPhaseController implements Initializable {
 		alert.showAndWait();
 	}
 
+	/**
+	 * This method will return true if field is empty and false if not.
+	 * 
+	 * @param field
+	 *            is a string to be validated
+	 * @param empty
+	 *            false if not empty
+	 * @return
+	 */
 	private boolean emptyValidation(String field, boolean empty) {
 		if (!empty) {
 			return true;
@@ -539,6 +646,14 @@ public class StartupPhaseController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method will be used to give alert message at the time of validation
+	 * 
+	 * @param field
+	 *            is a string you want to print in alert message
+	 * @param empty
+	 *            will return true check if alertContext is settled.
+	 */
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
 		alert.setTitle("Validation Error");
@@ -550,159 +665,148 @@ public class StartupPhaseController implements Initializable {
 
 		alert.showAndWait();
 	}
-	
+
+	/**
+	 * This method will assign countries to the user in random fashion
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void populateCountries(ActionEvent event) {
-		
-		
-
-		if(emptyValidation("Map", comboBoxchosenMap.getSelectionModel().getSelectedItem() == null)) {
-			
-			if(playerList.size()>=2) {
-				
-				
+		if (emptyValidation("Map", comboBoxchosenMap.getSelectionModel().getSelectedItem() == null)) {
+			if (playerList.size() >= 2) {
 				commonPopulateCountries();
-				
-				
 				alertMesage("All countries are randomly assigned to players. Please click on view column on usertable");
-				
-				
-			}else {
+			} else {
 				alertMesage("Atleast 2 pleayers are requiredd for the game");
 			}
-			
-		}else {
-			//alertMesage("Please select map first");
+		} else {
+			// alertMesage("Please select map first");
 		}
-		
 	}
-	
+
+	/**
+	 * This is a common method for both GUI and command line to populate countries
+	 * to user
+	 */
 	private void commonPopulateCountries() {
-		
-		if(playerList.size()==2 && !playerList.stream().anyMatch(p->p.getPlayerName().equalsIgnoreCase(NEUTRAL)) ){
-			
+
+		if (playerList.size() == 2 && !playerList.stream().anyMatch(p -> p.getPlayerName().equalsIgnoreCase(NEUTRAL))) {
+
 			Player player = new Player();
 			player.setPlayerId(playerId);
 			player.setPlayerName(NEUTRAL);
 			player.setArmyOwns(0);
 			playerList.add(player);
-			
+
 		}
-		
+
 		GamePlayPhase playPhase = new GamePlayPhase();
-		
-		playerList.forEach(player->player.getPlayerterritories().clear());
-		
+
+		playerList.forEach(player -> player.getPlayerterritories().clear());
+
 		playPhase.setGameState(playerList);
-		
-		if(mapFileName != null && !mapFileName.isEmpty()) {
+
+		if (mapFileName != null && !mapFileName.isEmpty()) {
 			playPhase.setFileName(mapFileName);
-		}else {
+		} else {
 			playPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
 		}
-		
+
 		playPhase = playerHandlerImpl.populateTerritoriesByRoundRobbin(playPhase);
-		
+
 		playerList = FXCollections.observableArrayList();
 		playerList.addAll(playPhase.getGameState());
 		playertable.getItems().clear();
 		playertable.setItems(playerList);
-		playerId = playerList.size()+1;
-		
+		playerId = playerList.size() + 1;
+
 		globGamePlayPhase = playPhase;
-		
-		
+
 	}
-	
+
+	/**
+	 * @return string message of appropriate result to above method where this got
+	 *         called
+	 */
 	private String commandPopulateCountries() {
 		String result = "";
-		
-		if(mapFileName != null && !mapFileName.isEmpty()) {
-			if(playerList.size()>=2) {
-				
+
+		if (mapFileName != null && !mapFileName.isEmpty()) {
+			if (playerList.size() >= 2) {
+
 				commonPopulateCountries();
 				result = "All countries are randomly assigned to players. Please fire showmap command to view";
-				
-			}else {
+
+			} else {
 				result = "Atleast 2 pleayers are requiredd for the game please add players";
 			}
-		}else {
+		} else {
 			result = "Please fire loadmap command first to load your map";
 		}
-		
+
 		return result;
 	}
-	
+
+	/**
+	 * This method will place initial army to all player created in the game at once
+	 * 
+	 * @param even
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void placeAllArmy(ActionEvent event) {
 
-		if(globGamePlayPhase != null) {
-			
-		
+		if (globGamePlayPhase != null) {
 			commonPlaceAllArmy();
-			
 			comboBoxchosenMap.setDisable(true);
 			playerNameText.setDisable(true);
 			btnAddPlayer.setDisable(true);
 			btnPopulatecountry.setDisable(true);
 			btnPlaceAll.setDisable(true);
-			
-			
-			
 			alertMesage("Armies are assigned to players. Please click on view column on usertable");
-			
-			
-			
-			
-		}else {
+		} else {
 			alertMesage("Please click on populate country first");
 		}
-		
 	}
-	
+
+	/**
+	 * This is the common method for both GUI and commandLine for place all army at
+	 * once.
+	 */
 	private void commonPlaceAllArmy() {
-		
 		GamePlayPhase playPhase = new GamePlayPhase();
-		
-		//playerList.forEach(player->player.getPlayerterritories().clear());
-		
 		playPhase.setGameState(playerList);
-		if(mapFileName != null && !mapFileName.isEmpty()) {
+		if (mapFileName != null && !mapFileName.isEmpty()) {
 			playPhase.setFileName(mapFileName);
-		}else {
+		} else {
 			playPhase.setFileName(comboBoxchosenMap.getSelectionModel().getSelectedItem());
 		}
-		
 		playPhase = playerHandlerImpl.placeAll(playPhase);
-		
 		playerList = FXCollections.observableArrayList();
 		playerList.addAll(playPhase.getGameState());
 		playertable.getItems().clear();
 		playertable.setItems(playerList);
-		playerId = playerList.size()+1;
-		
+		playerId = playerList.size() + 1;
 		startGame = true;
-		
 	}
-	
-	@FXML
-    void btnReset(ActionEvent event) {
 
-		
+	/**
+	 * This method will reset all buttons and fields once it got clicked
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
+	@FXML
+	void btnReset(ActionEvent event) {
 		comboBoxchosenMap.setDisable(false);
 		playerNameText.setDisable(false);
 		btnAddPlayer.setDisable(false);
 		btnPopulatecountry.setDisable(false);
 		btnPlaceAll.setDisable(false);
-		
 		mapFileName = "";
-		
 		playerList.clear();
 		loadPlayerDetails();
-		
-		
-		
-    }
-
-
+	}
 }
