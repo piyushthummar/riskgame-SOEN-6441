@@ -1,0 +1,9 @@
+com.riskgame
+com.riskgame.config
+com.riskgame.controller
+com.riskgame.dto
+com.riskgame.logging
+com.riskgame.model
+com.riskgame.service
+com.riskgame.service.Impl
+com.riskgame.view
