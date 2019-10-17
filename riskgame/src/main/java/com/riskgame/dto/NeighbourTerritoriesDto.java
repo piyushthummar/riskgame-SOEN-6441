@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * This DTO stores the value about neighbor territories given by user side.
+ * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ */
 @Getter
 @Setter
 @ToString
@@ -13,6 +17,7 @@ public class NeighbourTerritoriesDto {
 	private String countryName;
 	private String countryNeighbourName;
 	/**
+	 * parameterise constructor
 	 * @param id
 	 * @param countryName
 	 * @param countryNeighbourName
@@ -25,7 +30,7 @@ public class NeighbourTerritoriesDto {
 	}
 	
 	/**
-	 * 
+	 * default constructor
 	 */
 	public NeighbourTerritoriesDto() {
 		super();
