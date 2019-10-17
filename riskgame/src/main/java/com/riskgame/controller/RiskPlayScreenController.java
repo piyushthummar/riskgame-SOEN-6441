@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.riskgame.controller;
 
 import java.net.URL;
@@ -35,8 +32,12 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
 /**
+ * This a game playing screen controller, where things like Reinforcement,
+ * attack and fortification managed and player can play the game through command
+ * line also. This screen got redirected from startup phase controller.
  * 
  * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
+ * @see com.riskgame.controller.StartupPhaseController
  */
 @Controller
 public class RiskPlayScreenController implements Initializable {
@@ -130,6 +131,12 @@ public class RiskPlayScreenController implements Initializable {
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 
 	/**
+	 * This is an initialization method for this controller to start.
+	 * 
+	 * @param location
+	 *            of the FXML file
+	 * @param resources
+	 *            is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 */
@@ -144,31 +151,60 @@ public class RiskPlayScreenController implements Initializable {
 		adjacentTerritoryArea.clear();
 	}
 
+	/**
+	 * This is an onAction method for button place Reinforcement of GUI
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void placeReinforcement(ActionEvent event) {
 
 	}
 
+	/**
+	 * This is an onAction method for button attack of GUI
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void attack(ActionEvent event) {
 
 	}
 
+	/**
+	 * This is an onAction method for button fortification of GUI
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void fortify(ActionEvent event) {
 
 	}
 
+	/**
+	 * This is an onAction method for button end Turn of GUI
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void endTurn(ActionEvent event) {
 
 	}
 
+	/**
+	 * This is an onAction method for button fireCommand. It'll take commands from
+	 * player and performs action accordingly.
+	 * 
+	 * @param event
+	 *            will represents value sent from view
+	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
-
 		// txtConsoleLog.clear();
-
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
 
@@ -214,6 +250,14 @@ public class RiskPlayScreenController implements Initializable {
 		}
 	}
 
+	/**
+	 * This is a method for fortification process where player can move his/her army
+	 * from one territory to it's adjacent owned territory.
+	 * 
+	 * @param command
+	 *            is a fortification command given from player
+	 * @return message of result from fortification process
+	 */
 	private String fortification(String command) {
 
 		String[] dataArray = command.split(" ");
@@ -229,17 +273,13 @@ public class RiskPlayScreenController implements Initializable {
 
 				fillTerritoryList();
 				fillAdjacentTerritoryList();
-
 				changeUserTurn();
-
 			} else {
 
 				if (commandData.size() != 4) {
 
 					sb.append("Please Enter Valid command").append(NEWLINE);
-
 				} else {
-
 					if (validateInput(commandData.get(3), "[1-9][0-9]*")
 							&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 							&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
@@ -325,6 +365,16 @@ public class RiskPlayScreenController implements Initializable {
 		return sb.toString();
 	}
 
+	/**
+	 * This method validate input given from user and return true if it's correct
+	 * and false otherwise.
+	 * 
+	 * @param value
+	 *            is string to be validated
+	 * @param pattern
+	 *            is regex
+	 * @return true if validation got succeed.
+	 */
 	private boolean validateInput(String value, String pattern) {
 		if (!value.isEmpty()) {
 			Pattern p = Pattern.compile(pattern);
@@ -340,12 +390,14 @@ public class RiskPlayScreenController implements Initializable {
 	}
 
 	/**
+	 * This a reinforcement method in which you can put some number of extra army on
+	 * your desired territory each time your turn comes.
+	 * 
 	 * @param command
-	 * @return
+	 *            is a command fired from player
+	 * @return message of result from reinforcement process
 	 */
 	private String placeReinforcement(String command) {
-		StringBuilder result = new StringBuilder();
-		Player player = new Player();
 		String countryName = "";
 		int armyToPlace;
 		String[] dataArray = command.split(" ");
@@ -373,9 +425,6 @@ public class RiskPlayScreenController implements Initializable {
 
 					System.out.println("playerTerritory After ==> " + playerTerritory);
 
-					// playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory() +
-					// armyToPlace);
-
 					playerReinforceArmy = playerReinforceArmy - armyToPlace;
 
 					String message = armyToPlace + " Assigned to " + cName;
@@ -402,8 +451,6 @@ public class RiskPlayScreenController implements Initializable {
 				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
 			}
 
-			// reinforce(armyToPlace, countryName, player);
-
 		} else {
 
 			sb.append("Please Enter Valid Command").append(NEWLINE);
@@ -412,11 +459,19 @@ public class RiskPlayScreenController implements Initializable {
 		return sb.toString();
 	}
 
+	/**
+	 * This method will exit the game terminates the window.
+	 * @param event will represents value sent from view
+	 */
 	@FXML
 	void exitGame(ActionEvent event) {
 		stageManager.switchScene(FxmlView.WELCOME, null);
 	}
 
+	/**
+	 * This method will transfer phase of playing from one player to another player for the first time
+	 * @param object
+	 */
 	public void transferGamePlayPhase(Object object) {
 
 		playerList.clear();
@@ -443,19 +498,18 @@ public class RiskPlayScreenController implements Initializable {
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
-
 	}
 
+	/**
+	 * This method will change user's turn everytime
+	 */
 	private void changeUserTurn() {
 
 		if (playerIndex < playerList.size() - 1) {
-
 			playerIndex++;
-
 			if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
 				playerIndex = 0;
 			}
-
 		} else {
 			playerIndex = 0;
 		}
@@ -477,6 +531,9 @@ public class RiskPlayScreenController implements Initializable {
 
 	}
 
+	/**
+	 * This method will fill list of territories with it's army,that user owns to show it in GUI while he is having his turn
+	 */
 	private void fillTerritoryList() {
 
 		territoryArea.clear();
@@ -494,6 +551,9 @@ public class RiskPlayScreenController implements Initializable {
 		}
 	}
 
+	/**
+	 * This method will fill list of adjacent territories user owns to show it in GUI while he is having his turn
+	 */
 	private void fillAdjacentTerritoryList() {
 
 		adjacentTerritoryArea.clear();
@@ -522,10 +582,7 @@ public class RiskPlayScreenController implements Initializable {
 				sbBuilder.append(NEWLINE);
 				count++;
 			}
-
 			adjacentTerritoryArea.setText(sbBuilder.toString());
 		}
-
 	}
-
 }
