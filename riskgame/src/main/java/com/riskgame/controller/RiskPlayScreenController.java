@@ -419,7 +419,7 @@ public class RiskPlayScreenController implements Initializable {
 
 					System.out.println("playerTerritory before ==> " + playerTerritory);
 
-					int army = playerTerritory.getArmyOnterritory() + 1;
+					int army = playerTerritory.getArmyOnterritory() + armyToPlace;
 
 					playerTerritory.setArmyOnterritory(army);
 
@@ -481,7 +481,7 @@ public class RiskPlayScreenController implements Initializable {
 		System.out.println("===> " + gameplayphase);
 		System.out.println(riskMap);
 
-		playerList.addAll(gameplayphase.getGameState());
+		playerList.addAll(gameplayphase.getPlayerList());
 
 		txtCommandLine.clear();
 		txtConsoleLog.clear();

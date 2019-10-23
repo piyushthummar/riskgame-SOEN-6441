@@ -9,6 +9,7 @@ import com.riskgame.view.FxmlView;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This is the main entry point for RiskgameApplication and it extends
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @version 1.0.0
  */
+@Slf4j
 @SpringBootApplication
 public class RiskgameApplication extends Application {
 	protected ConfigurableApplicationContext springContext;
@@ -39,6 +41,7 @@ public class RiskgameApplication extends Application {
 	@Override
 	public void init() throws Exception {
 		springContext = springBootApplicationContext();
+		log.info("\nSystem started");
 	}
 
 	/**
@@ -80,6 +83,7 @@ public class RiskgameApplication extends Application {
 		SpringApplicationBuilder builder = new SpringApplicationBuilder(RiskgameApplication.class);
 		String[] args = getParameters().getRaw().stream().toArray(String[]::new);
 		return builder.run(args);
+		
 	}
 
 }

@@ -49,6 +49,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * This class is entry point of Map management related operation like edit
@@ -57,6 +58,7 @@ import javafx.util.Callback;
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
  */
+@Slf4j
 @Controller
 public class MapController implements Initializable {
 
@@ -1253,7 +1255,8 @@ public class MapController implements Initializable {
 				consoleArea.setText("Please enter valid command");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			log.error("Exception in fire command", e);
 			consoleArea.setText("Please enter valid command");
 		}
 

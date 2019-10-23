@@ -25,7 +25,7 @@ public class GamePlayPhase {
 	/**
 	 * It'll manage list of player in that particlaur state of game
 	 */
-	private List<Player> gameState;
+	private List<Player> playerList;
 	
 	/**
 	 * It'll store name of game phase i.e. startUp, reinforcement etc.
@@ -39,7 +39,7 @@ public class GamePlayPhase {
 
 	@Override
 	public String toString() {
-		return "GamePlayPhase [gameState= \n" + gameState +"\n"+ ", gamePhase=" + gamePhase + ", fileName=" + fileName + "]"+"\n";
+		return "GamePlayPhase [gameState= \n" + playerList +"\n"+ ", gamePhase=" + gamePhase + ", fileName=" + fileName + "]"+"\n";
 	}
 	
 	

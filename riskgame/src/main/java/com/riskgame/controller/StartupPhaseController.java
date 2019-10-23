@@ -253,7 +253,7 @@ public class StartupPhaseController implements Initializable {
 
 		if (startGame) {
 			GamePlayPhase gamePlayPhase = new GamePlayPhase();
-			gamePlayPhase.setGameState(playerList);
+			gamePlayPhase.setPlayerList(playerList);
 			gamePlayPhase.setGamePhase("Startup");
 			if (mapFileName != null && !mapFileName.isEmpty()) {
 				gamePlayPhase.setFileName(mapFileName);
@@ -294,7 +294,7 @@ public class StartupPhaseController implements Initializable {
 
 				if (command.startsWith("showmap")) {
 					GamePlayPhase gamePlayPhase = new GamePlayPhase();
-					gamePlayPhase.setGameState(playerList);
+					gamePlayPhase.setPlayerList(playerList);
 					gamePlayPhase.setGamePhase("Startup");
 					gamePlayPhase.setFileName(mapFileName);
 					txtConsoleLog.setText(gamePlayPhase.toString());
@@ -751,7 +751,7 @@ public class StartupPhaseController implements Initializable {
 
 		playerList.forEach(player -> player.getPlayerterritories().clear());
 
-		playPhase.setGameState(playerList);
+		playPhase.setPlayerList(playerList);
 
 		if (mapFileName != null && !mapFileName.isEmpty()) {
 			playPhase.setFileName(mapFileName);
@@ -762,7 +762,7 @@ public class StartupPhaseController implements Initializable {
 		playPhase = playerHandlerImpl.populateTerritoriesRandomly(playPhase);
 
 		playerList = FXCollections.observableArrayList();
-		playerList.addAll(playPhase.getGameState());
+		playerList.addAll(playPhase.getPlayerList());
 		playertable.getItems().clear();
 		playertable.setItems(playerList);
 		playerId = playerList.size() + 1;
@@ -832,7 +832,7 @@ public class StartupPhaseController implements Initializable {
 		}
 
 		GamePlayPhase playPhase = new GamePlayPhase();
-		playPhase.setGameState(playerList);
+		playPhase.setPlayerList(playerList);
 		if (mapFileName != null && !mapFileName.isEmpty()) {
 			playPhase.setFileName(mapFileName);
 		} else {
@@ -840,7 +840,7 @@ public class StartupPhaseController implements Initializable {
 		}
 		playPhase = playerHandlerImpl.placeAllArmyByRoundRobin(playPhase);
 		playerList = FXCollections.observableArrayList();
-		playerList.addAll(playPhase.getGameState());
+		playerList.addAll(playPhase.getPlayerList());
 		playertable.getItems().clear();
 		playertable.setItems(playerList);
 		playerId = playerList.size() + 1;
