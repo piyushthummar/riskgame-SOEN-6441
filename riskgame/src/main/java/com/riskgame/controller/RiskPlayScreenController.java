@@ -16,6 +16,7 @@ import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskMap;
+import com.riskgame.observerpattern.Observer;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.view.FxmlView;
@@ -40,7 +41,7 @@ import javafx.scene.control.TextField;
  * @see com.riskgame.controller.StartupPhaseController
  */
 @Controller
-public class RiskPlayScreenController implements Initializable {
+public class RiskPlayScreenController extends Observer implements Initializable {
 
 	GamePlayPhase gameplayphase = new GamePlayPhase();
 	@FXML
@@ -99,6 +100,12 @@ public class RiskPlayScreenController implements Initializable {
 
 	@FXML
 	private TextArea adjacentTerritoryArea;
+	
+	@FXML
+	private TextArea currentLog;
+	
+	@FXML
+	private TextArea phaseviewLog;
 
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
@@ -110,7 +117,7 @@ public class RiskPlayScreenController implements Initializable {
 	@Autowired
 	private StageManager stageManager;
 
-	private GamePlayPhase GamePlayPhase;
+	private GamePlayPhase gamePlayPhase;
 
 	private RiskMap riskMap;
 
@@ -143,7 +150,7 @@ public class RiskPlayScreenController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		GamePlayPhase = new GamePlayPhase();
+		gamePlayPhase = new GamePlayPhase();
 		riskMap = new RiskMap();
 		sb = new StringBuilder();
 
@@ -250,6 +257,15 @@ public class RiskPlayScreenController implements Initializable {
 		}
 	}
 
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		currentLog.setText("");
+		currentLog.appendText("Current Player : " + gameplayphase.getPlayerList().get(playerIndex).getPlayerName());
+		currentLog.appendText("Current Phase : " + gameplayphase.getGamePhase());
+		currentLog.appendText("Armies Owned : " + gameplayphase.getPlayerList().get(playerIndex).getPlayerName());
+	}
+	
 	/**
 	 * This is a method for fortification process where player can move his/her army
 	 * from one territory to it's adjacent owned territory.
@@ -262,7 +278,8 @@ public class RiskPlayScreenController implements Initializable {
 
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
-
+		String fortificationMessage = null;
+		
 		if (commandData.get(0).equalsIgnoreCase("fortify")) {
 
 			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
@@ -326,7 +343,7 @@ public class RiskPlayScreenController implements Initializable {
 
 									System.out.println("armyAfter=> " + armyAfter);
 
-									sb.append(playerName).append("s fortification done").append(NEWLINE);
+									sb.append(playerName).append("'s fortification done").append(NEWLINE);
 									sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
 
 									System.out.println("FORTIFY ====> " + playerList);
@@ -334,25 +351,32 @@ public class RiskPlayScreenController implements Initializable {
 									fillTerritoryList();
 									fillAdjacentTerritoryList();
 
+									//Observer-Pattern Update Call
+									fortificationMessage = armytoMove + " armies moved from " + fromTerritory + " to " + toTerritory;
+									
 									changeUserTurn();
 
 								} else {
 									sb.append("you should have at least one army in your territory after fortification")
 											.append(fromCountry).append(NEWLINE);
+									fortificationMessage = sb.toString();
 								}
 
 							} else {
 								sb.append(toCountry).append(" is not neighbour country of ").append(fromCountry)
 										.append(NEWLINE);
+								fortificationMessage = sb.toString();
 							}
 
 						} else {
 							sb.append("fromcountry or tocountry not found : Please Enter Valid country Name")
 									.append(NEWLINE);
+							fortificationMessage = sb.toString();
 						}
 
 					} else {
 						sb.append("Please Enter Valid command").append(NEWLINE);
+						fortificationMessage = sb.toString();
 					}
 
 				}
@@ -360,11 +384,21 @@ public class RiskPlayScreenController implements Initializable {
 		} else {
 
 			sb.append("Please Enter Valid command").append(NEWLINE);
+			fortificationMessage = sb.toString();
 		}
 
+		
+		observerSubject.setFortificationMessage(fortificationMessage);
 		return sb.toString();
 	}
 
+	@Override
+	public void fortificationUpdate()
+	{
+		phaseviewLog.setText("");
+		phaseviewLog.appendText(observerSubject.getFortificationMessage());
+	}
+	
 	/**
 	 * This method validate input given from user and return true if it's correct
 	 * and false otherwise.
@@ -402,6 +436,8 @@ public class RiskPlayScreenController implements Initializable {
 		int armyToPlace;
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
+		String reinforcementMessage;
+		
 		if (commandData.size() == 3 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 				&& validateInput(commandData.get(2), "[1-9][0-9]*")) {
 
@@ -428,9 +464,11 @@ public class RiskPlayScreenController implements Initializable {
 					playerReinforceArmy = playerReinforceArmy - armyToPlace;
 
 					String message = armyToPlace + " Assigned to " + cName;
+					
 
 					sb.append(message).append(NEWLINE);
 					sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+					
 					if (playerReinforceArmy == 0) {
 						sb.append(playerName)
 								.append(" 's Reinforcement Phase done please go to the Fortification phase")
@@ -439,16 +477,20 @@ public class RiskPlayScreenController implements Initializable {
 
 					System.out.println("REINFORCEMENT ====> " + playerList);
 
+
+					
 					fillTerritoryList();
 					fillAdjacentTerritoryList();
 
 				} else {
 					sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ")
 							.append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+
 				}
 
 			} else {
 				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
+				
 			}
 
 		} else {
@@ -456,9 +498,30 @@ public class RiskPlayScreenController implements Initializable {
 			sb.append("Please Enter Valid Command").append(NEWLINE);
 
 		}
+
+		//Observer Pattern Update Call
+		reinforcementMessage = sb.toString();
+		observerSubject.setReinforcementMessage(reinforcementMessage);
 		return sb.toString();
 	}
 
+	@Override
+	public void reinforcemrentUpdate() {
+		
+		phaseviewLog.setText("");
+		phaseviewLog.appendText(observerSubject.getReinforcementMessage());
+		
+	}
+
+	@Override
+	public void attackUpdate() {
+
+		phaseviewLog.setText("");
+		phaseviewLog.appendText(observerSubject.getAttackMessage());
+	}
+
+
+	
 	/**
 	 * This method will exit the game terminates the window.
 	 * @param event will represents value sent from view
@@ -585,4 +648,6 @@ public class RiskPlayScreenController implements Initializable {
 			adjacentTerritoryArea.setText(sbBuilder.toString());
 		}
 	}
+
+	
 }
