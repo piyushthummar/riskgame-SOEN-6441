@@ -134,6 +134,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	public static final String NEUTRAL = "NEUTRAL";
 
 	private static String NEWLINE = System.getProperty("line.separator");
+	
+	private static boolean mapConquered = false;
+	
+	private static int attackerTotalDice;
+	private static int defenderTotalDice;
 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 
@@ -214,7 +219,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// txtConsoleLog.clear();
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
-
 		System.out.println("playerIndex => " + playerIndex);
 		System.out.println("playerName => " + playerName);
 		System.out.println("playerReinforceArmy => " + playerReinforceArmy);
@@ -235,8 +239,16 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						txtConsoleLog.setText(sb.toString());
 					}
 
-				} else if (command.startsWith("fortify")) {
-
+				}else if(command.startsWith("attack") || command.startsWith("defend")
+						|| command.startsWith("attackmove")) {
+					if(mapConquered)
+					{
+						
+					}else {
+						txtConsoleLog.setText(attackPhase(command));
+					}				
+				}		
+					else if (command.startsWith("fortify")) {
 					if (playerReinforceArmy == 0) {
 						txtConsoleLog.setText(fortification(command));
 					} else {
@@ -244,7 +256,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 								.append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
 					}
-
 				} else
 					txtConsoleLog.setText("Please Enter Valid Command");
 			} else {
@@ -255,6 +266,45 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			e.printStackTrace();
 			txtConsoleLog.setText("Please Enter Valid Command");
 		}
+	}
+
+	/**
+	 * @param command
+	 * @return
+	 */
+	private String attackPhase(String command) {
+		
+		String[] dataArray = command.split(" ");
+		List<String> commandData = Arrays.asList(dataArray);
+		if (commandData.get(0).equals("attack") && commandData.get(3).equals("-allout")) {
+			if (commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& commandData.get(3).equals("-allout")) {
+				
+			}
+		} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack")) {
+
+		} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3),"[1-9][0-9]*")) {
+			String countryNameFrom = commandData.get(1);
+			String countryNameTo = commandData.get(2);
+			attackerTotalDice = Integer.parseInt(commandData.get(3));
+			if (commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& attackerTotalDice < 4) {
+				System.out.println(countryNameFrom+" "+countryNameTo);
+				System.out.println("attackdice" + attackerTotalDice);
+			}
+		} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1),"[1-9][0-9]*")) {
+			defenderTotalDice = Integer.parseInt(commandData.get(1));
+			
+		} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1),"[1-9][0-9]*")) {
+
+		} else {
+			sb.append("Please Enter Valid Command").append(NEWLINE);
+		}
+
+		return "attackdice" + attackerTotalDice;
+	
 	}
 
 	@Override
@@ -492,11 +542,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
 				
 			}
-
 		} else {
 
 			sb.append("Please Enter Valid Command").append(NEWLINE);
-
 		}
 
 		//Observer Pattern Update Call
@@ -509,8 +557,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	public void reinforcemrentUpdate() {
 		
 		phaseviewLog.setText("");
-		phaseviewLog.appendText(observerSubject.getReinforcementMessage());
-		
+		phaseviewLog.appendText(observerSubject.getReinforcementMessage());		
 	}
 
 	@Override
@@ -519,8 +566,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseviewLog.setText("");
 		phaseviewLog.appendText(observerSubject.getAttackMessage());
 	}
-
-
 	
 	/**
 	 * This method will exit the game terminates the window.
