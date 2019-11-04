@@ -1,5 +1,7 @@
 package com.riskgame.service;
 
+import com.riskgame.model.GamePlayPhase;
+
 /**
  * This is a interface of RiskPlayGame buiness logic. Where reinforcement,attack
  * and fortification happens.
@@ -17,5 +19,12 @@ public interface RiskPlayInterface {
 	 * @return army to reinforce
 	 */
 	int checkForReinforcement(int totalOwnedCountries);
-
+	
+	/**
+	 * This method will make number of cards same as number of countries to use it at the phase of reinforcement
+	 * @param noOfCountries
+	 */
+	void makeCards(int noOfCountries);
+	
+	int checkForContinentControlValue(GamePlayPhase gamePlayPhase);
 }
