@@ -100,10 +100,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	@FXML
 	private TextArea adjacentTerritoryArea;
-	
+
 	@FXML
 	private TextArea currentLog;
-	
+
 	@FXML
 	private TextArea phaseviewLog;
 
@@ -134,9 +134,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	public static final String NEUTRAL = "NEUTRAL";
 
 	private static String NEWLINE = System.getProperty("line.separator");
-	
+
 	private static boolean mapConquered = false;
-	
+	private static boolean countryConqured = false;
+
 	private static int attackerTotalDice;
 	private static int defenderTotalDice;
 
@@ -228,9 +229,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		try {
 			String command = txtCommandLine.getText();
 			if (command != null && !command.isEmpty()) {
-				if (command.startsWith("reinforce")) {
-
+				if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
 					if (playerReinforceArmy != 0) {
+						if(countryConqured)
+						{
+							
+						}
+						
 						txtConsoleLog.setText(placeReinforcement(command));
 					} else {
 						sb.append(playerName)
@@ -239,16 +244,14 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						txtConsoleLog.setText(sb.toString());
 					}
 
-				}else if(command.startsWith("attack") || command.startsWith("defend")
+				} else if (command.startsWith("attack") || command.startsWith("defend")
 						|| command.startsWith("attackmove")) {
-					if(mapConquered)
-					{
-						
-					}else {
+					if (mapConquered) {
+
+					} else {
 						txtConsoleLog.setText(attackPhase(command));
-					}				
-				}		
-					else if (command.startsWith("fortify")) {
+					}
+				} else if (command.startsWith("fortify")) {
 					if (playerReinforceArmy == 0) {
 						txtConsoleLog.setText(fortification(command));
 					} else {
@@ -273,38 +276,37 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * @return
 	 */
 	private String attackPhase(String command) {
-		
+
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
 		if (commandData.get(0).equals("attack") && commandData.get(3).equals("-allout")) {
 			if (commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 					&& commandData.get(3).equals("-allout")) {
-				
+
 			}
 		} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack")) {
 
-		} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3),"[1-9][0-9]*")) {
+		} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")) {
 			String countryNameFrom = commandData.get(1);
 			String countryNameTo = commandData.get(2);
 			attackerTotalDice = Integer.parseInt(commandData.get(3));
 			if (commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-					&& attackerTotalDice < 4) {
-				System.out.println(countryNameFrom+" "+countryNameTo);
+					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") && attackerTotalDice < 4) {
+				System.out.println(countryNameFrom + " " + countryNameTo);
 				System.out.println("attackdice" + attackerTotalDice);
 			}
-		} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1),"[1-9][0-9]*")) {
+		} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
 			defenderTotalDice = Integer.parseInt(commandData.get(1));
-			
-		} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1),"[1-9][0-9]*")) {
+
+		} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
 
 		} else {
 			sb.append("Please Enter Valid Command").append(NEWLINE);
 		}
 
 		return "attackdice" + attackerTotalDice;
-	
+
 	}
 
 	@Override
@@ -315,7 +317,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		currentLog.appendText("Current Phase : " + gameplayphase.getGamePhase());
 		currentLog.appendText("Armies Owned : " + gameplayphase.getPlayerList().get(playerIndex).getPlayerName());
 	}
-	
+
 	/**
 	 * This is a method for fortification process where player can move his/her army
 	 * from one territory to it's adjacent owned territory.
@@ -329,7 +331,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
 		String fortificationMessage = null;
-		
+
 		if (commandData.get(0).equalsIgnoreCase("fortify")) {
 
 			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
@@ -401,9 +403,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 									fillTerritoryList();
 									fillAdjacentTerritoryList();
 
-									//Observer-Pattern Update Call
-									fortificationMessage = armytoMove + " armies moved from " + fromTerritory + " to " + toTerritory;
-									
+									// Observer-Pattern Update Call
+									fortificationMessage = armytoMove + " armies moved from " + fromTerritory + " to "
+											+ toTerritory;
+
 									changeUserTurn();
 
 								} else {
@@ -437,18 +440,16 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			fortificationMessage = sb.toString();
 		}
 
-		
 		observerSubject.setFortificationMessage(fortificationMessage);
 		return sb.toString();
 	}
 
 	@Override
-	public void fortificationUpdate()
-	{
+	public void fortificationUpdate() {
 		phaseviewLog.setText("");
 		phaseviewLog.appendText(observerSubject.getFortificationMessage());
 	}
-	
+
 	/**
 	 * This method validate input given from user and return true if it's correct
 	 * and false otherwise.
@@ -487,67 +488,69 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
 		String reinforcementMessage;
-		
-		if (commandData.size() == 3 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-				&& validateInput(commandData.get(2), "[1-9][0-9]*")) {
+		if (commandData.get(0).equals("reinforce")) {
+			if (commandData.size() == 3 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& validateInput(commandData.get(2), "[1-9][0-9]*")) {
 
-			countryName = commandData.get(1);
-			armyToPlace = Integer.parseInt(commandData.get(2));
+				countryName = commandData.get(1);
+				armyToPlace = Integer.parseInt(commandData.get(2));
 
-			final String cName = countryName;
+				final String cName = countryName;
 
-			PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
-					.filter(x -> cName.equals(x.getTerritoryName())).findAny().orElse(null);
+				PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
+						.filter(x -> cName.equals(x.getTerritoryName())).findAny().orElse(null);
 
-			if (playerTerritory != null) {
+				if (playerTerritory != null) {
 
-				if (armyToPlace <= playerReinforceArmy && armyToPlace != 0 && playerReinforceArmy != 0) {
+					if (armyToPlace <= playerReinforceArmy && armyToPlace != 0 && playerReinforceArmy != 0) {
 
-					System.out.println("playerTerritory before ==> " + playerTerritory);
+						System.out.println("playerTerritory before ==> " + playerTerritory);
 
-					int army = playerTerritory.getArmyOnterritory() + armyToPlace;
+						int army = playerTerritory.getArmyOnterritory() + armyToPlace;
 
-					playerTerritory.setArmyOnterritory(army);
+						playerTerritory.setArmyOnterritory(army);
 
-					System.out.println("playerTerritory After ==> " + playerTerritory);
+						System.out.println("playerTerritory After ==> " + playerTerritory);
 
-					playerReinforceArmy = playerReinforceArmy - armyToPlace;
+						playerReinforceArmy = playerReinforceArmy - armyToPlace;
 
-					String message = armyToPlace + " Assigned to " + cName;
-					
+						String message = armyToPlace + " Assigned to " + cName;
 
-					sb.append(message).append(NEWLINE);
-					sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
-					
-					if (playerReinforceArmy == 0) {
-						sb.append(playerName)
-								.append(" 's Reinforcement Phase done please go to the Fortification phase")
+						sb.append(message).append(NEWLINE);
+						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
 								.append(NEWLINE);
+
+						if (playerReinforceArmy == 0) {
+							sb.append(playerName)
+									.append(" 's Reinforcement Phase done please go to the Fortification phase")
+									.append(NEWLINE);
+						}
+
+						System.out.println("REINFORCEMENT ====> " + playerList);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+
+					} else {
+						sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ")
+								.append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
 					}
-
-					System.out.println("REINFORCEMENT ====> " + playerList);
-
-
-					
-					fillTerritoryList();
-					fillAdjacentTerritoryList();
-
 				} else {
-					sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ")
-							.append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
-
+					sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
 				}
-
-			} else {
-				sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
+			}
+		} else if (commandData.get(0).equals("exchangecards")) {
+			if (commandData.get(1).equals("none")) {
+				sb.append("Player Don't want to exchange cards. Please Enter attack commnads");
+			}
+			else {
 				
 			}
+
 		} else {
 
 			sb.append("Please Enter Valid Command").append(NEWLINE);
 		}
-
-		//Observer Pattern Update Call
+		// Observer Pattern Update Call
 		reinforcementMessage = sb.toString();
 		observerSubject.setReinforcementMessage(reinforcementMessage);
 		return sb.toString();
@@ -555,9 +558,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	@Override
 	public void reinforcemrentUpdate() {
-		
+
 		phaseviewLog.setText("");
-		phaseviewLog.appendText(observerSubject.getReinforcementMessage());		
+		phaseviewLog.appendText(observerSubject.getReinforcementMessage());
 	}
 
 	@Override
@@ -566,10 +569,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseviewLog.setText("");
 		phaseviewLog.appendText(observerSubject.getAttackMessage());
 	}
-	
+
 	/**
 	 * This method will exit the game terminates the window.
-	 * @param event will represents value sent from view
+	 * 
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void exitGame(ActionEvent event) {
@@ -577,7 +582,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	}
 
 	/**
-	 * This method will transfer phase of playing from one player to another player for the first time
+	 * This method will transfer phase of playing from one player to another player
+	 * for the first time
+	 * 
 	 * @param object
 	 */
 	public void transferGamePlayPhase(Object object) {
@@ -640,7 +647,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	}
 
 	/**
-	 * This method will fill list of territories with it's army,that user owns to show it in GUI while he is having his turn
+	 * This method will fill list of territories with it's army,that user owns to
+	 * show it in GUI while he is having his turn
 	 */
 	private void fillTerritoryList() {
 
@@ -660,7 +668,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	}
 
 	/**
-	 * This method will fill list of adjacent territories user owns to show it in GUI while he is having his turn
+	 * This method will fill list of adjacent territories user owns to show it in
+	 * GUI while he is having his turn
 	 */
 	private void fillAdjacentTerritoryList() {
 
@@ -694,5 +703,4 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 	}
 
-	
 }
