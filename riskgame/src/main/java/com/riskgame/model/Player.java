@@ -38,12 +38,19 @@ public class Player {
 	 * List of Territories owns by player
 	 */
 	private List<PlayerTerritory> playerterritories = new ArrayList<PlayerTerritory>();
+	
+	private List<RiskCard> cardListOwnedByPlayer;
+	
+	private int exchangeCount;
+	
+	private boolean isTerritoryConqured;
 
 	@Override
 	public String toString() {
 		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns
-				+ ", playerterritories=" + playerterritories + "]"+"\n";
+				+ ", playerterritories=" + playerterritories + ", cardListOwnedByPlayer=" + cardListOwnedByPlayer
+				+ ", exchangeCount=" + exchangeCount + ", isTerritoryConqured=" + isTerritoryConqured + "]";
 	}
-	
-	
+
+
 }

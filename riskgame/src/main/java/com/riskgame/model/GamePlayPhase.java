@@ -36,11 +36,16 @@ public class GamePlayPhase {
 	 * name of the map file
 	 */
 	private String fileName;
+	
+	/**
+	 * List of total risk cards
+	 */
+	private List<RiskCard> riskCardList;
 
 	@Override
 	public String toString() {
-		return "GamePlayPhase [gameState= \n" + playerList +"\n"+ ", gamePhase=" + gamePhase + ", fileName=" + fileName + "]"+"\n";
+		return "GamePlayPhase [playerList=" + playerList + ", gamePhase=" + gamePhase + ", fileName=" + fileName
+				+ ", riskCardList=" + riskCardList + "]";
 	}
-	
-	
+
 }
