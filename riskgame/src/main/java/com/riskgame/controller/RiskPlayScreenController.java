@@ -192,7 +192,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					if (playerReinforceArmy == 0) {
 						if (attackphaseEnded) {
 							txtConsoleLog.setText(fortification(command));
-						}else {
+						} else {
 							sb.append("Please fire \"attack -noattck\" before starting fortification phase");
 						}
 					} else {
@@ -227,8 +227,17 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 				&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
 
+			fromCountryAttack = commandData.get(1);
+			toCountryAttack = commandData.get(2);
+			if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex))
+					&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,
+							playerList.get(playerIndex)))
+			{
+				attckAllOut(fromCountryAttack,toCountryAttack);
+			}
+			
 		} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack")) {
-			sb.append("Attacker decided not to attack anymore.").append(NEWLINE);
+			sb.append(playerName + " ").append("decided not to attack anymore.").append(NEWLINE);
 			sb.append("Attack phase ended.").append(NEWLINE);
 			sb.append("Start with fortification commands").append(NEWLINE);
 			attackphaseEnded = true;
@@ -274,7 +283,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sb.append("Correct ==>").append(NEWLINE);
 
 				decideBattle(attackerDice, defenderDice);
-
 			} else {
 				sb.append("Please do attack first or invalid defender dies").append(NEWLINE);
 			}
@@ -284,9 +292,17 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		} else {
 			sb.append("Please Enter Valid Command").append(NEWLINE);
 		}
-
 		return sb.toString();
+	}
 
+	/**
+	 * @param fromCountry
+	 * @param toCountry
+	 */
+	private void attckAllOut(String fromCountry, String toCountry) {
+		boolean allOutTerritoryConqured = false;
+		
+		
 	}
 
 	/**
@@ -311,11 +327,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				updateArmyAfterBattle(toCountryAttack, "defender");
 			}
 		}
-
 	}
 
 	/**
-	 * This method will update number of army after battle completed everytime
+	 * This method will update number of army from attcker or defender territory
+	 * after battle completed everytime
 	 * 
 	 * @param country
 	 * @param name
@@ -341,11 +357,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					break;
 
 				}
-
 			}
-
 		}
-
 	}
 
 	@Override
