@@ -1,10 +1,12 @@
 package com.riskgame.service.Impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -250,6 +252,27 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		return false;
 
+	}
+	
+	public List<Integer> getCountFromDies(int dies){
+		
+		List<Integer> countList = new ArrayList<Integer>();
+		
+		for (int i = 0; i < dies; i++) {
+			
+			countList.add(generateRandomIntIntRange(1, 6));
+			
+		}
+		
+		/* Sorting in decreasing (descending) order*/
+	    Collections.sort(countList, Collections.reverseOrder());
+		return countList;
+		
+	}
+	
+	public int generateRandomIntIntRange(int min, int max) {
+	    Random r = new Random();
+	    return r.nextInt((max - min) + 1) + min;
 	}
 
 	
