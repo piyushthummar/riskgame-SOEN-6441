@@ -35,6 +35,11 @@ public class Player {
 	private int armyOwns;
 	
 	/**
+	 * The number of army of playerReinforceArmy
+	 */
+	private int playerReinforceArmy;
+	
+	/**
 	 * List of Territories owns by player
 	 */
 	private List<PlayerTerritory> playerterritories = new ArrayList<PlayerTerritory>();
