@@ -36,7 +36,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
 	public static int updatedArmy;
-	
+
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
 
@@ -131,7 +131,13 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			}
 		}
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#validateFromCountry(java.lang.String,
+	 *      com.riskgame.model.Player)
+	 */
 	@Override
 	public boolean validateFromCountry(String fromCountry, Player player) {
 
@@ -146,29 +152,40 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#validateToCountry(java.lang.String,
+	 *      java.lang.String, com.riskgame.model.RiskMap, com.riskgame.model.Player)
+	 */
 	@Override
-	public boolean validateToCountry(String fromCountry,String toCountry, RiskMap riskMap, Player player) {
-		
+	public boolean validateToCountry(String fromCountry, String toCountry, RiskMap riskMap, Player player) {
+
 		List<String> playerCountry = new ArrayList<String>();
 		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
 
 			playerCountry.add(playerTerritory.getTerritoryName());
 		}
-		
-		if(!playerCountry.contains(toCountry)) {
-			
+
+		if (!playerCountry.contains(toCountry)) {
+
 			List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap,
 					fromCountry);
 			if (neighbourCountriesList.contains(toCountry)) {
 				return true;
 			}
-			
-		}
 
+		}
 		return false;
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#validateAttackerDice(int,
+	 *      java.lang.String, com.riskgame.model.Player)
+	 */
 	@Override
 	public boolean validateAttackerDice(int dies, String fromCountry, Player player) {
 
@@ -193,14 +210,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 					return true;
 
 				}
-
 			}
 		}
 
 		return false;
-
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getPlayerByCountry(java.lang.String,
+	 *      java.util.List)
+	 */
 	@Override
 	public Player getPlayerByCountry(String country, List<Player> playerList) {
 
@@ -213,13 +234,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				if (country.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
 
 					return player;
-
 				}
-
 			}
-
 		}
-
 		return playerFromCountry;
 
 	}
@@ -246,34 +263,43 @@ public class RiskPlayImpl implements RiskPlayInterface {
 					return true;
 
 				}
-
 			}
 		}
-
 		return false;
 
 	}
-	
-	public List<Integer> getCountFromDies(int dies){
-		
+
+	/**
+	 * This method will return one list having count of generated dice
+	 * 
+	 * @param dies
+	 * @return sorted list of dice
+	 */
+	public List<Integer> getCountFromDies(int dies) {
+
 		List<Integer> countList = new ArrayList<Integer>();
-		
+
 		for (int i = 0; i < dies; i++) {
-			
+
 			countList.add(generateRandomIntIntRange(1, 6));
-			
+
 		}
-		
-		/* Sorting in decreasing (descending) order*/
-	    Collections.sort(countList, Collections.reverseOrder());
+
+		/* Sorting in decreasing (descending) order */
+		Collections.sort(countList, Collections.reverseOrder());
 		return countList;
-		
-	}
-	
-	public int generateRandomIntIntRange(int min, int max) {
-	    Random r = new Random();
-	    return r.nextInt((max - min) + 1) + min;
+
 	}
 
-	
+	/**
+	 * Generate random number for dice with random function
+	 * 
+	 * @param min
+	 * @param max
+	 * @return random number for dice
+	 */
+	public int generateRandomIntIntRange(int min, int max) {
+		Random r = new Random();
+		return r.nextInt((max - min) + 1) + min;
+	}
 }
