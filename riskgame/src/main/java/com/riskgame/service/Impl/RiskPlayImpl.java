@@ -1,16 +1,20 @@
 package com.riskgame.service.Impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
+import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
+import com.riskgame.model.RiskMap;
 import com.riskgame.service.RiskPlayInterface;
 
 /**
@@ -30,6 +34,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
 	public static int updatedArmy;
+	
+	@Autowired
+	public MapManagementImpl mapManagementImpl;
 
 	/**
 	 * {@inheritDoc}
@@ -122,4 +129,128 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			}
 		}
 	}
+	
+	@Override
+	public boolean validateFromCountry(String fromCountry, Player player) {
+
+		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+			if (fromCountry.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	@Override
+	public boolean validateToCountry(String fromCountry,String toCountry, RiskMap riskMap, Player player) {
+		
+		List<String> playerCountry = new ArrayList<String>();
+		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+			playerCountry.add(playerTerritory.getTerritoryName());
+		}
+		
+		if(!playerCountry.contains(toCountry)) {
+			
+			List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap,
+					fromCountry);
+			if (neighbourCountriesList.contains(toCountry)) {
+				return true;
+			}
+			
+		}
+
+		return false;
+
+	}
+
+	@Override
+	public boolean validateAttackerDice(int dies, String fromCountry, Player player) {
+
+		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+			if (fromCountry.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+
+				int currentArmy = playerTerritory.getArmyOnterritory();
+
+				int numDies = 0;
+
+				if (currentArmy >= 4) {
+					numDies = 3;
+				} else if (currentArmy == 3) {
+					numDies = 2;
+				} else if (currentArmy == 2) {
+					numDies = 1;
+				}
+
+				if (numDies == dies && dies != 0) {
+
+					return true;
+
+				}
+
+			}
+		}
+
+		return false;
+
+	}
+	
+	@Override
+	public Player getPlayerByCountry(String country, List<Player> playerList) {
+
+		Player playerFromCountry = null;
+
+		for (Player player : playerList) {
+
+			for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+				if (country.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+
+					return player;
+
+				}
+
+			}
+
+		}
+
+		return playerFromCountry;
+
+	}
+
+	@Override
+	public boolean validateDefenderDice(int dies, String toCountry, Player player) {
+
+		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+			if (toCountry.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+
+				int currentArmy = playerTerritory.getArmyOnterritory();
+
+				int numDies = 0;
+
+				if (currentArmy >= 2) {
+					numDies = 2;
+				} else if (currentArmy == 1) {
+					numDies = 1;
+				}
+
+				if (numDies == dies && dies != 0) {
+
+					return true;
+
+				}
+
+			}
+		}
+
+		return false;
+
+	}
+
+	
 }

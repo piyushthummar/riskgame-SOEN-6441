@@ -7,6 +7,7 @@ import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
+import com.riskgame.model.RiskMap;
 
 /**
  * This is a interface of RiskPlayGame buiness logic. Where reinforcement,attack
@@ -57,4 +58,14 @@ public interface RiskPlayInterface {
 	 * @param exchangedCards
 	 */
 	void updateCardListAfterExchange(Player player,List<RiskCard> cards,RiskCardExchange exchangedCards);
+
+	boolean validateFromCountry(String fromCountry, Player player);
+
+	boolean validateToCountry(String fromCountry, String toCountry, RiskMap riskMap, Player player);
+
+	boolean validateAttackerDice(int dies, String fromCountry, Player player);
+
+	Player getPlayerByCountry(String country, List<Player> playerList);
+
+	boolean validateDefenderDice(int dies, String toCountry, Player player);
 }
