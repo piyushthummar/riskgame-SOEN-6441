@@ -44,50 +44,21 @@ import javafx.scene.control.TextField;
 public class RiskPlayScreenController extends Observer implements Initializable {
 
 	GamePlayPhase gameplayphase = new GamePlayPhase();
-	@FXML
-	private ListView<?> lvTerritoryList;
-
-	@FXML
-	private Button btnAttack;
-
-	@FXML
-	private ListView<?> lvTerritoryPlayerArmy;
 
 	@FXML
 	private Button btnFireCommand;
 
 	@FXML
-	private Button btnReinforcement;
+	private TextArea txtPhaseView;
 
 	@FXML
-	private Button btnFortify;
-
+	private TextArea txtPlayerDominationView;
+	
 	@FXML
-	private ListView<?> lvCurrentLog;
-
-	@FXML
-	private ListView<?> lvContinent;
-
-	@FXML
-	private Button btnEndTurn;
-
-	@FXML
-	private ListView<?> lvLog;
-
-	@FXML
-	private ListView<?> lvAdjTerritoryList;
-
-	@FXML
-	private ComboBox<?> cbAdjTerritoryList;
-
+	private TextArea txtCardExchangeView;
+	
 	@FXML
 	private TextField txtCommandLine;
-
-	@FXML
-	private TextField txtMoveNumArmy;
-
-	@FXML
-	private ComboBox<?> cbTerritoryList;
 
 	@FXML
 	private TextArea txtConsoleLog;
@@ -163,51 +134,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		territoryArea.clear();
 		adjacentTerritoryArea.clear();
 	}
-
-	/**
-	 * This is an onAction method for button place Reinforcement of GUI
-	 * 
-	 * @param event
-	 *            will represents value sent from view
-	 */
-	@FXML
-	void placeReinforcement(ActionEvent event) {
-
-	}
-
-	/**
-	 * This is an onAction method for button attack of GUI
-	 * 
-	 * @param event
-	 *            will represents value sent from view
-	 */
-	@FXML
-	void attack(ActionEvent event) {
-
-	}
-
-	/**
-	 * This is an onAction method for button fortification of GUI
-	 * 
-	 * @param event
-	 *            will represents value sent from view
-	 */
-	@FXML
-	void fortify(ActionEvent event) {
-
-	}
-
-	/**
-	 * This is an onAction method for button end Turn of GUI
-	 * 
-	 * @param event
-	 *            will represents value sent from view
-	 */
-	@FXML
-	void endTurn(ActionEvent event) {
-
-	}
-
 	/**
 	 * This is an onAction method for button fireCommand. It'll take commands from
 	 * player and performs action accordingly.
@@ -231,11 +157,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			if (command != null && !command.isEmpty()) {
 				if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
 					if (playerReinforceArmy != 0) {
-						if(countryConqured)
-						{
-							
+						if (countryConqured) {
+
 						}
-						
+
 						txtConsoleLog.setText(placeReinforcement(command));
 					} else {
 						sb.append(playerName)
@@ -541,9 +466,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		} else if (commandData.get(0).equals("exchangecards")) {
 			if (commandData.get(1).equals("none")) {
 				sb.append("Player Don't want to exchange cards. Please Enter attack commnads");
-			}
-			else {
-				
+			} else {
+
 			}
 
 		} else {
