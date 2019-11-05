@@ -23,49 +23,98 @@ import com.riskgame.model.RiskMap;
 public interface RiskPlayInterface {
 
 	/**
-	 * This method will check in new turn how many number of army player can get for reinforcement.
-	 * @param totalOwnedCountries is a number of country owned by player
+	 * This method will check in new turn how many number of army player can get for
+	 * reinforcement.
+	 * 
+	 * @param totalOwnedCountries
+	 *            is a number of country owned by player
 	 * @return army to reinforce
 	 */
 	int checkForReinforcement(int totalOwnedCountries);
-	
+
 	/**
-	 * This method will make number of cards same as number of countries to use it at the phase of reinforcement
+	 * This method will make number of cards same as number of countries to use it
+	 * at the phase of reinforcement
+	 * 
 	 * @param noOfCountries
-	 * @return 
+	 * @return
 	 */
 	Map<Integer, String> makeCards(int noOfCountries);
-	
+
 	/**
-	 * This method will be called to check if player control all the territories of particular continent
+	 * This method will be called to check if player control all the territories of
+	 * particular continent
 	 * 
 	 * @param gamePlayPhase
 	 * @return value of continent control to update army
 	 */
 	int checkForContinentControlValue(GamePlayPhase gamePlayPhase);
-	
+
 	/**
 	 * This method will update armyCount after card exchange
 	 * 
 	 * @param player
 	 */
 	int updateArmyAfterCardExchange(Player player);
-	
+
 	/**
-	 * This method will be called after card exchange has been done and card need to add again to total card list
+	 * This method will be called after card exchange has been done and card need to
+	 * add again to total card list
+	 * 
 	 * @param player
-	 * @param cards total cards in game
+	 * @param cards
+	 *            total cards in game
 	 * @param exchangedCards
 	 */
-	void updateCardListAfterExchange(Player player,List<RiskCard> cards,RiskCardExchange exchangedCards);
+	void updateCardListAfterExchange(Player player, List<RiskCard> cards, RiskCardExchange exchangedCards);
 
+	/**
+	 * This method will validate if given attacker country is owned by given player
+	 * 
+	 * @param fromCountry
+	 * @param player
+	 * @return true if country belongs to player
+	 */
 	boolean validateFromCountry(String fromCountry, Player player);
 
+	/**
+	 * This method will validate if given defender country is owned by given player
+	 * 
+	 * @param fromCountry
+	 * @param toCountry
+	 * @param riskMap
+	 * @param player
+	 * @return true if country belongs to that player
+	 */
 	boolean validateToCountry(String fromCountry, String toCountry, RiskMap riskMap, Player player);
 
+	/**
+	 * This method wil validate the number of dice given by attacker
+	 * 
+	 * @param dies
+	 * @param fromCountry
+	 * @param player
+	 * @return true if number of dice is valid according to army on that territory
+	 */
 	boolean validateAttackerDice(int dies, String fromCountry, Player player);
 
+	/**
+	 * This method will return the player object, who owns given country
+	 * 
+	 * @param country
+	 * @param playerList
+	 * @return player object
+	 */
 	Player getPlayerByCountry(String country, List<Player> playerList);
 
+	/**
+	 * This method will validate defender dice given by defender based on army on
+	 * given country
+	 * 
+	 * @param dies
+	 * @param toCountry
+	 * @param player
+	 * @return true of number of dice given by defender is true
+	 */
 	boolean validateDefenderDice(int dies, String toCountry, Player player);
 }
