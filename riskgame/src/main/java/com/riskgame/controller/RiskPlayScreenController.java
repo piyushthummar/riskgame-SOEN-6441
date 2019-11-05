@@ -113,8 +113,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private static int defenderDice;
 	
 	private Player defenderPlayer;
-	private String fromCountry;
-	private String toCountry;
+	private String fromCountryAttack;
+	private String toCountryAttack;
 	
 	private boolean attackFire = false;
 
@@ -234,20 +234,23 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") && ( getint(commandData.get(3)) >0  && getint(commandData.get(3)) <= 3 )   ) {
 			
 			
-			fromCountry = commandData.get(1);
-			toCountry = commandData.get(2);
+			fromCountryAttack = commandData.get(1);
+			toCountryAttack = commandData.get(2);
 			attackerDice = Integer.parseInt(commandData.get(3));
 			
-			if(riskPlayImpl.validateFromCountry(fromCountry, playerList.get(playerIndex)) 
-					&& riskPlayImpl.validateToCountry(fromCountry, toCountry, riskMap,playerList.get(playerIndex))
-					&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountry, playerList.get(playerIndex))) {
+			if(riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex)) 
+					&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,playerList.get(playerIndex))
+					&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack, playerList.get(playerIndex))) {
 				
-				defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountry, playerList);
+				defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 				
 				attackFire = true;
 				
+				PlayerTerritory toTerritory = defenderPlayer.getPlayerterritories().stream()
+						.filter(x -> toCountryAttack.equals(x.getTerritoryName())).findAny().orElse(null);
+				
 				sb.append(defenderPlayer.getPlayerName()+"'s defend turn started..").append(NEWLINE);
-			//	sb.append(defenderPlayer.getPlayerName()+"'s country Name: ").append(toCountry).append(" Army: ").append(defenderPlayer.get).append(NEWLINE);
+				sb.append(defenderPlayer.getPlayerName()+"'s country Name: ").append(toCountryAttack).append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
 				
 			}else {
 				sb.append("Invalid attacker's fromCountry or toCountry or dies").append(NEWLINE);;
@@ -260,18 +263,22 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			
 		} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1), "[1-9][0-9]*") && ( getint(commandData.get(1)) >0  && getint(commandData.get(1)) <= 2 )) {
 			
-			defenderDice = getint(commandData.get(3));
+			defenderDice = getint(commandData.get(1));
 			
-			if(attackFire && riskPlayImpl.validateDefenderDice(defenderDice, toCountry, defenderPlayer)) {
+			if(attackFire && riskPlayImpl.validateDefenderDice(defenderDice, toCountryAttack, defenderPlayer)) {
 				
 				attackFire = false;
-				sb.append("Correct ==>").append(NEWLINE);;
+				sb.append("Correct ==>").append(NEWLINE);
+				
+				decideBattle(attackerDice,defenderDice);
+				
+				
 				
 			}else {
-				sb.append("Please do attack first or invalid defender dies").append(NEWLINE);;
+				sb.append("Please do attack first or invalid defender dies").append(NEWLINE);
 			}
 			
-			defenderDice = Integer.parseInt(commandData.get(1));
+			
 
 		} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
 			
@@ -285,7 +292,49 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		return sb.toString();
 
 	}
+	
+	private void decideBattle(int attackerDice,int defenderDice) {
+		
+		List<Integer> attackerList = riskPlayImpl.getCountFromDies(attackerDice);
+		List<Integer> defenderList = riskPlayImpl.getCountFromDies(defenderDice);
+		
+		for (int i = 0; i < defenderList.size(); i++) {
+			
+			if(defenderList.get(i) == attackerList.get(i)) {
+				updateArmyAfterBattle(fromCountryAttack,"attacker");
+			}else if(defenderList.get(i) > attackerList.get(i)) {
+				updateArmyAfterBattle(fromCountryAttack,"attacker");
+			}else if(defenderList.get(i) < attackerList.get(i)) {
+				updateArmyAfterBattle(toCountryAttack,"defender");
+			}
+		}
+		
+	}
 
+	private void updateArmyAfterBattle(String country, String name) {
+		
+		for (Player player : playerList) {
+
+			for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+				if (country.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+
+					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory()-1);
+					player.setArmyOwns(player.getArmyOwns()-1);
+					
+					sb.append(name).append(" Country loses 1 army ").append(name).append(" has left with ").append(playerTerritory.getArmyOnterritory()).append(NEWLINE);;
+					
+					fillTerritoryList();
+					fillAdjacentTerritoryList();
+					break;
+
+				}
+
+			}
+
+		}
+		
+	}
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
