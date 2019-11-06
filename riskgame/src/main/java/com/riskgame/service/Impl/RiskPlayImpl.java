@@ -50,10 +50,10 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForReinforcement(int)
 	 */
 	@Override
-	public int checkForReinforcement(int totalOwnedCountries,GamePlayPhase gamePlayPhase) {
+	public int checkForReinforcement(int totalOwnedCountries, GamePlayPhase gamePlayPhase) {
 		int total = Math.floorDiv(totalOwnedCountries, 3);
 		int totalArmyforReinforce = Math.max(total, 3);
-		totalArmyforReinforce +=checkForContinentControlValue(gamePlayPhase);
+		totalArmyforReinforce += checkForContinentControlValue(gamePlayPhase);
 		return totalArmyforReinforce;
 
 	}
@@ -66,33 +66,31 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	@Override
 	public List<RiskCard> makeCards(int noOfCountries) {
 		List<RiskCard> totalCards = new ArrayList<>();
-		for (int i = 0; i < noOfCountries; i = i + 3)
-		{
+		for (int i = 0; i < noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(INFANTRY);
 			card.setCardNumber(i);
 			totalCards.add(card);
 		}
-		for (int i = 1; i < noOfCountries; i = i + 3)
-		{
+		for (int i = 1; i < noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(ARTILLERY);
 			card.setCardNumber(i);
 			totalCards.add(card);
 		}
-		for (int i = 2; i < noOfCountries; i = i + 3)
-		{
+		for (int i = 2; i < noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(CAVALRY);
 			card.setCardNumber(i);
 			totalCards.add(card);
 		}
-		
+
 		return totalCards;
 	}
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.service.RiskPlayInterface#checkForContinentControlValue(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
@@ -117,8 +115,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				Continent continent = entry.getValue();
 				List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
 						.map(e -> e.getTerritoryName()).collect(Collectors.toList());
-				if(territoryStringList.containsAll(continentTerritoryStringList))
-				{
+				if (territoryStringList.containsAll(continentTerritoryStringList)) {
 					controlvalueTosend = continent.getContinentValue();
 				}
 			}
@@ -391,11 +388,17 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	/**
 	 * This method will return true if Player can excahnage card
+	 * 
 	 * @see com.riskgame.service.RiskPlayInterface#checkForExchange(com.riskgame.model.RiskCardExchange)
 	 */
 	@Override
 	public boolean checkForExchange(RiskCardExchange cardExchange) {
-		
+		String a = cardExchange.getExchange1().getArmyType();
+		String b = cardExchange.getExchange2().getArmyType();
+		String c = cardExchange.getExchange3().getArmyType();
+		if ((a.equals(b) && b.equals(c)) || (!a.equals(b) && !b.equals(c) && !c.equals(a))) {
+			return true;
+		}
 		return false;
 	}
 }

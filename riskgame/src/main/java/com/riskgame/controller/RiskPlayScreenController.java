@@ -96,7 +96,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	@Autowired
 	private StageManager stageManager;
 
-	private GamePlayPhase gamePlayPhase;
+	//private GamePlayPhase gamePlayPhase;
 
 	private RiskMap riskMap;
 
@@ -134,7 +134,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 
 	private static int totalCountries;
-	private List<RiskCard> totalCards;
+	private List<RiskCard> cardList;
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -149,12 +149,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		gamePlayPhase = new GamePlayPhase();
+		//gamePlayPhase = new GamePlayPhase();
 		riskMap = new RiskMap();
 		sb = new StringBuilder();
-		totalCountries = intializeCardMaking(riskMap);
-		riskPlayImpl.makeCards(totalCountries);
-		gameplayphase.setRiskCardList(totalCards);
 		territoryArea.clear();
 		adjacentTerritoryArea.clear();
 	}
@@ -162,7 +159,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * @param riskMap2
 	 */
-	private int intializeCardMaking(RiskMap r) {
+	private int getTotaolCountries(RiskMap r) {
 		Map<Integer, Continent> continentMap = r.getContinents();
 		Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
 		int totalCountries = 0;
@@ -311,6 +308,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sb.append("Start with fortification commands").append(NEWLINE);
 				attackphaseEnded = true;
 				fortificationStarted = true;
+				
 				countryConquredInSingleAttack = false;
 				allOutTerritoryConqured = false;
 
@@ -826,22 +824,30 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				}
 			}
 		} else if (commandData.get(0).equals("exchangecards")) {
-			if (commandData.get(1).equals("-none")) {
+			if (commandData.size()==2 && commandData.get(1).equals("-none")) {
 				sb.append("Player Don't want to exchange cards. Please Enter attack commnads");
 			} else {
-				int numOfCardsPlayerOwned = playerList.get(playerIndex).getCardListOwnedByPlayer().size();
+				int numOfCardsPlayerOwned = currentPlayer.getCardListOwnedByPlayer().size();
 				if (commandData.size() == 4 && validateInput(commandData.get(1), "[1-9][0-9]*")
 						&& validateInput(commandData.get(2), "[1-9][0-9]*")
 						&& validateInput(commandData.get(3), "[1-9][0-9]*") && numOfCardsPlayerOwned >=3) {
+					
 					int x = Integer.parseInt(commandData.get(1));
 					int y = Integer.parseInt(commandData.get(2));
 					int z = Integer.parseInt(commandData.get(3));
+					
 					RiskCardExchange cardExchange = new RiskCardExchange();
 					
 					cardExchange.setExchange1(currentPlayer.getCardListOwnedByPlayer().get(x-1));
 					cardExchange.setExchange2(currentPlayer.getCardListOwnedByPlayer().get(y-1));
 					cardExchange.setExchange3(currentPlayer.getCardListOwnedByPlayer().get(z-1));
-					riskPlayImpl.checkForExchange(cardExchange);
+					
+					if(riskPlayImpl.checkForExchange(cardExchange))
+					{
+						 int count = currentPlayer.getExchangeCount();
+						 currentPlayer.setExchangeCount(count+1);
+						 riskPlayImpl.updateCardListAfterExchange(currentPlayer, cardList, cardExchange);
+					}
 				}
 				else
 				{
@@ -900,11 +906,18 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// System.out.println(riskMap);
 
 		playerList.addAll(gameplayphase.getPlayerList());
+		
+		
+		totalCountries = getTotaolCountries(riskMap);
+		cardList = riskPlayImpl.makeCards(totalCountries);
+		gameplayphase.setRiskCardList(cardList);
 
 		txtCommandLine.clear();
 		txtConsoleLog.clear();
 
 		playerName = playerList.get(playerIndex).getPlayerName();
+		currentPlayer = playerList.get(playerIndex);
+		
 		playerReinforceArmy = riskPlayImpl
 				.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(), gameplayphase);
 
