@@ -30,7 +30,7 @@ public interface RiskPlayInterface {
 	 *            is a number of country owned by player
 	 * @return army to reinforce
 	 */
-	int checkForReinforcement(int totalOwnedCountries,GamePlayPhase gameplayphase);
+	int checkForReinforcement(int totalOwnedCountries,List<Player> playerList,String fileName);
 
 	/**
 	 * This method will make number of cards same as number of countries to use it
@@ -48,7 +48,7 @@ public interface RiskPlayInterface {
 	 * @param gamePlayPhase
 	 * @return value of continent control to update army
 	 */
-	int checkForContinentControlValue(GamePlayPhase gamePlayPhase);
+	int checkForContinentControlValue(List<Player> playerList,String fileName);
 
 	/**
 	 * This method will update armyCount after card exchange
@@ -129,4 +129,8 @@ public interface RiskPlayInterface {
 	void addRiskCardToPlayer(String playerName, GamePlayPhase gamePlayPhase);
 	
 	boolean checkForExchange(RiskCardExchange cardExchange);
+
+	List<Integer> getCardNumbersFromPlayer(Player player);
+
+	RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber);
 }

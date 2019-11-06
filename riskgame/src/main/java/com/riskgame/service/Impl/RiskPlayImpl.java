@@ -39,7 +39,6 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public static final String INFANTRY = "INFANTRY";
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
-	public static int updatedArmy;
 
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
@@ -50,10 +49,10 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForReinforcement(int)
 	 */
 	@Override
-	public int checkForReinforcement(int totalOwnedCountries, GamePlayPhase gamePlayPhase) {
+	public int checkForReinforcement(int totalOwnedCountries, List<Player> playerList, String fileName) {
 		int total = Math.floorDiv(totalOwnedCountries, 3);
 		int totalArmyforReinforce = Math.max(total, 3);
-		totalArmyforReinforce += checkForContinentControlValue(gamePlayPhase);
+		totalArmyforReinforce += checkForContinentControlValue(playerList, fileName);
 		return totalArmyforReinforce;
 
 	}
@@ -66,19 +65,19 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	@Override
 	public List<RiskCard> makeCards(int noOfCountries) {
 		List<RiskCard> totalCards = new ArrayList<>();
-		for (int i = 0; i < noOfCountries; i = i + 3) {
+		for (int i = 1; i <= noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(INFANTRY);
 			card.setCardNumber(i);
 			totalCards.add(card);
 		}
-		for (int i = 1; i < noOfCountries; i = i + 3) {
+		for (int i = 2; i <= noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(ARTILLERY);
 			card.setCardNumber(i);
 			totalCards.add(card);
 		}
-		for (int i = 2; i < noOfCountries; i = i + 3) {
+		for (int i = 3; i <= noOfCountries; i = i + 3) {
 			RiskCard card = new RiskCard();
 			card.setArmyType(CAVALRY);
 			card.setCardNumber(i);
@@ -94,17 +93,16 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForContinentControlValue(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
-	public int checkForContinentControlValue(GamePlayPhase gamePlayPhase) {
+	public int checkForContinentControlValue(List<Player> playerList, String fileName) {
 		int controlvalueTosend = 0;
-		List<Player> playerList = gamePlayPhase.getPlayerList();
+
 		Iterator<Player> itr = playerList.listIterator();
 		while (itr.hasNext()) {
 			Player p = itr.next();
 			List<PlayerTerritory> territoryList = p.getPlayerterritories();
 			List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 					.collect(Collectors.toList());
-			Map<Integer, Continent> continentMap = mapManagementImpl.readMap(gamePlayPhase.getFileName())
-					.getContinents();
+			Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
 			/*
 			 * Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
 			 * while (i.hasNext()) {
@@ -130,24 +128,21 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 */
 	@Override
 	public int updateArmyAfterCardExchange(Player player) {
-		if (player.getExchangeCount() == 0) {
+		int updatedArmy = 0;
+		if (player.getExchangeCount() == 1) {
 			updatedArmy = 5;
-			player.setExchangeCount(1);
-		} else if (player.getExchangeCount() == 1) {
-			updatedArmy = 10;
-			player.setExchangeCount(2);
 		} else if (player.getExchangeCount() == 2) {
-			updatedArmy = 15;
-			player.setExchangeCount(3);
+			updatedArmy = 10;
 		} else if (player.getExchangeCount() == 3) {
-			updatedArmy = 20;
-			player.setExchangeCount(4);
+			updatedArmy = 15;
 		} else if (player.getExchangeCount() == 4) {
-			updatedArmy = 25;
-			player.setExchangeCount(5);
+			updatedArmy = 20;
 		} else if (player.getExchangeCount() == 5) {
+			updatedArmy = 25;
+		} else if (player.getExchangeCount() == 6) {
 			updatedArmy = 30;
-			player.setExchangeCount(6);
+		} else if (player.getExchangeCount() == 0) {
+			updatedArmy = 0;
 		}
 		return updatedArmy;
 	}
@@ -345,7 +340,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		List<Integer> countList = new ArrayList<Integer>();
 		for (int i = 0; i < dies; i++) {
-			countList.add(generateRandomIntIntRange(1, 6));
+			countList.add(generateRandomIntRange(1, 6));
 		}
 		/* Sorting in decreasing (descending) order */
 		Collections.sort(countList, Collections.reverseOrder());
@@ -360,7 +355,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param max
 	 * @return random number for dice
 	 */
-	public int generateRandomIntIntRange(int min, int max) {
+	public int generateRandomIntRange(int min, int max) {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
 	}
@@ -401,4 +396,35 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		return false;
 	}
+
+	@Override
+	public List<Integer> getCardNumbersFromPlayer(Player player) {
+		List<Integer> cardNumber = new ArrayList<Integer>();
+		if (player.getCardListOwnedByPlayer() != null && !player.getCardListOwnedByPlayer().isEmpty()) {
+			for (RiskCard riskCard : player.getCardListOwnedByPlayer()) {
+
+				cardNumber.add(riskCard.getCardNumber());
+
+			}
+		}
+		return cardNumber;
+	}
+
+	@Override
+	public RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber) {
+		RiskCard riskCardReturn = new RiskCard();
+		if (player.getCardListOwnedByPlayer() != null && !player.getCardListOwnedByPlayer().isEmpty()) {
+			for (RiskCard riskCard : player.getCardListOwnedByPlayer()) {
+
+				if (riskCard.getCardNumber() == cardNumber) {
+					System.out.println("riskCard ==> "+riskCard);
+					return riskCard;
+				}
+
+			}
+		}
+		System.out.println("riskCardReturn ==> "+riskCardReturn);
+		return riskCardReturn;
+	}
+
 }
