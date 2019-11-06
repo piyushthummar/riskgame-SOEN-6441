@@ -2,8 +2,11 @@ package com.riskgame.controller;
 
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -13,9 +16,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.config.StageManager;
+import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
+import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskMap;
 import com.riskgame.observerpattern.Observer;
 import com.riskgame.service.Impl.MapManagementImpl;
@@ -38,6 +43,9 @@ import javafx.scene.control.TextField;
  * 
  * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
  * @see com.riskgame.controller.StartupPhaseController
+ * @see com.riskgame.model.Continent
+ * @see com.riskgame.model.RiskMap
+ * 
  */
 @Controller
 public class RiskPlayScreenController extends Observer implements Initializable {
@@ -106,8 +114,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private static String NEWLINE = System.getProperty("line.separator");
 
 	private static boolean mapConquered = false;
-	private static boolean countryConqured = false;
+	private static boolean countryConquredInSingleAttack = false;
 	private static boolean attackphaseEnded = false;
+	private static boolean allOutTerritoryConqured = false;
 	private static boolean fortificationStarted = false;
 	private static int attackerDice;
 	private static int defenderDice;
@@ -121,7 +130,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private boolean attackMove = false;
 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
-
+	
+	private static int totalCountries;
+	private List<RiskCard> totalCards;
+	
+	
 	/**
 	 * This is an initialization method for this controller to start.
 	 * 
@@ -136,9 +149,26 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		gamePlayPhase = new GamePlayPhase();
 		riskMap = new RiskMap();
 		sb = new StringBuilder();
-
+		totalCountries = intializeCardMaking(riskMap);
+		riskPlayImpl.makeCards(totalCountries);
+		gameplayphase.setRiskCardList(totalCards);
 		territoryArea.clear();
 		adjacentTerritoryArea.clear();
+	}	
+	/**
+	 * @param riskMap2
+	 */
+	private int intializeCardMaking(RiskMap r) {
+		Map<Integer,Continent> continentMap = r.getContinents();
+		Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
+		int totalCountries=0;
+		while(i.hasNext())
+		{
+			Entry<Integer, Continent> e = i.next();
+			Continent c = e.getValue();
+			totalCountries+=c.getTerritoryList().size();
+		}
+		return totalCountries;
 	}
 
 	/**
@@ -273,6 +303,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack") ) {
 
+				if(countryConquredInSingleAttack || allOutTerritoryConqured)
+				{
+					
+				}
 				sb.append(playerName + " ").append("decided not to attack anymore.").append(NEWLINE);
 				sb.append("Attack phase ended.").append(NEWLINE);
 				sb.append("Start with fortification commands").append(NEWLINE);
@@ -324,7 +358,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
 							defenderPlayer);
 					if (toTerritory.getArmyOnterritory() == 0) {
-
+						countryConquredInSingleAttack = true;
 						attackMove = true;
 
 						moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
@@ -468,7 +502,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		boolean alloutFinish = false;
 
-		boolean allOutTerritoryConqured = false;
+		
 
 		int armyOnFromC = riskPlayImpl.getCurrentAramyByCountryName(fromCountryAttack, playerList);
 		int armyOnToC = riskPlayImpl.getCurrentAramyByCountryName(toCountryAttack, playerList);
@@ -482,7 +516,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 			PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack, defenderPlayer);
 			if (toTerritory.getArmyOnterritory() == 0) {
-
+				allOutTerritoryConqured = true;
 				attackMove = true;
 				alloutFinish = true;
 
