@@ -50,9 +50,10 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForReinforcement(int)
 	 */
 	@Override
-	public int checkForReinforcement(int totalOwnedCountries) {
+	public int checkForReinforcement(int totalOwnedCountries,GamePlayPhase gamePlayPhase) {
 		int total = Math.floorDiv(totalOwnedCountries, 3);
 		int totalArmyforReinforce = Math.max(total, 3);
+		totalArmyforReinforce +=checkForContinentControlValue(gamePlayPhase);
 		return totalArmyforReinforce;
 
 	}
@@ -386,5 +387,15 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				}
 			}
 		}
+	}
+
+	/**
+	 * This method will return true if Player can excahnage card
+	 * @see com.riskgame.service.RiskPlayInterface#checkForExchange(com.riskgame.model.RiskCardExchange)
+	 */
+	@Override
+	public boolean checkForExchange(RiskCardExchange cardExchange) {
+		
+		return false;
 	}
 }
