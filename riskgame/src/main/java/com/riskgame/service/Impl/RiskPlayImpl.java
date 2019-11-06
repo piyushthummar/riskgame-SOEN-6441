@@ -63,14 +63,31 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#makeCards(int)
 	 */
 	@Override
-	public Map<Integer, String> makeCards(int noOfCountries) {
-		Map<Integer, String> cardMap = new HashMap<>();
-		/*
-		 * for (int i = 0; i < noOfCountries; i = i + 3) { cardMap.put(i, INFANTRY); }
-		 * for (int i = 1; i < noOfCountries; i = i + 3) { cardMap.put(i, INFANTRY); }
-		 * for (int i = 2; i < noOfCountries; i = i + 3) { cardMap.put(i, INFANTRY); }
-		 */
-		return cardMap;
+	public List<RiskCard> makeCards(int noOfCountries) {
+		List<RiskCard> totalCards = new ArrayList<>();
+		for (int i = 0; i < noOfCountries; i = i + 3)
+		{
+			RiskCard card = new RiskCard();
+			card.setArmyType(INFANTRY);
+			card.setCardNumber(i);
+			totalCards.add(card);
+		}
+		for (int i = 1; i < noOfCountries; i = i + 3)
+		{
+			RiskCard card = new RiskCard();
+			card.setArmyType(ARTILLERY);
+			card.setCardNumber(i);
+			totalCards.add(card);
+		}
+		for (int i = 2; i < noOfCountries; i = i + 3)
+		{
+			RiskCard card = new RiskCard();
+			card.setArmyType(CAVALRY);
+			card.setCardNumber(i);
+			totalCards.add(card);
+		}
+		
+		return totalCards;
 	}
 
 	/**

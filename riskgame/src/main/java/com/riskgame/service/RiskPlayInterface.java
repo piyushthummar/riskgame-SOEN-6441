@@ -39,7 +39,7 @@ public interface RiskPlayInterface {
 	 * @param noOfCountries
 	 * @return
 	 */
-	Map<Integer, String> makeCards(int noOfCountries);
+	List<RiskCard> makeCards(int noOfCountries);
 
 	/**
 	 * This method will be called to check if player control all the territories of
