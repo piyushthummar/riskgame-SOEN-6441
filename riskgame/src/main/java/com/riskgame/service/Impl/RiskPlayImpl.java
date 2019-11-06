@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.aspectj.apache.bcel.util.Play;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -193,17 +194,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 			if (fromCountry.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
 
-				int currentArmy = playerTerritory.getArmyOnterritory();
-
-				int numDies = 0;
-
-				if (currentArmy >= 4) {
-					numDies = 3;
-				} else if (currentArmy == 3) {
-					numDies = 2;
-				} else if (currentArmy == 2) {
-					numDies = 1;
-				}
+				int numDies = getAttackerDiesCount(playerTerritory.getArmyOnterritory());
 
 				if (numDies == dies && dies != 0) {
 
@@ -214,6 +205,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 
 		return false;
+	}
+
+	public int getAttackerDiesCount(int currentArmy) {
+		int numDies = 0;
+		if (currentArmy >= 4) {
+			numDies = 3;
+		} else if (currentArmy == 3) {
+			numDies = 2;
+		} else if (currentArmy == 2) {
+			numDies = 1;
+		}
+		return numDies;
 	}
 
 	/**
@@ -241,6 +244,29 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	}
 
+	public int getCurrentAramyByCountryName(String country, List<Player> playerList) {
+		int army = 0;
+
+		for (Player player : playerList) {
+
+			for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+				if (country.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+
+					return playerTerritory.getArmyOnterritory();
+				}
+			}
+		}
+
+		return army;
+
+	}
+
+	public PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player) {
+		return player.getPlayerterritories().stream().filter(x -> country.equals(x.getTerritoryName())).findAny()
+				.orElse(null);
+	}
+
 	@Override
 	public boolean validateDefenderDice(int dies, String toCountry, Player player) {
 
@@ -248,15 +274,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 			if (toCountry.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
 
-				int currentArmy = playerTerritory.getArmyOnterritory();
-
-				int numDies = 0;
-
-				if (currentArmy >= 2) {
-					numDies = 2;
-				} else if (currentArmy == 1) {
-					numDies = 1;
-				}
+				int numDies = getDefenderDiceCount(playerTerritory.getArmyOnterritory());
 
 				if (numDies == dies && dies != 0) {
 
@@ -267,6 +285,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		return false;
 
+	}
+
+	public int getDefenderDiceCount(int currentArmy) {
+		int numDies = 0;
+
+		if (currentArmy >= 2) {
+			numDies = 2;
+		} else if (currentArmy == 1) {
+			numDies = 1;
+		}
+
+		return numDies;
 	}
 
 	/**

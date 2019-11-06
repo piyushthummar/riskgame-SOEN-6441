@@ -44,7 +44,7 @@ public class Player {
 	 */
 	private List<PlayerTerritory> playerterritories = new ArrayList<PlayerTerritory>();
 	
-	private List<RiskCard> cardListOwnedByPlayer;
+	private List<RiskCard> cardListOwnedByPlayer = new ArrayList<RiskCard>();
 	
 	private int exchangeCount;
 	
