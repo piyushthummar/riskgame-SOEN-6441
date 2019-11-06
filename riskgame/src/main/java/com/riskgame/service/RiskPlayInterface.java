@@ -117,4 +117,14 @@ public interface RiskPlayInterface {
 	 * @return true of number of dice given by defender is true
 	 */
 	boolean validateDefenderDice(int dies, String toCountry, Player player);
+
+	/**
+	 * This method will assign 1 risk card randomly from original list of cards to
+	 * player
+	 * 
+	 * @param playerName
+	 *            is the name of the player who want to add list of cards
+	 * @param gamePlayPhase
+	 */
+	void addRiskCardToPlayer(String playerName, GamePlayPhase gamePlayPhase);
 }
