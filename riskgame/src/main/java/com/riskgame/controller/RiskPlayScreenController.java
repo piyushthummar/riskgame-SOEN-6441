@@ -3,6 +3,7 @@ package com.riskgame.controller;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,8 +28,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
@@ -165,7 +164,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				//if (!attackFire) {
 
-					if (!attackMove) {
+					//if (!attackMove) {
 
 						if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
 							if (playerReinforceArmy != 0) {
@@ -212,11 +211,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 							txtConsoleLog.setText("Please Enter Valid phase Command");
 						}
 
-					} else {
-
-						txtConsoleLog.setText("Please Finish attackmove command on win country " + toCountryAttack);
-
-					}
+//					} else {
+//
+//						txtConsoleLog.setText("Please Finish attackmove command on win country " + toCountryAttack);
+//
+//					}
 
 //				} else {
 //					txtConsoleLog.setText("Please Finish defend command first");
@@ -242,126 +241,134 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * @return message to console regarding what is happening
 	 */
 	private String attackPhase(String command) {
+		
+		if(!attackMove || command.contains("attackmove")) {
+			
+			String[] dataArray = command.split(" ");
+			List<String> commandData = Arrays.asList(dataArray);
+			if (commandData.get(0).equals("attack") && commandData.size() == 4 && commandData.get(3).equals("-allout")
+					&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$") ) {
 
-		String[] dataArray = command.split(" ");
-		List<String> commandData = Arrays.asList(dataArray);
-		if (commandData.get(0).equals("attack") && commandData.size() == 4 && commandData.get(3).equals("-allout")
-				&& validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-				&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+				fromCountryAttack = commandData.get(1);
+				toCountryAttack = commandData.get(2);
 
-			fromCountryAttack = commandData.get(1);
-			toCountryAttack = commandData.get(2);
+				if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex)) && riskPlayImpl
+						.validateToCountry(fromCountryAttack, toCountryAttack, riskMap, playerList.get(playerIndex))) {
 
-			if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex)) && riskPlayImpl
-					.validateToCountry(fromCountryAttack, toCountryAttack, riskMap, playerList.get(playerIndex))) {
+					int armyOnFromC = riskPlayImpl.getCurrentAramyByCountryName(fromCountryAttack, playerList);
 
-				int armyOnFromC = riskPlayImpl.getCurrentAramyByCountryName(fromCountryAttack, playerList);
+					for (int i = 0; i < armyOnFromC; i++) {
 
-				for (int i = 0; i < armyOnFromC; i++) {
+						boolean alloutFinish = alloutAttack();
+						if (alloutFinish) {
+							break;
+						}
 
-					boolean alloutFinish = alloutAttack();
-					if (alloutFinish) {
-						break;
 					}
 
+				} else {
+					sb.append("Invalid attacker's fromCountry or toCountry").append(NEWLINE);
+				}
+
+			} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack") ) {
+
+				sb.append(playerName + " ").append("decided not to attack anymore.").append(NEWLINE);
+				sb.append("Attack phase ended.").append(NEWLINE);
+				sb.append("Start with fortification commands").append(NEWLINE);
+				attackphaseEnded = true;
+				fortificationStarted=true;
+
+			} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")
+					&& commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
+					&& (getint(commandData.get(3)) > 0 && getint(commandData.get(3)) <= 3) ) {
+
+				fromCountryAttack = commandData.get(1);
+				toCountryAttack = commandData.get(2);
+				attackerDice = Integer.parseInt(commandData.get(3));
+
+				if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex))
+						&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,
+								playerList.get(playerIndex))
+						&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack,
+								playerList.get(playerIndex))) {
+
+					defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
+
+					attackFire = true;
+
+					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
+							defenderPlayer);
+
+					sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
+					sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
+							.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
+
+				} else {
+					sb.append("Invalid attacker's fromCountry or toCountry or dice").append(NEWLINE);
+				}
+
+			} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1), "[1-9][0-9]*")
+					&& (getint(commandData.get(1)) > 0 && getint(commandData.get(1)) <= 2) && attackFire ) {
+
+				defenderDice = getint(commandData.get(1));
+
+				if (riskPlayImpl.validateDefenderDice(defenderDice, toCountryAttack, defenderPlayer)) {
+
+					attackFire = false;
+					// sb.append("Correct ==>").append(NEWLINE);
+
+					decideBattle(attackerDice, defenderDice);
+					defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
+					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
+							defenderPlayer);
+					if (toTerritory.getArmyOnterritory() == 0) {
+
+						attackMove = true;
+
+						moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+
+						sb.append(toCountryAttack).append(
+								" country has been conquered Please move number of armies to this country from the attacking country")
+								.append(NEWLINE);
+
+					}
+
+				} else {
+					sb.append("Please do attack first or invalid defender dice").append(NEWLINE);
+				}
+
+			} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
+
+				int armyToMove = getint(commandData.get(1));
+
+				Player player = riskPlayImpl.getPlayerByCountry(fromCountryAttack, playerList);
+				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
+				if (armyToMove > 0 && armyToMove < toTerritory.getArmyOnterritory()) {
+
+					moveArmy(fromCountryAttack,toCountryAttack, armyToMove);
+					attackMove = false;
+
+				} else {
+					sb.append("Please Enter Valid Army to Move").append(NEWLINE);
 				}
 
 			} else {
-				sb.append("Invalid attacker's fromCountry or toCountry").append(NEWLINE);
+				sb.append("Please Enter Valid Phase Command").append(NEWLINE);
 			}
-
-		} else if (commandData.get(0).equals("attack") && commandData.get(1).equals("-noattack")) {
-
-			sb.append(playerName + " ").append("decided not to attack anymore.").append(NEWLINE);
-			sb.append("Attack phase ended.").append(NEWLINE);
-			sb.append("Start with fortification commands").append(NEWLINE);
-			attackphaseEnded = true;
-			fortificationStarted=true;
-
-		} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")
-				&& commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-				&& validateInput(commandData.get(2), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
-				&& (getint(commandData.get(3)) > 0 && getint(commandData.get(3)) <= 3)) {
-
-			fromCountryAttack = commandData.get(1);
-			toCountryAttack = commandData.get(2);
-			attackerDice = Integer.parseInt(commandData.get(3));
-
-			if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex))
-					&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,
-							playerList.get(playerIndex))
-					&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack,
-							playerList.get(playerIndex))) {
-
-				defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
-
-				attackFire = true;
-
-				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
-						defenderPlayer);
-
-				sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
-				sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
-						.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
-
-			} else {
-				sb.append("Invalid attacker's fromCountry or toCountry or dice").append(NEWLINE);
-			}
-
-		} else if (commandData.get(0).equals("defend") && validateInput(commandData.get(1), "[1-9][0-9]*")
-				&& (getint(commandData.get(1)) > 0 && getint(commandData.get(1)) <= 2) && attackFire) {
-
-			defenderDice = getint(commandData.get(1));
-
-			if (riskPlayImpl.validateDefenderDice(defenderDice, toCountryAttack, defenderPlayer)) {
-
-				attackFire = false;
-				// sb.append("Correct ==>").append(NEWLINE);
-
-				decideBattle(attackerDice, defenderDice);
-				defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
-				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
-						defenderPlayer);
-				if (toTerritory.getArmyOnterritory() == 0) {
-
-					attackMove = true;
-
-					moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
-					fillTerritoryList();
-					fillAdjacentTerritoryList();
-
-					sb.append(toCountryAttack).append(
-							" country has been conquered Please move number of armies to this country from the attacking country")
-							.append(NEWLINE);
-
-				}
-
-			} else {
-				sb.append("Please do attack first or invalid defender dice").append(NEWLINE);
-			}
-
-		} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
-
-			int armyToMove = getint(commandData.get(1));
-
-			Player player = riskPlayImpl.getPlayerByCountry(fromCountryAttack, playerList);
-			PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
-			if (armyToMove > 0 && armyToMove < toTerritory.getArmyOnterritory()) {
-
-				moveArmy(toCountryAttack, armyToMove);
-				attackMove = false;
-
-			} else {
-				sb.append("Please Enter Valid Army to Move").append(NEWLINE);
-			}
-
-		} else {
-			sb.append("Please Enter Valid Command").append(NEWLINE);
+			
+		}else {
+			sb.append("Please enter valid Phase command").append(NEWLINE);
 		}
+
+		
 		return sb.toString();
 	}
 
-	private void moveArmy(String toCountryAttack, int armyToMove) {
+	private void moveArmy(String fromCountryAttack,String toCountryAttack, int armyToMove) {
 
 		for (Player player : playerList) {
 
@@ -374,13 +381,16 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					sb.append(armyToMove).append(" Army Moved Successfully on ").append(toCountryAttack)
 							.append(" country").append(NEWLINE);
 
-					fillTerritoryList();
-					fillAdjacentTerritoryList();
-					break;
-
+				}else if(fromCountryAttack.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+					
+					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory()-armyToMove);
+					
 				}
 			}
 		}
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+		
 
 	}
 
@@ -392,31 +402,60 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// Fore removing country
 		for (Player playertoLst : playerList) {
 
-			playertoLst.getPlayerterritories().stream().filter(
-					pTerritory -> pTerritory.getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName())
-
-			).findFirst().map(territory -> {
-
-				playertoLst.getPlayerterritories().remove(territory);
-
-				return territory;
-
-			});
+//			playertoLst.getPlayerterritories().stream().filter(
+//					pTerritory -> pTerritory.getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName())
+//
+//			).findFirst().map(territory -> {
+//
+//				playertoLst.getPlayerterritories().remove(territory);
+//
+//				return territory;
+//
+//			});
+			
+			
+			ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories().listIterator();
+			
+//			for (int i = 0; i < playerTerritories.size(); i++) {
+//				
+//				if(playerTerritories.get(i).getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+//					playerTerritories.remove(i);
+//					break;
+//				}
+//			}
+			
+			while(playerTerritories.hasNext()){
+			    if(playerTerritories.next().getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName())){
+			        playerTerritories.remove();
+			    }
+			}
+			
 
 		}
 
 		// for Adding country
 		for (Player playerFromLst : playerList) {
-
-			for (PlayerTerritory playerTerritory1 : playerFromLst.getPlayerterritories()) {
-
-				if (playerTerritory1.getTerritoryName().equalsIgnoreCase(fromCountryAttack)) {
-
-					playerFromLst.getPlayerterritories().add(playerTerritory);
-
-				}
-
+			
+			
+			ListIterator<PlayerTerritory> playerTerritories = playerFromLst.getPlayerterritories().listIterator();
+			
+			while(playerTerritories.hasNext()){
+			    if(playerTerritories.next().getTerritoryName().equalsIgnoreCase(fromCountryAttack)){
+			    	playerTerritories.add(playerTerritory);
+			    }
 			}
+			
+			
+
+//			for (PlayerTerritory playerTerritory1 : playerFromLst.getPlayerterritories()) {
+//
+//				if (playerTerritory1.getTerritoryName().equalsIgnoreCase(fromCountryAttack)) {
+//
+//					playerFromLst.getPlayerterritories().add(playerTerritory);
+//
+//				}
+//
+//			}
 		}
 
 	}
@@ -477,8 +516,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		List<Integer> attackerList = riskPlayImpl.getCountFromDies(attackerDice);
 		List<Integer> defenderList = riskPlayImpl.getCountFromDies(defenderDice);
-
-		for (int i = 0; i < defenderList.size(); i++) {
+		int min = Math.min(attackerList.size(), defenderList.size());
+		
+		for (int i = 0; i < min; i++) {
 
 			if (defenderList.get(i) == attackerList.get(i)) {
 				updateArmyAfterBattle(fromCountryAttack, "attacker");
@@ -544,7 +584,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		if (commandData.get(0).equalsIgnoreCase("fortify")) {
 
-			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("none")) {
+			if (commandData.size() == 2 && commandData.get(0).equals("fortify") && commandData.get(1).equals("-none")) {
 
 				sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
 
