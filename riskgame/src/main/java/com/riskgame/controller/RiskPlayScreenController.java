@@ -145,13 +145,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	private String currentPhase;
 
+	private boolean gamewin = false;
+
 	/**
 	 * This is an initialization method for this controller to start.
 	 * 
-	 * @param location
-	 *            of the FXML file
-	 * @param resources
-	 *            is properties information
+	 * @param location  of the FXML file
+	 * @param resources is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 */
@@ -188,85 +188,92 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This is an onAction method for button fireCommand. It'll take commands from
 	 * player and performs action accordingly.
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
-		// txtConsoleLog.clear();
-		fillTerritoryList();
-		fillAdjacentTerritoryList();
-		System.out.println("playerIndex => " + playerIndex);
-		System.out.println("playerName => " + playerName);
-		System.out.println("playerReinforceArmy => " + playerReinforceArmy);
 
-		System.out.println("Before playerList = > " + playerList);
+		if (!gamewin) {
 
-		try {
-			String command = txtCommandLine.getText();
-			if (command != null && !command.isEmpty()) {
+			// txtConsoleLog.clear();
+			fillTerritoryList();
+			fillAdjacentTerritoryList();
+			System.out.println("playerIndex => " + playerIndex);
+			System.out.println("playerName => " + playerName);
+			System.out.println("playerReinforceArmy => " + playerReinforceArmy);
 
-				// if (!attackFire) {
+			System.out.println("Before playerList = > " + playerList);
 
-				// if (!attackMove) {
+			try {
+				String command = txtCommandLine.getText();
+				if (command != null && !command.isEmpty()) {
 
-				if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
-					if (playerReinforceArmy != 0) {
+					// if (!attackFire) {
 
-						txtConsoleLog.setText(placeReinforcement(command));
-					} else {
-						sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
-						txtConsoleLog.setText(sb.toString());
+					// if (!attackMove) {
 
-					}
+					if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
+						if (playerReinforceArmy != 0) {
 
-				} else if ((command.startsWith("attack") || command.startsWith("defend")
-						|| command.startsWith("attackmove")) && !fortificationStarted) {
+							txtConsoleLog.setText(placeReinforcement(command));
+						} else {
+							sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
+							txtConsoleLog.setText(sb.toString());
 
-					if (playerReinforceArmy == 0) {
-						txtConsoleLog.setText(attackPhase(command));
+						}
 
-					} else {
-						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
-								.append(NEWLINE);
-						txtConsoleLog.setText(sb.toString());
-					}
+					} else if ((command.startsWith("attack") || command.startsWith("defend")
+							|| command.startsWith("attackmove")) && !fortificationStarted) {
 
-				} else if (command.startsWith("fortify")) {
-					if (playerReinforceArmy == 0) {
-						if (attackphaseEnded) {
-
-							txtConsoleLog.setText(fortification(command));
+						if (playerReinforceArmy == 0) {
+							txtConsoleLog.setText(attackPhase(command));
 
 						} else {
-							sb.append("Please fire \"attack -noattck\" before starting fortification phase")
+							sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
+									.append(NEWLINE);
+							txtConsoleLog.setText(sb.toString());
+						}
+
+					} else if (command.startsWith("fortify")) {
+						if (playerReinforceArmy == 0) {
+							if (attackphaseEnded) {
+
+								txtConsoleLog.setText(fortification(command));
+
+							} else {
+								sb.append("Please fire \"attack -noattck\" before starting fortification phase")
+										.append(NEWLINE);
+								txtConsoleLog.setText(sb.toString());
+							}
+						} else {
+							sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
 									.append(NEWLINE);
 							txtConsoleLog.setText(sb.toString());
 						}
 					} else {
-						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
-								.append(NEWLINE);
+						sb.append("Please Enter Valid phase Command").append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
 					}
+
 				} else {
 					sb.append("Please Enter Valid phase Command").append(NEWLINE);
 					txtConsoleLog.setText(sb.toString());
 				}
 
-			} else {
+			} catch (Exception e) {
+				e.printStackTrace();
 				sb.append("Please Enter Valid phase Command").append(NEWLINE);
 				txtConsoleLog.setText(sb.toString());
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			sb.append("Please Enter Valid phase Command").append(NEWLINE);
-			txtConsoleLog.setText(sb.toString());
+			System.out.println("After playerList = > " + playerList);
+
+			printPlayerDominationView();
+
+		} else {
+			sb.append("Game Finished ..!");
 		}
 
-		System.out.println("After playerList = > " + playerList);
-
-		printPlayerDominationView();
 	}
 
 	/**
@@ -456,6 +463,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	/**
 	 * This method will move army from attcker country to conqured country
+	 * 
 	 * @param fromCountryAttack
 	 * @param toCountryAttack
 	 * @param armyToMove
@@ -487,6 +495,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	/**
 	 * This method will move conqured country to attacker
+	 * 
 	 * @param fromCountryAttack
 	 * @param toCountryAttack
 	 */
@@ -593,8 +602,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * after battle completed everytime
 	 * 
 	 * @param country
-	 * @param name
-	 *            attcker or defender
+	 * @param name    attcker or defender
 	 */
 	private void updateArmyAfterBattle(String country, String name) {
 
@@ -637,8 +645,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This is a method for fortification process where player can move his/her army
 	 * from one territory to it's adjacent owned territory.
 	 * 
-	 * @param command
-	 *            is a fortification command given from player
+	 * @param command is a fortification command given from player
 	 * @return message of result from fortification process
 	 */
 	private String fortification(String command) {
@@ -779,10 +786,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This method validate input given from user and return true if it's correct
 	 * and false otherwise.
 	 * 
-	 * @param value
-	 *            is string to be validated
-	 * @param pattern
-	 *            is regex
+	 * @param value   is string to be validated
+	 * @param pattern is regex
 	 * @return true if validation got succeed.
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -803,8 +808,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This a reinforcement method in which you can put some number of extra army on
 	 * your desired territory each time your turn comes.
 	 * 
-	 * @param command
-	 *            is a command fired from player
+	 * @param command is a command fired from player
 	 * @return message of result from reinforcement process
 	 */
 	private String placeReinforcement(String command) {
@@ -994,8 +998,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * This method will exit the game terminates the window.
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void exitGame(ActionEvent event) {
@@ -1055,43 +1058,53 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 */
 	private void changeUserTurn() {
 
-		if (playerIndex < playerList.size() - 1) {
-			playerIndex++;
-			if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+		if (currentPlayer.getPlayerterritories().size() != totalCountries) {
+
+			if (playerIndex < playerList.size() - 1) {
+				playerIndex++;
+				if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+					playerIndex = 0;
+				}
+			} else {
 				playerIndex = 0;
 			}
+
+			txtCommandLine.clear();
+			txtConsoleLog.clear();
+
+			playerName = playerList.get(playerIndex).getPlayerName();
+			currentPlayer = playerList.get(playerIndex);
+
+			playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer,
+					gameplayphase.getFileName());
+			playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+
+			turnStartedMsg = playerName + "'s turn is started";
+			leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+			sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+
+			if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
+
+				sb.append("Your Risk card is more than 5 please exchange it");
+				exchangeRequired = true;
+
+				printPhaseView("EXCHANGE CARDS");
+			}
+
+			txtConsoleLog.setText(sb.toString());
+
+			fillTerritoryList();
+			fillAdjacentTerritoryList();
+
+			printPhaseView("REINFORCEMENT");
+
 		} else {
-			playerIndex = 0;
+
+			gamewin = true;
+			sb.append(currentPlayer.getPlayerName()).append(" Won the Game !!").append(NEWLINE);
+
 		}
-
-		txtCommandLine.clear();
-		txtConsoleLog.clear();
-
-		playerName = playerList.get(playerIndex).getPlayerName();
-		currentPlayer = playerList.get(playerIndex);
-
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
-				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
-		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
-
-		turnStartedMsg = playerName + "'s turn is started";
-		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
-		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-
-		if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
-
-			sb.append("Your Risk card is more than 5 please exchange it");
-			exchangeRequired = true;
-
-			printPhaseView("EXCHANGE CARDS");
-		}
-
-		txtConsoleLog.setText(sb.toString());
-
-		fillTerritoryList();
-		fillAdjacentTerritoryList();
-
-		printPhaseView("REINFORCEMENT");
 
 	}
 
@@ -1159,9 +1172,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * This method will Print the phase View of Risk Game on every phase.
 	 * 
-	 * @param phase
-	 *            is the name of current Phase i.e. Reinforcement, Attack,
-	 *            fortification etc.
+	 * @param phase is the name of current Phase i.e. Reinforcement, Attack,
+	 *              fortification etc.
 	 */
 	private void printPhaseView(String phase) {
 
