@@ -50,6 +50,8 @@ public class RiskPlayImplTest {
 	int countriesOwned;
 	List<PlayerTerritory> ptList;
 	String FILE_NAME = "risk.map";
+	List<Player> playerList = new ArrayList<>();
+	
 	
 	List<String> continentsControlledByUser;
 	
@@ -70,7 +72,7 @@ public class RiskPlayImplTest {
 		player = new Player();
 		playerTerritory = new PlayerTerritory();
 		ptList = new ArrayList<PlayerTerritory>();
-		
+		playerList.add(player);
 		playerTerritory.setArmyOnterritory(1);
 		playerTerritory.setContinentName("South-America");
 		playerTerritory.setTerritoryName("Venezuela");
@@ -112,6 +114,8 @@ public class RiskPlayImplTest {
 		card.setArmyType(CAVALRY);
 		card.setCardNumber(3);
 		totalCards.add(card);
+		
+		
 	}
 	
 	/**
@@ -261,5 +265,124 @@ public class RiskPlayImplTest {
 		int expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
 		assertNotEquals(25, expectedUpdateArmy);
 		
+	}
+	/**
+	 * Test for validGetAttackerDiesCount.
+	 * 
+	 * @result based on current Army return dice count for attacker.
+	 * 
+	 */
+	@Test
+	public void validGetAttackerDiesCount() {
+		int CurrentArmy=5;
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int numDices = riskplayimpl.getAttackerDiesCount(CurrentArmy);
+		assertEquals(3, numDices);
+		
+	}
+	
+	/**
+	 * Test for invalidGetAttackerDiesCount.
+	 * 
+	 * @result based on current Army return dice count for attacker.
+	 * 
+	 */
+	@Test
+	public void invalidGetAttackerDiesCount() {
+		int CurrentArmy=5;
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int numDices = riskplayimpl.getAttackerDiesCount(CurrentArmy);
+		assertNotEquals(2, numDices);
+		
+	}
+	/**
+	 * Test for validGetDefenderDiceCount.
+	 * 
+	 * @result returns number of dice defender can use based upon number of
+	 *         army he is having.
+	 * 
+	 */
+	@Test
+	public void validGetDefenderDiceCount() {
+		int CurrentArmy=3;
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int numDices=riskplayimpl.getDefenderDiceCount(CurrentArmy);
+		assertEquals(2, numDices);
+		
+	}
+	
+	/**
+	 * Test for invalidGetDefenderDiceCount.
+	 * 
+	 * @result returns number of dice defender can use based upon number of
+	 *         army he is having.
+	 * 
+	 */
+	@Test
+	public void invalidGetDefenderDiceCount() {
+		int CurrentArmy=3;
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int numDices=riskplayimpl.getDefenderDiceCount(CurrentArmy);
+		assertNotEquals(1, numDices);
+		
+	}
+	/**
+	 * Test for validGetCurrentArmyByCountryName.
+	 * 
+	 * @result returns number of armies for given territory
+	 * 
+	 */
+	@Test
+	public void validGetCurrentArmyByCountryName() {
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int army = riskplayimpl.getCurrentAramyByCountryName("Brazil", playerList);
+		assertEquals(0, army);
+		
+	}
+	
+	/**
+	 * Test for invalidGetCurrentArmyByCountryName.
+	 * 
+	 * @result returns number of armies for given territory
+	 * 
+	 */
+	@Test
+	public void invalidGetCurrentArmyByCountryName() {
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		int army = riskplayimpl.getCurrentAramyByCountryName("Brazil", playerList);
+		assertNotEquals(4, army);	
+	}
+	
+	/**
+	 * Test for validGetPlayerTerritoryByCountryName.
+	 * 
+	 * @result returns player territory for given territory name
+	 * 
+	 */
+	@Test
+	public void validGetPlayerTerritoryByCountryName() {
+		PlayerTerritory expectedPlayerTerritory = new PlayerTerritory();
+		expectedPlayerTerritory.setArmyOnterritory(4);
+		expectedPlayerTerritory.setContinentName("South-America");
+		expectedPlayerTerritory.setTerritoryName("Argentina");
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		assertNotEquals(expectedPlayerTerritory, riskplayimpl.getPlayerTerritoryByCountryName("Argentina", player));
+		
+	}
+	
+	/**
+	 * Test for invalidGetPlayerTerritoryByCountryName.
+	 * 
+	 * @result returns player territory for given territory name
+	 * 
+	 */
+	@Test
+	public void invalidGetPlayerTerritoryByCountryName() {
+		PlayerTerritory expectedPlayerTerritory = new PlayerTerritory();
+		expectedPlayerTerritory.setArmyOnterritory(4);
+		expectedPlayerTerritory.setContinentName("South-America");
+		expectedPlayerTerritory.setTerritoryName("Argentina");
+		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
+		assertNotEquals(expectedPlayerTerritory, riskplayimpl.getPlayerTerritoryByCountryName("Brazil", player));	
 	}
 }
