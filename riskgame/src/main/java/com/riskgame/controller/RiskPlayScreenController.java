@@ -140,6 +140,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	
 	private List<RiskCard> cardList;
 	
+	private StringBuilder phaseView;
+	private StringBuilder playerView;
+	
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -157,6 +160,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		sb = new StringBuilder();
 		territoryArea.clear();
 		adjacentTerritoryArea.clear();
+		
+		phaseView = new StringBuilder();
+		playerView = new StringBuilder();
 	}
 
 	/**
@@ -206,6 +212,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					} else {
 						sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
+						
+						
+						
 					}
 
 				} else if ((command.startsWith("attack") || command.startsWith("defend")
@@ -313,6 +322,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				countryConquredInSingleAttack = false;
 				allOutTerritoryConqured = false;
+				
+				printPhaseView("FORTIFICATION");
 
 			} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")
 					&& commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
@@ -807,8 +818,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 								.append(NEWLINE);
 
 						if (playerReinforceArmy == 0) {
-							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase")
-									.append(NEWLINE);
+							
+							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase").append(NEWLINE);
+							
+							printPhaseView("ATTACK");
 						}
 
 						// System.out.println("REINFORCEMENT ====> " + playerList);
@@ -894,6 +907,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 							
 							leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
 							sb.append(leftArmyMsg).append(NEWLINE);
+							
+							printPhaseView("REINFORCEMENT");
 							
 							
 							
@@ -982,7 +997,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerName = playerList.get(playerIndex).getPlayerName();
 		currentPlayer = playerList.get(playerIndex);
 
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(), playerList,gameplayphase.getFileName());
+		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer,gameplayphase.getFileName());
 		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
 
 		turnStartedMsg = playerName + "'s turn is started";
@@ -993,6 +1008,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
+		
+		printPhaseView("REINFORCEMENT");
 	}
 
 	/**
@@ -1016,7 +1033,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		currentPlayer = playerList.get(playerIndex);
 		
 		
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(),playerList,gameplayphase.getFileName());
+		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(),currentPlayer,gameplayphase.getFileName());
 		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
 		
 
@@ -1034,9 +1051,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 //		}
 		
 		if(currentPlayer.getCardListOwnedByPlayer().size() >=5) {
+			
 			sb.append("Your Risk card is more than 5 please exchange it");
 			exchangeRequired = true;
 			
+			printPhaseView("EXCHANGE CARDS");
 		}
 		
 		
@@ -1044,6 +1063,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
+		
+		printPhaseView("REINFORCEMENT");
 
 	}
 
@@ -1106,6 +1127,31 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	private int getint(String str) {
 		return Integer.parseInt(str);
+	}
+	
+	private void printPhaseView(String phase) {
+		
+		txtPhaseView.clear();
+		
+		phaseView = new StringBuilder();
+		
+		phaseView.append("Current Player : ").append(currentPlayer.getPlayerName()).append(NEWLINE);
+		phaseView.append("Current Phase : ").append(phase).append(NEWLINE);
+		
+		txtPhaseView.setText(phaseView.toString());
+		
+	}
+	
+	private void printPlayerDominationView() {
+		
+		txtPhaseView.clear();
+		playerView = new StringBuilder();
+		
+		String percentage = riskPlayImpl.getPlayerPercentageByCountry(currentPlayer, totalCountries);
+		
+		
+		
+		
 	}
 
 }
