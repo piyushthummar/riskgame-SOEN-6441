@@ -3,6 +3,7 @@ package com.riskgame.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ public class MapManagementImplTest {
 	public static final String VALID_MAP_NAME = "world.map";
 	public static final String INVALID_MAP_NAME = "invalidone.map";
 	public static final String COUNTRY_NAME = "India";
+	public static final String VALID_SMALL_MAP = "validSmall.map";
+	
 	public static final boolean TRUE = true;
 	public static RiskMap riskMap;
 
@@ -38,6 +41,7 @@ public class MapManagementImplTest {
 	@Before
 	public void setup() {
 		riskMap = map.readMap(VALID_MAP_NAME);
+		
 	}
 
 	@Test
@@ -54,6 +58,21 @@ public class MapManagementImplTest {
 	public void testForValidateMapFileName() {
 
 		RiskMap riskMap = map.readMap(VALID_MAP_NAME);
+		boolean result = map.validateMap(riskMap);
+
+		assertEquals(true, result);
+
+	}
+	/**
+	 * Test for valid map file for self made file.
+	 * 
+	 * @result This test cases will read file from resources folder with map file
+	 *         name and if it is valid then return would be boolean.
+	 */
+	@Test
+	public void testForValidateMapFileName1() {
+
+		RiskMap riskMap = map.readMap(VALID_SMALL_MAP);
 		boolean result = map.validateMap(riskMap);
 
 		assertEquals(true, result);
