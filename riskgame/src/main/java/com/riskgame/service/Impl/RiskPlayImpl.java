@@ -2,15 +2,12 @@ package com.riskgame.service.Impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.aspectj.apache.bcel.util.Play;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +46,10 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForReinforcement(int)
 	 */
 	@Override
-	public int checkForReinforcement(int totalOwnedCountries, List<Player> playerList, String fileName) {
+	public int checkForReinforcement(int totalOwnedCountries, Player player, String fileName) {
 		int total = Math.floorDiv(totalOwnedCountries, 3);
 		int totalArmyforReinforce = Math.max(total, 3);
-		totalArmyforReinforce += checkForContinentControlValue(playerList, fileName);
+		totalArmyforReinforce += checkForContinentControlValue(player, fileName);
 		return totalArmyforReinforce;
 
 	}
@@ -93,22 +90,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#checkForContinentControlValue(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
-	public int checkForContinentControlValue(List<Player> playerList, String fileName) {
+	public int checkForContinentControlValue(Player player, String fileName) {
 		int controlvalueTosend = 0;
 
-		Iterator<Player> itr = playerList.listIterator();
-		while (itr.hasNext()) {
-			Player p = itr.next();
-			List<PlayerTerritory> territoryList = p.getPlayerterritories();
+		
+			
+			List<PlayerTerritory> territoryList = player.getPlayerterritories();
+			
 			List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 					.collect(Collectors.toList());
+			
 			Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
-			/*
-			 * Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
-			 * while (i.hasNext()) {
-			 * 
-			 * }
-			 */
+			
 			for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
 				Continent continent = entry.getValue();
 				List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
@@ -117,8 +110,35 @@ public class RiskPlayImpl implements RiskPlayInterface {
 					controlvalueTosend = continent.getContinentValue();
 				}
 			}
-		}
+		
 		return controlvalueTosend;
+	}
+	
+	public List<String> getContinentControlledByPlayer(Player player, String fileName){
+		List<String> continentLst = new ArrayList<String>();
+		
+		List<PlayerTerritory> territoryList = player.getPlayerterritories();
+		
+		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
+				.collect(Collectors.toList());
+		
+		Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
+		
+		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
+			Continent continent = entry.getValue();
+			List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
+					.map(e -> e.getTerritoryName()).collect(Collectors.toList());
+			if (territoryStringList.containsAll(continentTerritoryStringList)) {
+				
+				continentLst.add(continent.getContinentName());
+				
+			}
+		}
+		
+		return continentLst;
+		
+		
+		
 	}
 
 	/**
@@ -468,6 +488,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		System.out.println("riskCardReturn ==> " + riskCardReturn);
 		return riskCardReturn;
+	}
+	
+	@Override
+	public String getPlayerPercentageByCountry(Player player, int totalCountry) {
+		
+		int size = player.getPlayerterritories().size();
+		float percent = size * 100f / totalCountry;
+		
+		return Float.toString(percent);
+		
+		
+		
 	}
 
 }
