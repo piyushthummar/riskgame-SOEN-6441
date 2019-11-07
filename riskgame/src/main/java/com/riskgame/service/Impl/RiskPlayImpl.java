@@ -81,6 +81,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			totalCards.add(card);
 		}
 
+		Collections.shuffle(totalCards);
 		return totalCards;
 	}
 
