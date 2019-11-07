@@ -187,9 +187,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				return true;
 			}
 		}
-
 		return false;
-
 	}
 
 	/**
@@ -214,7 +212,6 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			if (neighbourCountriesList.contains(toCountry)) {
 				return true;
 			}
-
 		}
 		return false;
 
@@ -236,16 +233,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				int numDies = getAttackerDiesCount(playerTerritory.getArmyOnterritory());
 
 				if (numDies == dies && dies != 0) {
-
 					return true;
-
 				}
 			}
 		}
-
 		return false;
 	}
 
+	/**
+	 * This method will return dice count for attacker based on his army.
+	 * @param currentArmy
+	 * @return count of dice attacker can play with
+	 */
 	public int getAttackerDiesCount(int currentArmy) {
 		int numDies = 0;
 		if (currentArmy >= 4) {
@@ -283,6 +282,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	}
 
+	/**
+	 * This method will return current army on particular country given
+	 * @param country
+	 * @param playerList
+	 * @return number of army on country
+	 */
 	public int getCurrentAramyByCountryName(String country, List<Player> playerList) {
 		int army = 0;
 
@@ -299,11 +304,27 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return army;
 	}
 
+	/**
+	 * This method will return whole object of PlayerTerritory of given player based
+	 * upon given territory(country) name
+	 * 
+	 * @param country
+	 *            is name of country whose object is needed
+	 * @param player
+	 *            is the player object whose PlayerTerritory needed
+	 * @return
+	 */
 	public PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player) {
 		return player.getPlayerterritories().stream().filter(x -> country.equals(x.getTerritoryName())).findAny()
 				.orElse(null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#validateDefenderDice(int,
+	 *      java.lang.String, com.riskgame.model.Player)
+	 */
 	@Override
 	public boolean validateDefenderDice(int dies, String toCountry, Player player) {
 
@@ -320,6 +341,14 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return false;
 	}
 
+	/**
+	 * This method will return number of dice defender can use based upon number of
+	 * army he is having
+	 * 
+	 * @param currentArmy
+	 *            is number of army defender is having
+	 * @return number of dice defender can have
+	 */
 	public int getDefenderDiceCount(int currentArmy) {
 		int numDies = 0;
 		if (currentArmy >= 2) {
@@ -333,13 +362,14 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	/**
 	 * This method will return one list having count of generated dice
 	 * 
-	 * @param dies
+	 * @param dice
+	 *            number of dice selected from user
 	 * @return sorted list of dice
 	 */
-	public List<Integer> getCountFromDies(int dies) {
+	public List<Integer> getCountFromDies(int dice) {
 
 		List<Integer> countList = new ArrayList<Integer>();
-		for (int i = 0; i < dies; i++) {
+		for (int i = 0; i < dice; i++) {
 			countList.add(generateRandomIntRange(1, 6));
 		}
 		/* Sorting in decreasing (descending) order */
@@ -352,7 +382,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * Generate random number for dice with random function
 	 * 
 	 * @param min
+	 *            number provided
 	 * @param max
+	 *            number provided
 	 * @return random number for dice
 	 */
 	public int generateRandomIntRange(int min, int max) {
@@ -382,7 +414,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method will return true if Player can excahnage card
+	 * {@inheritDoc} This method will return true if Player can excahnage card
 	 * 
 	 * @see com.riskgame.service.RiskPlayInterface#checkForExchange(com.riskgame.model.RiskCardExchange)
 	 */
@@ -397,6 +429,11 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getCardNumbersFromPlayer(com.riskgame.model.Player)
+	 */
 	@Override
 	public List<Integer> getCardNumbersFromPlayer(Player player) {
 		List<Integer> cardNumber = new ArrayList<Integer>();
@@ -410,6 +447,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return cardNumber;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getCardBycardNumberofPlayer(com.riskgame.model.Player,
+	 *      int)
+	 */
 	@Override
 	public RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber) {
 		RiskCard riskCardReturn = new RiskCard();
@@ -417,13 +460,13 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			for (RiskCard riskCard : player.getCardListOwnedByPlayer()) {
 
 				if (riskCard.getCardNumber() == cardNumber) {
-					System.out.println("riskCard ==> "+riskCard);
+					System.out.println("riskCard ==> " + riskCard);
 					return riskCard;
 				}
 
 			}
 		}
-		System.out.println("riskCardReturn ==> "+riskCardReturn);
+		System.out.println("riskCardReturn ==> " + riskCardReturn);
 		return riskCardReturn;
 	}
 
