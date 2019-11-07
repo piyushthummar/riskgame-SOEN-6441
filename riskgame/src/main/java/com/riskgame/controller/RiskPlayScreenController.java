@@ -142,7 +142,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private StringBuilder phaseView;
 	private StringBuilder playerView;
 	private StringBuilder excahangeCardView;
-	
+
 	private String currentPhase;
 
 	/**
@@ -236,8 +236,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 							txtConsoleLog.setText(fortification(command));
 
 						} else {
-							txtConsoleLog
-									.setText("Please fire \"attack -noattck\" before starting fortification phase");
+							sb.append("Please fire \"attack -noattck\" before starting fortification phase")
+									.append(NEWLINE);
+							txtConsoleLog.setText(sb.toString());
 						}
 					} else {
 						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
@@ -245,27 +246,19 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						txtConsoleLog.setText(sb.toString());
 					}
 				} else {
-					txtConsoleLog.setText("Please Enter Valid phase Command");
+					sb.append("Please Enter Valid phase Command").append(NEWLINE);
+					txtConsoleLog.setText(sb.toString());
 				}
 
-				// } else {
-				//
-				// txtConsoleLog.setText("Please Finish attackmove command on win country " +
-				// toCountryAttack);
-				//
-				// }
-
-				// } else {
-				// txtConsoleLog.setText("Please Finish defend command first");
-				// }
-
 			} else {
-				txtConsoleLog.setText("Please Enter valid Command");
+				sb.append("Please Enter Valid phase Command").append(NEWLINE);
+				txtConsoleLog.setText(sb.toString());
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			txtConsoleLog.setText("Please Enter Valid Command");
+			sb.append("Please Enter Valid phase Command").append(NEWLINE);
+			txtConsoleLog.setText(sb.toString());
 		}
 
 		System.out.println("After playerList = > " + playerList);
@@ -1130,13 +1123,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseView = new StringBuilder();
 
 		phaseView.append("Current Player : ").append(currentPlayer.getPlayerName()).append(NEWLINE);
-		phaseView.append("Current Phase : ").append(phase).append(NEWLINE);
+		phaseView.append("Current Phase : ").append(phase).append(NEWLINE).append(NEWLINE);
 
 		txtPhaseView.setText(phaseView.toString());
-		
-		if(phase.equalsIgnoreCase("REINFORCEMENT")) {
+
+		if (phase.equalsIgnoreCase("REINFORCEMENT")) {
 			printRiskCard();
-		}else {
+		} else {
 			txtCardExchangeView.clear();
 		}
 
