@@ -196,7 +196,9 @@ public class MapManagementImpl implements MapManagementInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 * @throws UnsupportedEncodingException
+	 * @throws FileNotFoundException
+	 * @throws IOException
 	 * @see com.riskgame.service.MapManagementInterface#saveMapToFile(com.riskgame.model.RiskMap)
 	 */
 	@Override

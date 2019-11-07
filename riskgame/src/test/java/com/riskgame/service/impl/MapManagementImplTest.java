@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,15 @@ public class MapManagementImplTest {
 	public static final String INVALID_MAP_NAME = "invalidone.map";
 	public static final String COUNTRY_NAME = "India";
 	public static final boolean TRUE = true;
+	public static RiskMap riskMap;
 
 	@Autowired
 	MapManagementImpl map;
+
+	@Before
+	public void setup() {
+		riskMap = map.readMap(VALID_MAP_NAME);
+	}
 
 	@Test
 	public void contextLoads() throws Exception {
@@ -99,17 +107,21 @@ public class MapManagementImplTest {
 	 * @result
 	 */
 	@Test
-	public void notEmptyAvailableMap() {
+	public void testNotEmptyAvailableMap() {
 		List<String> mapList = map.getAvailableMap();
 		assertNotEquals(0, mapList.size());
 	}
-	
+
+	/**
+	 * This method will return true if given riskmap can be saved as domination file
+	 * name
+	 * 
+	 * @param riskMap
+	 * @return
+	 */
 	@Test
-	public boolean saveMapToFile(RiskMap map)
-	{
-		
-		
-		
-		return true;
+	public void testSaveMapToFile() {
+		boolean result = map.validateMap(riskMap);
+		assertEquals(true, result);
 	}
 }
