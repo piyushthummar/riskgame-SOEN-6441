@@ -8,7 +8,6 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -18,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.riskgame.model.GamePlayPhase;
+import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskMap;
-import com.riskgame.service.MapManagementInterface;
-import com.riskgame.service.PlayerHandlerInterface;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.PlayerHandlerImpl;
 
@@ -38,6 +37,7 @@ public class PlayerHandlerImplTest {
 	public static final String VALID_SMALL_MAP1 = "validSmall.map";
 	public static final List<String> territoryList = new ArrayList<>();
 	public static RiskMap riskMap;
+	public static GamePlayPhase gamePlayPhase = new GamePlayPhase();
 
 	@Autowired
 	MapManagementImpl map;
@@ -54,6 +54,17 @@ public class PlayerHandlerImplTest {
 		territoryList.add("CA");
 		territoryList.add("USA");
 		territoryList.add("test");
+		
+		
+		List<Player> plist = new ArrayList<Player>();
+		Player playerOne = new Player();
+		Player playerTwo = new Player();
+		
+		plist.add(playerOne);
+		plist.add(playerTwo);
+		gamePlayPhase.setFileName(VALID_MAP_NAME);
+		gamePlayPhase.setPlayerList(plist);
+		
 
 	}
 
@@ -106,5 +117,20 @@ public class PlayerHandlerImplTest {
 		boolean result = territoryList.containsAll(territoriesStringList);
 		assertEquals(true, result);
 	}
+	
+	/**
+	 * This method will Test populateTerritoriesRandomly which will populate countries randomly to player
+	 * return same Gameplayphase object
+	 * true if Gameplayephase is equal.
+	 */
+	@Test
+	public void populateTerritoriesRandomlyTest() {
+		
+		GamePlayPhase gamePlayPhaseReturn = playerHandler.populateTerritoriesRandomly(gamePlayPhase);
+		assertEquals(gamePlayPhaseReturn, gamePlayPhase);
+		
+	}
+	
+	
 
 }
