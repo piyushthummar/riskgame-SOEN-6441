@@ -142,6 +142,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private StringBuilder phaseView;
 	private StringBuilder playerView;
 	private StringBuilder excahangeCardView;
+	
+	private String currentPhase;
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -269,7 +271,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		System.out.println("After playerList = > " + playerList);
 
 		printPlayerDominationView();
-		printRiskCard();
 	}
 
 	/**
@@ -1006,7 +1007,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		printPhaseView("REINFORCEMENT");
 		printPlayerDominationView();
-		printRiskCard();
 	}
 
 	/**
@@ -1133,6 +1133,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseView.append("Current Phase : ").append(phase).append(NEWLINE);
 
 		txtPhaseView.setText(phaseView.toString());
+		
+		if(phase.equalsIgnoreCase("REINFORCEMENT")) {
+			printRiskCard();
+		}else {
+			txtCardExchangeView.clear();
+		}
 
 	}
 
@@ -1164,12 +1170,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		excahangeCardView = new StringBuilder();
 
-		excahangeCardView.append(currentPlayer.getPlayerName()).append(" cardexchange view :").append(NEUTRAL);
+		excahangeCardView.append(currentPlayer.getPlayerName()).append(" cardexchange view :").append(NEWLINE);
+		excahangeCardView.append("Risk Cards:").append(NEWLINE);
 
 		for (RiskCard riskCard : currentPlayer.getCardListOwnedByPlayer()) {
 
 			excahangeCardView.append("cardNumber: ").append(riskCard.getCardNumber()).append(" armyType: ")
-					.append(riskCard.getArmyType()).append(NEUTRAL);
+					.append(riskCard.getArmyType()).append(NEWLINE);
 
 		}
 		txtCardExchangeView.setText(excahangeCardView.toString());
