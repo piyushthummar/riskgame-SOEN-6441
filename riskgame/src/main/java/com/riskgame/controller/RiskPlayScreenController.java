@@ -148,8 +148,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * This is an initialization method for this controller to start.
 	 * 
-	 * @param location  of the FXML file
-	 * @param resources is properties information
+	 * @param location
+	 *            of the FXML file
+	 * @param resources
+	 *            is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 */
@@ -186,7 +188,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This is an onAction method for button fireCommand. It'll take commands from
 	 * player and performs action accordingly.
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
@@ -407,14 +410,16 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			sb.append("Please enter valid Phase command").append(NEWLINE);
 		}
 
-		
-		if(currentPhase.equals("ATTACK")) {
+		if (currentPhase.equals("ATTACK")) {
 			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 		}
-		
+
 		return sb.toString();
 	}
 
+	/**
+	 * This method will asign risk card to player after successful conqured
+	 */
 	private void addRiskCardToPlayer() {
 
 		// add card to player
@@ -449,6 +454,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	}
 
+	/**
+	 * This method will move army from attcker country to conqured country
+	 * @param fromCountryAttack
+	 * @param toCountryAttack
+	 * @param armyToMove
+	 */
 	private void moveArmy(String fromCountryAttack, String toCountryAttack, int armyToMove) {
 
 		for (Player player : playerList) {
@@ -474,8 +485,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	}
 
+	/**
+	 * This method will move conqured country to attacker
+	 * @param fromCountryAttack
+	 * @param toCountryAttack
+	 */
 	private void moveCountryToWinPlayer(String fromCountryAttack, String toCountryAttack) {
-
 		Player player = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 		PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack, player);
 
@@ -489,9 +504,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					playerTerritories.remove();
 				}
 			}
-
 		}
-
 		// for Adding country
 		for (Player playerFromLst : playerList) {
 
@@ -502,12 +515,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					playerTerritories.add(playerTerritory);
 				}
 			}
-
 		}
-
 	}
 
 	/**
+	 * This method will use to attack all possible time on defender country
+	 * 
 	 * @param fromCountry
 	 * @param toCountry
 	 */
@@ -580,7 +593,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * after battle completed everytime
 	 * 
 	 * @param country
-	 * @param name    attcker or defender
+	 * @param name
+	 *            attcker or defender
 	 */
 	private void updateArmyAfterBattle(String country, String name) {
 
@@ -605,6 +619,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.observerpattern.Observer#update()
+	 */
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
@@ -618,7 +637,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This is a method for fortification process where player can move his/her army
 	 * from one territory to it's adjacent owned territory.
 	 * 
-	 * @param command is a fortification command given from player
+	 * @param command
+	 *            is a fortification command given from player
 	 * @return message of result from fortification process
 	 */
 	private String fortification(String command) {
@@ -634,7 +654,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sb.append(playerName).append(" 's turn ended.!").append(NEWLINE);
 
 				// System.out.println("FORTIFY ====> " + playerList);
-
 				fortificationStarted = false;
 				attackphaseEnded = false;
 				fillTerritoryList();
@@ -642,9 +661,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				changeUserTurn();
 
 			} else {
-
 				if (commandData.size() != 4) {
-
 					sb.append("Please Enter Valid command").append(NEWLINE);
 				} else {
 					if (validateInput(commandData.get(3), "[1-9][0-9]*")
@@ -715,7 +732,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 											.append(fromCountry).append(NEWLINE);
 									fortificationMessage = sb.toString();
 								}
-
 							} else {
 								sb.append(toCountry).append(" is not neighbour country of ").append(fromCountry)
 										.append(NEWLINE);
@@ -732,24 +748,27 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						sb.append("Please Enter Valid command").append(NEWLINE);
 						fortificationMessage = sb.toString();
 					}
-
 				}
 			}
 		} else {
-
 			sb.append("Please Enter Valid command").append(NEWLINE);
 			fortificationMessage = sb.toString();
 		}
 
 		// observerSubject.setFortificationMessage(fortificationMessage);
-		
-		if(currentPhase.equals("FORTIFICATION")) {
+
+		if (currentPhase.equals("FORTIFICATION")) {
 			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 		}
-		
+
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.observerpattern.Observer#fortificationUpdate()
+	 */
 	@Override
 	public void fortificationUpdate() {
 		phaseviewLog.setText("");
@@ -760,8 +779,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This method validate input given from user and return true if it's correct
 	 * and false otherwise.
 	 * 
-	 * @param value   is string to be validated
-	 * @param pattern is regex
+	 * @param value
+	 *            is string to be validated
+	 * @param pattern
+	 *            is regex
 	 * @return true if validation got succeed.
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -782,7 +803,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 * This a reinforcement method in which you can put some number of extra army on
 	 * your desired territory each time your turn comes.
 	 * 
-	 * @param command is a command fired from player
+	 * @param command
+	 *            is a command fired from player
 	 * @return message of result from reinforcement process
 	 */
 	private String placeReinforcement(String command) {
@@ -937,15 +959,19 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// Observer Pattern Update Call
 		reinforcementMessage = sb.toString();
 		// observerSubject.setReinforcementMessage(reinforcementMessage);
-		
-		if(currentPhase.equals("REINFORCEMENT")) {
+
+		if (currentPhase.equals("REINFORCEMENT")) {
 			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 		}
-		
-		
+
 		return sb.toString();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.observerpattern.Observer#reinforcemrentUpdate()
+	 */
 	@Override
 	public void reinforcemrentUpdate() {
 
@@ -953,6 +979,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseviewLog.appendText(observerSubject.getReinforcementMessage());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.observerpattern.Observer#attackUpdate()
+	 */
 	@Override
 	public void attackUpdate() {
 
@@ -963,7 +994,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * This method will exit the game terminates the window.
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void exitGame(ActionEvent event) {
@@ -1046,14 +1078,6 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
 		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
 
-//		if(currentPlayer.getCardListOwnedByPlayer().size() == 3 || currentPlayer.getCardListOwnedByPlayer().size() == 4) {
-//			
-//			
-//			
-//		}else if(currentPlayer.getCardListOwnedByPlayer().size() >=5) {
-//			
-//		}
-
 		if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
 
 			sb.append("Your Risk card is more than 5 please exchange it");
@@ -1132,8 +1156,15 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		return Integer.parseInt(str);
 	}
 
+	/**
+	 * This method will Print the phase View of Risk Game on every phase.
+	 * 
+	 * @param phase
+	 *            is the name of current Phase i.e. Reinforcement, Attack,
+	 *            fortification etc.
+	 */
 	private void printPhaseView(String phase) {
-		
+
 		currentPhase = phase;
 
 		txtPhaseView.clear();
@@ -1153,6 +1184,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	}
 
+	/**
+	 * This method will Print Player domination View including player name,
+	 * percentage of world map he is covering etc.
+	 */
 	private void printPlayerDominationView() {
 
 		txtPlayerDominationView.clear();
@@ -1175,6 +1210,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 	}
 
+	/**
+	 * This method will use to print riskcard in console of Card Exchnage View
+	 */
 	private void printRiskCard() {
 
 		txtCardExchangeView.clear();
