@@ -407,6 +407,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			sb.append("Please enter valid Phase command").append(NEWLINE);
 		}
 
+		
+		if(currentPhase.equals("ATTACK")) {
+			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		}
+		
 		return sb.toString();
 	}
 
@@ -737,6 +742,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 
 		// observerSubject.setFortificationMessage(fortificationMessage);
+		
+		if(currentPhase.equals("FORTIFICATION")) {
+			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		}
+		
 		return sb.toString();
 	}
 
@@ -927,6 +937,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// Observer Pattern Update Call
 		reinforcementMessage = sb.toString();
 		// observerSubject.setReinforcementMessage(reinforcementMessage);
+		
+		if(currentPhase.equals("REINFORCEMENT")) {
+			txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		}
+		
+		
 		return sb.toString();
 	}
 
@@ -1117,6 +1133,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	}
 
 	private void printPhaseView(String phase) {
+		
+		currentPhase = phase;
 
 		txtPhaseView.clear();
 
