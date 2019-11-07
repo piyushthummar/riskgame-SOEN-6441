@@ -1,7 +1,6 @@
 package com.riskgame.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -127,7 +126,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private Player defenderPlayer;
 	private String fromCountryAttack;
 	private String toCountryAttack;
-	
+
 	private boolean exchangeRequired = false;
 
 	private boolean attackFire = false;
@@ -137,12 +136,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 
 	private static int totalCountries;
-	
+
 	private List<RiskCard> cardList;
-	
+
 	private StringBuilder phaseView;
 	private StringBuilder playerView;
-	
+	private StringBuilder excahangeCardView;
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -160,9 +159,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		sb = new StringBuilder();
 		territoryArea.clear();
 		adjacentTerritoryArea.clear();
-		
+
 		phaseView = new StringBuilder();
 		playerView = new StringBuilder();
+		excahangeCardView = new StringBuilder();
 	}
 
 	/**
@@ -212,9 +212,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					} else {
 						sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
-						
-						
-						
+
 					}
 
 				} else if ((command.startsWith("attack") || command.startsWith("defend")
@@ -269,8 +267,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 
 		System.out.println("After playerList = > " + playerList);
-		
+
 		printPlayerDominationView();
+		printRiskCard();
 	}
 
 	/**
@@ -324,7 +323,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				countryConquredInSingleAttack = false;
 				allOutTerritoryConqured = false;
-				
+
 				printPhaseView("FORTIFICATION");
 
 			} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")
@@ -337,8 +336,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				attackerDice = Integer.parseInt(commandData.get(3));
 
 				if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex))
-						&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,playerList.get(playerIndex))
-						&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack,playerList.get(playerIndex))) {
+						&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,
+								playerList.get(playerIndex))
+						&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack,
+								playerList.get(playerIndex))) {
 
 					defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 
@@ -370,20 +371,20 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
 							defenderPlayer);
 
-					 if (toTerritory.getArmyOnterritory() == 0) {
+					if (toTerritory.getArmyOnterritory() == 0) {
 
-					countryConquredInSingleAttack = true;
-					attackMove = true;
+						countryConquredInSingleAttack = true;
+						attackMove = true;
 
-					moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
-					fillTerritoryList();
-					fillAdjacentTerritoryList();
+						moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
 
-					sb.append(toCountryAttack).append(
-							" country has been conquered Please move number of armies to this country from the attacking country")
-							.append(NEWLINE);
+						sb.append(toCountryAttack).append(
+								" country has been conquered Please move number of armies to this country from the attacking country")
+								.append(NEWLINE);
 
-					 }
+					}
 
 				} else {
 					sb.append("Please do attack first or invalid defender dice").append(NEWLINE);
@@ -431,9 +432,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 
 		// remove card from cardlist
-		//ListIterator<RiskCard> riskcardList = gameplayphase.getRiskCardList().listIterator();
-		
-		//List<RiskCard> riskcardList = gameplayphase.getRiskCardList();
+		// ListIterator<RiskCard> riskcardList =
+		// gameplayphase.getRiskCardList().listIterator();
+
+		// List<RiskCard> riskcardList = gameplayphase.getRiskCardList();
 		cardList.remove(0);
 		gameplayphase.setRiskCardList(cardList);
 
@@ -442,7 +444,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		System.out.println("Card Size ==> " + gameplayphase.getRiskCardList().size());
 
 		System.out.println("Card ==> " + gameplayphase.getRiskCardList());
-		
+
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
 
@@ -785,9 +787,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		String[] dataArray = command.split(" ");
 		List<String> commandData = Arrays.asList(dataArray);
 		String reinforcementMessage;
-		
+
 		if (commandData.get(0).equals("reinforce") && !exchangeRequired) {
-			
+
 			if (commandData.size() == 3 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
 					&& validateInput(commandData.get(2), "[1-9][0-9]*")) {
 
@@ -820,9 +822,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 								.append(NEWLINE);
 
 						if (playerReinforceArmy == 0) {
-							
-							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase").append(NEWLINE);
-							
+
+							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase")
+									.append(NEWLINE);
+
 							printPhaseView("ATTACK");
 						}
 
@@ -839,14 +842,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				}
 			}
 		} else if (commandData.get(0).equals("exchangecards")) {
-			
-			
+
 			if (commandData.size() == 2 && commandData.get(1).equals("-none") && !exchangeRequired) {
 				sb.append("Player Don't want to exchange cards.");
-				
+
 			} else {
-				
-				
+
 				int numOfCardsPlayerOwned = currentPlayer.getCardListOwnedByPlayer().size();
 				if (commandData.size() == 4 && validateInput(commandData.get(1), "[1-9][0-9]*")
 						&& validateInput(commandData.get(2), "[1-9][0-9]*")
@@ -855,84 +856,75 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					Integer x = Integer.parseInt(commandData.get(1));
 					Integer y = Integer.parseInt(commandData.get(2));
 					Integer z = Integer.parseInt(commandData.get(3));
-					
+
 					List<Integer> cardNumberLst = riskPlayImpl.getCardNumbersFromPlayer(currentPlayer);
-					
-					if( cardNumberLst.contains(x) && cardNumberLst.contains(y) && cardNumberLst.contains(z)) {
-						
-						
+
+					if (cardNumberLst.contains(x) && cardNumberLst.contains(y) && cardNumberLst.contains(z)) {
+
 						RiskCardExchange cardExchange = new RiskCardExchange();
-						
+
 						cardExchange.setExchange1(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, x));
 						cardExchange.setExchange2(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, y));
 						cardExchange.setExchange3(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, z));
-						
-						System.out.println("cardExchange==================>   "+cardExchange);
+
+						System.out.println("cardExchange==================>   " + cardExchange);
 
 						boolean checkforExchange = riskPlayImpl.checkForExchange(cardExchange);
-						
-						System.out.println("checkforExchange==================>   "+checkforExchange);
-						
+
+						System.out.println("checkforExchange==================>   " + checkforExchange);
+
 						if (checkforExchange) {
-							
+
 							exchangeRequired = false;
-							
+
 							int count = currentPlayer.getExchangeCount();
-							
+
 							cardList.add(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, x));
 							cardList.add(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, y));
 							cardList.add(riskPlayImpl.getCardBycardNumberofPlayer(currentPlayer, z));
 							gameplayphase.setRiskCardList(cardList);
-							
-							
-							
+
 							for (Player player : playerList) {
 
 								if (player.getPlayerName().equals(currentPlayer.getPlayerName())) {
 
 									player.setExchangeCount(count + 1);
-									
+
 									ListIterator<RiskCard> cards = player.getCardListOwnedByPlayer().listIterator();
-									while(cards.hasNext()) {
-										if(cards.next().getCardNumber()==x || cards.next().getCardNumber()==y ||cards.next().getCardNumber()==z ) {
+									while (cards.hasNext()) {
+										if (cards.next().getCardNumber() == x || cards.next().getCardNumber() == y
+												|| cards.next().getCardNumber() == z) {
 											cards.remove();
 										}
 									}
-									
+
 								}
 
 							}
-							
+
 							sb.append("card Successfully exchanged").append(NEWLINE);
-							
-							playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
-							
+
+							playerReinforceArmy = playerReinforceArmy
+									+ riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+
 							leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
 							sb.append(leftArmyMsg).append(NEWLINE);
-							
+
 							printPhaseView("REINFORCEMENT");
-							
-							
-							
-						}else {
+
+						} else {
 							sb.append("card Numbers are not valid for exchange").append(NEWLINE);
 						}
-						
-						
-					}else {
+
+					} else {
 						sb.append("Invalid card Number.").append(NEWLINE);
 					}
 
-					
-					
-					
-					
 				} else {
-					sb.append(" Please exchange card or Invalid command or Player don't have enough cards to trade").append(NEWLINE);
+					sb.append(" Please exchange card or Invalid command or Player don't have enough cards to trade")
+							.append(NEWLINE);
 				}
 			}
-			
-			
 
 		} else {
 
@@ -999,7 +991,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerName = playerList.get(playerIndex).getPlayerName();
 		currentPlayer = playerList.get(playerIndex);
 
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer,gameplayphase.getFileName());
+		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
 		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
 
 		turnStartedMsg = playerName + "'s turn is started";
@@ -1010,9 +1003,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
-		
+
 		printPhaseView("REINFORCEMENT");
 		printPlayerDominationView();
+		printRiskCard();
 	}
 
 	/**
@@ -1034,17 +1028,15 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		playerName = playerList.get(playerIndex).getPlayerName();
 		currentPlayer = playerList.get(playerIndex);
-		
-		
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(),currentPlayer,gameplayphase.getFileName());
+
+		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
 		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
-		
 
 		turnStartedMsg = playerName + "'s turn is started";
 		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
 		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-		
-		
+
 //		if(currentPlayer.getCardListOwnedByPlayer().size() == 3 || currentPlayer.getCardListOwnedByPlayer().size() == 4) {
 //			
 //			
@@ -1052,21 +1044,20 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 //		}else if(currentPlayer.getCardListOwnedByPlayer().size() >=5) {
 //			
 //		}
-		
-		if(currentPlayer.getCardListOwnedByPlayer().size() >=5) {
-			
+
+		if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
+
 			sb.append("Your Risk card is more than 5 please exchange it");
 			exchangeRequired = true;
-			
+
 			printPhaseView("EXCHANGE CARDS");
 		}
-		
-		
+
 		txtConsoleLog.setText(sb.toString());
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
-		
+
 		printPhaseView("REINFORCEMENT");
 
 	}
@@ -1131,41 +1122,58 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private int getint(String str) {
 		return Integer.parseInt(str);
 	}
-	
+
 	private void printPhaseView(String phase) {
-		
+
 		txtPhaseView.clear();
-		
+
 		phaseView = new StringBuilder();
-		
+
 		phaseView.append("Current Player : ").append(currentPlayer.getPlayerName()).append(NEWLINE);
 		phaseView.append("Current Phase : ").append(phase).append(NEWLINE);
-		
+
 		txtPhaseView.setText(phaseView.toString());
-		
+
 	}
-	
+
 	private void printPlayerDominationView() {
-		
+
 		txtPlayerDominationView.clear();
-		
+
 		playerView = new StringBuilder();
-		
+
 		String percentage = riskPlayImpl.getPlayerPercentageByCountry(currentPlayer, totalCountries);
-		
-		List<String> continentList = riskPlayImpl.getContinentControlledByPlayer(currentPlayer, gameplayphase.getFileName());
-		
+
+		List<String> continentList = riskPlayImpl.getContinentControlledByPlayer(currentPlayer,
+				gameplayphase.getFileName());
+
 		int totalArmy = riskPlayImpl.getTotalArmyByPlayer(playerList, currentPlayer);
-		
-		
-		playerView.append("Map Controlled by ").append(currentPlayer.getPlayerName()).append(" is ").append(percentage).append(NEWLINE);
+
+		playerView.append("Map Controlled by ").append(currentPlayer.getPlayerName()).append(" is ").append(percentage)
+				.append(NEWLINE);
 		playerView.append("Continent : ").append(continentList).append(NEWLINE);
 		playerView.append("Total Numebr of Army : ").append(totalArmy).append(NEWLINE);
-		
+
 		txtPlayerDominationView.setText(playerView.toString());
-		
-		
-		
+
+	}
+
+	private void printRiskCard() {
+
+		txtCardExchangeView.clear();
+
+		excahangeCardView = new StringBuilder();
+
+		excahangeCardView.append(currentPlayer.getPlayerName()).append(" cardexchange view :").append(NEUTRAL);
+
+		for (RiskCard riskCard : currentPlayer.getCardListOwnedByPlayer()) {
+
+			excahangeCardView.append("cardNumber: ").append(riskCard.getCardNumber()).append(" armyType: ")
+					.append(riskCard.getArmyType()).append(NEUTRAL);
+
+		}
+		txtCardExchangeView.setText(excahangeCardView.toString());
+
 	}
 
 }
