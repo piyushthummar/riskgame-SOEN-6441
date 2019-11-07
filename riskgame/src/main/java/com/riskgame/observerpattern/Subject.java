@@ -20,6 +20,9 @@ public class Subject {
 	private String attackMessage;
 	private String fortificationMessage;
 	
+	/**
+	 * This method will notify all oberver the changes were happened
+	 */
 	public void notifyAllObservers()
 	{
 		for(Observer observer : observers)
@@ -46,9 +49,19 @@ public class Subject {
 	public void setPhase(String phase) {
 		this.phase = phase;
 	}
+	
+	/**
+	 * This method will set reinforcement message for reinforcement phase
+	 * @return reinforcementMessage
+	 */
 	public String getReinforcementMessage() {
 		return reinforcementMessage;
 	}
+	
+	/**
+	 * This method will set reinforcement message for reinforcement phase
+	 * @param reinforcementMessage
+	 */
 	public void setReinforcementMessage(String reinforcementMessage) {
 		this.reinforcementMessage = reinforcementMessage;
 		
@@ -58,9 +71,19 @@ public class Subject {
 			observer.reinforcemrentUpdate();
 		}
 	}
+	
+	/**
+	 * This method will get attack message for attack phase
+	 * @return attack message
+	 */
 	public String getAttackMessage() {
 		return attackMessage;
 	}
+	
+	/**
+	 * This method will set attack message for attack phase
+	 * @param attackMessage
+	 */
 	public void setAttackMessage(String attackMessage) {
 		this.attackMessage = attackMessage;
 		
@@ -70,9 +93,17 @@ public class Subject {
 			observer.attackUpdate();
 		}
 	}
+	/**
+	 * This method will get fortification message for fortification phase
+	 * @return fortification message
+	 */
 	public String getFortificationMessage() {
 		return fortificationMessage;
 	}
+	/**
+	 * This method will set fortification message for fortification phase
+	 * @param fortificationMessage
+	 */
 	public void setFortificationMessage(String fortificationMessage) {
 		this.fortificationMessage = fortificationMessage;
 		
@@ -83,11 +114,19 @@ public class Subject {
 		}
 	}
 	
+	/**
+	 * This method will attack observer to subject
+	 * @param observer
+	 */
 	public void attach(Observer observer)
 	{
 		observers.add(observer);
 	}
 	
+	/**
+	 * This method will detach observer from subject
+	 * @param observer
+	 */
 	public void detach(Observer observer)
 	{
 		boolean detachSuccess = observers.remove(observer);
@@ -99,7 +138,5 @@ public class Subject {
 		{
 			System.out.println(observer + " is not found in observer list to be detached.");
 		}
-	}
-	
-	
+	}	
 }
