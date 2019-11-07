@@ -4,6 +4,8 @@ com.riskgame.controller
 com.riskgame.dto
 com.riskgame.logging
 com.riskgame.model
+com.riskgame.observerpattern
 com.riskgame.service
 com.riskgame.service.Impl
+com.riskgame.service.impl
 com.riskgame.view
