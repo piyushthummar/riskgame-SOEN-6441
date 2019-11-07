@@ -93,52 +93,48 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public int checkForContinentControlValue(Player player, String fileName) {
 		int controlvalueTosend = 0;
 
-		
-			
-			List<PlayerTerritory> territoryList = player.getPlayerterritories();
-			
-			List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
-					.collect(Collectors.toList());
-			
-			Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
-			
-			for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
-				Continent continent = entry.getValue();
-				List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
-						.map(e -> e.getTerritoryName()).collect(Collectors.toList());
-				if (territoryStringList.containsAll(continentTerritoryStringList)) {
-					controlvalueTosend = continent.getContinentValue();
-				}
-			}
-		
-		return controlvalueTosend;
-	}
-	
-	public List<String> getContinentControlledByPlayer(Player player, String fileName){
-		List<String> continentLst = new ArrayList<String>();
-		
 		List<PlayerTerritory> territoryList = player.getPlayerterritories();
-		
+
 		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 				.collect(Collectors.toList());
-		
+
 		Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
-		
+
 		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
 			Continent continent = entry.getValue();
 			List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
 					.map(e -> e.getTerritoryName()).collect(Collectors.toList());
 			if (territoryStringList.containsAll(continentTerritoryStringList)) {
-				
-				continentLst.add(continent.getContinentName());
-				
+				controlvalueTosend = continent.getContinentValue();
 			}
 		}
-		
+
+		return controlvalueTosend;
+	}
+
+	public List<String> getContinentControlledByPlayer(Player player, String fileName) {
+		List<String> continentLst = new ArrayList<String>();
+
+		List<PlayerTerritory> territoryList = player.getPlayerterritories();
+
+		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
+				.collect(Collectors.toList());
+
+		Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
+
+		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
+			Continent continent = entry.getValue();
+			List<String> continentTerritoryStringList = continent.getTerritoryList().stream()
+					.map(e -> e.getTerritoryName()).collect(Collectors.toList());
+			if (territoryStringList.containsAll(continentTerritoryStringList)) {
+
+				continentLst.add(continent.getContinentName());
+
+			}
+		}
+
 		return continentLst;
-		
-		
-		
+
 	}
 
 	/**
@@ -262,6 +258,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	/**
 	 * This method will return dice count for attacker based on his army.
+	 * 
 	 * @param currentArmy
 	 * @return count of dice attacker can play with
 	 */
@@ -304,6 +301,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	/**
 	 * This method will return current army on particular country given
+	 * 
 	 * @param country
 	 * @param playerList
 	 * @return number of army on country
@@ -328,10 +326,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * This method will return whole object of PlayerTerritory of given player based
 	 * upon given territory(country) name
 	 * 
-	 * @param country
-	 *            is name of country whose object is needed
-	 * @param player
-	 *            is the player object whose PlayerTerritory needed
+	 * @param country is name of country whose object is needed
+	 * @param player  is the player object whose PlayerTerritory needed
 	 * @return
 	 */
 	public PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player) {
@@ -365,8 +361,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * This method will return number of dice defender can use based upon number of
 	 * army he is having
 	 * 
-	 * @param currentArmy
-	 *            is number of army defender is having
+	 * @param currentArmy is number of army defender is having
 	 * @return number of dice defender can have
 	 */
 	public int getDefenderDiceCount(int currentArmy) {
@@ -382,8 +377,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	/**
 	 * This method will return one list having count of generated dice
 	 * 
-	 * @param dice
-	 *            number of dice selected from user
+	 * @param dice number of dice selected from user
 	 * @return sorted list of dice
 	 */
 	public List<Integer> getCountFromDies(int dice) {
@@ -401,10 +395,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	/**
 	 * Generate random number for dice with random function
 	 * 
-	 * @param min
-	 *            number provided
-	 * @param max
-	 *            number provided
+	 * @param min number provided
+	 * @param max number provided
 	 * @return random number for dice
 	 */
 	public int generateRandomIntRange(int min, int max) {
@@ -489,17 +481,33 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		System.out.println("riskCardReturn ==> " + riskCardReturn);
 		return riskCardReturn;
 	}
-	
+
 	@Override
 	public String getPlayerPercentageByCountry(Player player, int totalCountry) {
-		
+
 		int size = player.getPlayerterritories().size();
 		float percent = size * 100f / totalCountry;
-		
-		return Float.toString(percent);
-		
-		
-		
+
+		return Float.toString(percent)+"%";
+
+	}
+
+	@Override
+	public int getTotalArmyByPlayer(List<Player> players, Player currentPlayer) {
+
+		int totalArmy = 0;
+
+		for (Player player : players) {
+
+			if (player.getPlayerName().equalsIgnoreCase(currentPlayer.getPlayerName())) {
+				for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+
+					totalArmy = totalArmy + playerTerritory.getArmyOnterritory();
+				}
+			}
+
+		}
+		return totalArmy;
 	}
 
 }

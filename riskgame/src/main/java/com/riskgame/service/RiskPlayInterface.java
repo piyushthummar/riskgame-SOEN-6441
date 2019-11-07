@@ -160,4 +160,6 @@ public interface RiskPlayInterface {
 	RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber);
 
 	String getPlayerPercentageByCountry(Player player, int totalCountry);
+
+	int getTotalArmyByPlayer(List<Player> players, Player currentPlayer);
 }

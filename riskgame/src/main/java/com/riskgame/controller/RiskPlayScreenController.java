@@ -269,6 +269,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 
 		System.out.println("After playerList = > " + playerList);
+		
+		printPlayerDominationView();
 	}
 
 	/**
@@ -1010,6 +1012,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		fillAdjacentTerritoryList();
 		
 		printPhaseView("REINFORCEMENT");
+		printPlayerDominationView();
 	}
 
 	/**
@@ -1144,11 +1147,22 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	
 	private void printPlayerDominationView() {
 		
-		txtPhaseView.clear();
+		txtPlayerDominationView.clear();
+		
 		playerView = new StringBuilder();
 		
 		String percentage = riskPlayImpl.getPlayerPercentageByCountry(currentPlayer, totalCountries);
 		
+		List<String> continentList = riskPlayImpl.getContinentControlledByPlayer(currentPlayer, gameplayphase.getFileName());
+		
+		int totalArmy = riskPlayImpl.getTotalArmyByPlayer(playerList, currentPlayer);
+		
+		
+		playerView.append("Map Controlled by ").append(currentPlayer.getPlayerName()).append(" is ").append(percentage).append(NEWLINE);
+		playerView.append("Continent : ").append(continentList).append(NEWLINE);
+		playerView.append("Total Numebr of Army : ").append(totalArmy).append(NEWLINE);
+		
+		txtPlayerDominationView.setText(playerView.toString());
 		
 		
 		
