@@ -1,0 +1,36 @@
+; Yura Mamyrin
+; Risk Map
+
+; Risk build Game Map
+; Dimensions: 677 x 425 Pixels
+
+; Made by Zankhanaben Patel
+;         Koshaben Patel
+;         Piyush Thummar
+;         Raj Mistry
+;         Jaswanth Banavathu
+
+name build map
+
+[files]
+pic world_pic.jpg
+map world_map.gif
+crd risk.cards
+prv world.jpg
+
+[continents]
+c 2 none
+cc 1 none
+
+[countries]
+1 a 1 0 0
+2 b 1 0 0
+3 d 1 0 0
+4 e 1 0 0
+5 f 2 0 0
+
+[borders]
+1 4 2
+2 3
+5 2
+
