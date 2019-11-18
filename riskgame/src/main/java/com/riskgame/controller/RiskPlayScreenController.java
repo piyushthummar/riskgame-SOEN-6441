@@ -24,6 +24,7 @@ import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 import com.riskgame.observerpattern.Observer;
+import com.riskgame.observerpattern.Subject;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.view.FxmlView;
@@ -146,6 +147,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private String currentPhase;
 
 	private boolean gamewin = false;
+	
+	private Subject subject;
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -167,6 +170,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		phaseView = new StringBuilder();
 		playerView = new StringBuilder();
 		excahangeCardView = new StringBuilder();
+		
+		subject = new Subject();
+		subject.attach(this);
+		
 	}
 
 	/**
@@ -268,7 +275,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			System.out.println("After playerList = > " + playerList);
 
-			printPlayerDominationView();
+			//printPlayerDominationView();
+			subject.setPlayerDominationViewMessage(sb.toString());
 
 		} else {
 			sb.append("Game Finished ..!");
@@ -328,7 +336,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				countryConquredInSingleAttack = false;
 				allOutTerritoryConqured = false;
 
-				printPhaseView("FORTIFICATION");
+				//printPhaseView("FORTIFICATION");
+				subject.setPlayerPhaseViewMessage("FORTIFICATION");
 
 			} else if (commandData.get(0).equals("attack") && validateInput(commandData.get(3), "[1-9][0-9]*")
 					&& commandData.size() == 4 && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")
@@ -856,7 +865,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase")
 									.append(NEWLINE);
 
-							printPhaseView("ATTACK");
+							//printPhaseView("ATTACK");
+							subject.setPlayerPhaseViewMessage("ATTACK");
 						}
 
 						// System.out.println("REINFORCEMENT ====> " + playerList);
@@ -940,7 +950,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 							leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
 							sb.append(leftArmyMsg).append(NEWLINE);
 
-							printPhaseView("REINFORCEMENT");
+							//printPhaseView("REINFORCEMENT");
+							subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+							
 
 						} else {
 							sb.append("card Numbers are not valid for exchange").append(NEWLINE);
@@ -1049,8 +1061,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
 
-		printPhaseView("REINFORCEMENT");
-		printPlayerDominationView();
+		//printPhaseView("REINFORCEMENT");
+		subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+		//printPlayerDominationView();
+		subject.setPlayerDominationViewMessage(sb.toString());
 	}
 
 	/**
@@ -1089,7 +1103,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sb.append("Your Risk card is more than 5 please exchange it");
 				exchangeRequired = true;
 
-				printPhaseView("EXCHANGE CARDS");
+				//printPhaseView("EXCHANGE CARDS");
 			}
 
 			txtConsoleLog.setText(sb.toString());
@@ -1097,7 +1111,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			fillTerritoryList();
 			fillAdjacentTerritoryList();
 
-			printPhaseView("REINFORCEMENT");
+			//printPhaseView("REINFORCEMENT");
+			subject.setPlayerPhaseViewMessage("REINFORCEMENT");
 
 		} else {
 
@@ -1148,6 +1163,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				sbBuilder.append(count).append(") ").append(country).append("-").append(territory.getArmyOnterritory());
 				List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(riskMap,
 						country);
+				if(neighbourCountriesList != null && !neighbourCountriesList.isEmpty()) {
 				for (String neighbour : neighbourCountriesList) {
 
 					PlayerTerritory playerTerritory = playerList.get(playerIndex).getPlayerterritories().stream()
@@ -1158,6 +1174,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					}
 
 				}
+			}
 				sbBuilder.append(NEWLINE);
 				count++;
 			}
@@ -1189,7 +1206,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		txtPhaseView.setText(phaseView.toString());
 
 		if (phase.equalsIgnoreCase("REINFORCEMENT")) {
-			printRiskCard();
+			//printRiskCard();
+			subject.setPlayerCardExchangeViewMessage(excahangeCardView.toString());
 		} else {
 			txtCardExchangeView.clear();
 		}
@@ -1242,6 +1260,25 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 		txtCardExchangeView.setText(excahangeCardView.toString());
 
+	}
+
+	@Override
+	public void playerDominationUpdate() {
+		printPlayerDominationView();
+		
+	}
+
+	@Override
+	public void playerPhaseViewUpdate() {
+
+		printPhaseView(subject.getPlayerPhaseViewMessage());
+		
+	}
+
+	@Override
+	public void playerCardExchangeViewUpdate() {
+		printRiskCard();
+		
 	}
 
 }
