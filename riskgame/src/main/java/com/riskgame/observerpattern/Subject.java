@@ -19,6 +19,9 @@ public class Subject {
 	private String reinforcementMessage;
 	private String attackMessage;
 	private String fortificationMessage;
+	private String playerDominationViewMessage;
+	private String playerPhaseViewMessage;
+	private String playerCardExchangeViewMessage;
 	
 	/**
 	 * This method will notify all oberver the changes were happened
@@ -114,6 +117,47 @@ public class Subject {
 		}
 	}
 	
+	public String getPlayerDominationViewMessage() {
+		return playerDominationViewMessage;
+	}
+	
+	public void setPlayerDominationViewMessage(String playerDominationViewMessage) {
+		this.playerDominationViewMessage = playerDominationViewMessage;
+		
+		//notifyForFortification
+		for(Observer observer : observers)
+		{
+			observer.playerDominationUpdate();
+		}
+	}
+	
+	
+	public String getPlayerPhaseViewMessage() {
+		return playerPhaseViewMessage;
+	}
+
+	public void setPlayerPhaseViewMessage(String playerPhaseViewMessage) {
+		this.playerPhaseViewMessage = playerPhaseViewMessage;
+		
+		for(Observer observer : observers)
+		{
+			observer.playerPhaseViewUpdate();
+		}
+	}
+	
+	public String getPlayerCardExchangeViewMessage() {
+		return playerCardExchangeViewMessage;
+	}
+
+	public void setPlayerCardExchangeViewMessage(String playerCardExchangeViewMessage) {
+		this.playerCardExchangeViewMessage = playerCardExchangeViewMessage;
+		
+		for(Observer observer : observers)
+		{
+			observer.playerCardExchangeViewUpdate();
+		}
+	}
+
 	/**
 	 * This method will attack observer to subject
 	 * @param observer

@@ -31,4 +31,19 @@ public abstract class Observer {
 	 */
 	public abstract void reinforcemrentUpdate();
 	
+	/**
+	 * This method will update player domination View
+	 */
+	public abstract void playerDominationUpdate();
+	
+	/**
+	 * This method will update player phase View
+	 */
+	public abstract void playerPhaseViewUpdate();
+	
+	/**
+	 * This method will update player card exchnage View
+	 */
+	public abstract void playerCardExchangeViewUpdate();
+	
 }
