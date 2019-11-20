@@ -49,6 +49,13 @@ public class Player {
 	private int exchangeCount;
 	
 	private boolean isTerritoryConqured;
+	
+	
+	public void placeReinforcement(int armyToPlace) {
+		
+		this.playerReinforceArmy = this.playerReinforceArmy - armyToPlace;
+	}
+	
 
 	@Override
 	public String toString() {

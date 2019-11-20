@@ -106,7 +106,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private int playerIndex = 0;
 	private String playerName = "";
 	// private int playerLeftArmy = 0;
-	private int playerReinforceArmy = 0;
+	//private int playerReinforceArmy = 0;
 
 	private static String turnStartedMsg = "";
 	private static String leftArmyMsg = "";
@@ -179,7 +179,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	/**
 	 * @param riskMap2
 	 */
-	private int getTotaolCountries(RiskMap r) {
+	private int getTotalCountries(RiskMap r) {
 		Map<Integer, Continent> continentMap = r.getContinents();
 		Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
 		int totalCountries = 0;
@@ -207,7 +207,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			fillAdjacentTerritoryList();
 			System.out.println("playerIndex => " + playerIndex);
 			System.out.println("playerName => " + playerName);
-			System.out.println("playerReinforceArmy => " + playerReinforceArmy);
+			System.out.println("playerReinforceArmy => " + currentPlayer.getPlayerReinforceArmy());
 
 			System.out.println("Before playerList = > " + playerList);
 
@@ -220,7 +220,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					// if (!attackMove) {
 
 					if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
-						if (playerReinforceArmy != 0) {
+						if (currentPlayer.getPlayerReinforceArmy() != 0) {
 
 							txtConsoleLog.setText(placeReinforcement(command));
 						} else {
@@ -232,17 +232,17 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					} else if ((command.startsWith("attack") || command.startsWith("defend")
 							|| command.startsWith("attackmove")) && !fortificationStarted) {
 
-						if (playerReinforceArmy == 0) {
+						if (currentPlayer.getPlayerReinforceArmy() == 0) {
 							txtConsoleLog.setText(attackPhase(command));
 
 						} else {
-							sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
+							sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
 									.append(NEWLINE);
 							txtConsoleLog.setText(sb.toString());
 						}
 
 					} else if (command.startsWith("fortify")) {
-						if (playerReinforceArmy == 0) {
+						if (currentPlayer.getPlayerReinforceArmy() == 0) {
 							if (attackphaseEnded) {
 
 								txtConsoleLog.setText(fortification(command));
@@ -253,7 +253,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 								txtConsoleLog.setText(sb.toString());
 							}
 						} else {
-							sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
+							sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
 									.append(NEWLINE);
 							txtConsoleLog.setText(sb.toString());
 						}
@@ -842,7 +842,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				if (playerTerritory != null) {
 
-					if (armyToPlace <= playerReinforceArmy && armyToPlace != 0 && playerReinforceArmy != 0) {
+					if (armyToPlace <= currentPlayer.getPlayerReinforceArmy() && armyToPlace != 0 && currentPlayer.getPlayerReinforceArmy() != 0) {
 
 						// System.out.println("playerTerritory before ==> " + playerTerritory);
 
@@ -852,15 +852,17 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 						// System.out.println("playerTerritory After ==> " + playerTerritory);
 
-						playerReinforceArmy = playerReinforceArmy - armyToPlace;
+						//playerReinforceArmy = playerReinforceArmy - armyToPlace;
+						//currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy()-armyToPlace);
+						currentPlayer.placeReinforcement(armyToPlace);
 
 						String message = armyToPlace + " Assigned to " + cName;
 
 						sb.append(message).append(NEWLINE);
-						sb.append("you have left ").append(playerReinforceArmy).append(" to reinforcement")
+						sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
 								.append(NEWLINE);
 
-						if (playerReinforceArmy == 0) {
+						if (currentPlayer.getPlayerReinforceArmy() == 0) {
 
 							sb.append(playerName).append(" 's Reinforcement Phase done please go to the Attack phase")
 									.append(NEWLINE);
@@ -875,7 +877,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 					} else {
 						sb.append("Please provide Valid Army details").append(NEWLINE).append("you have left ")
-								.append(playerReinforceArmy).append(" to reinforcement").append(NEWLINE);
+								.append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement").append(NEWLINE);
 					}
 				} else {
 					sb.append("Country not found : Please Enter Valid country Name").append(NEWLINE);
@@ -944,10 +946,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 							sb.append("card Successfully exchanged").append(NEWLINE);
 
-							playerReinforceArmy = playerReinforceArmy
-									+ riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+//							playerReinforceArmy = playerReinforceArmy
+//									+ riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+							
+							currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy() + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
 
-							leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+							leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
 							sb.append(leftArmyMsg).append(NEWLINE);
 
 							//printPhaseView("REINFORCEMENT");
@@ -1034,7 +1038,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		playerList.addAll(gameplayphase.getPlayerList());
 
-		totalCountries = getTotaolCountries(riskMap);
+		totalCountries = getTotalCountries(riskMap);
 		cardList = riskPlayImpl.makeCards(totalCountries);
 		gameplayphase.setRiskCardList(cardList);
 
@@ -1048,12 +1052,17 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerName = playerList.get(playerIndex).getPlayerName();
 		currentPlayer = playerList.get(playerIndex);
 
-		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
-				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
-		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+//		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+//				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
+//		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+		
+		currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(
+				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
+		
+		currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy()+riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
 
 		turnStartedMsg = playerName + "'s turn is started";
-		leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+		leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
 		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
 
 		txtConsoleLog.setText(sb.toString());
@@ -1089,13 +1098,18 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			playerName = playerList.get(playerIndex).getPlayerName();
 			currentPlayer = playerList.get(playerIndex);
 
-			playerReinforceArmy = riskPlayImpl.checkForReinforcement(
-					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer,
-					gameplayphase.getFileName());
-			playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+//			playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+//					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer,
+//					gameplayphase.getFileName());
+//			playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+			
+			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(
+					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
+			
+			currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy()+riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
 
 			turnStartedMsg = playerName + "'s turn is started";
-			leftArmyMsg = "You have " + playerReinforceArmy + " armies to Reinforcement";
+			leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
 			sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
 
 			if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
