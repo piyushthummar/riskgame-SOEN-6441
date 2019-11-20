@@ -9,13 +9,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
+ * This is the testcase file for startupPhase controlller
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @version 1.0.0
+ * @see com.riskgame.controller.StartupPhaseController
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class StartupPhaseControllerTest {
 
+	/**
+	 * The context load method to initialize springboot context
+	 * @throws Exception
+	 */
 	@Test
 	public void contextLoads() throws Exception {
 	}
