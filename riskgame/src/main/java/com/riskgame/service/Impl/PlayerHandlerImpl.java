@@ -38,6 +38,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#findTotalArmy(int)
 	 */
 	@Override
@@ -59,21 +60,37 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#populateTerritoriesRandomly(com.riskgame.model.RiskMap)
 	 */
 	@Override
 	public GamePlayPhase populateTerritoriesRandomly(GamePlayPhase playPhase) {
 
 		List<Player> playerInformation = playPhase.getPlayerList();
+		// initial army is assigned to players
+		int noOfPlayer = playerInformation.size();
+		int armyPerPlayer = findTotalArmy(noOfPlayer);
+
+		for (Player player : playerInformation) {
+			player.setArmyOwns(armyPerPlayer);
+		}
+		
 		RiskMap riskMap = mapManagementImpl.readMap(playPhase.getFileName());
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
 		Collections.shuffle(territoriesOwnedByPlayer);
+
+		int armyRemainsForPlayer = 0;
 		int counter = -1;
 		for (PlayerTerritory pt : territoriesOwnedByPlayer) {
 			counter++;
 			if (playerInformation.get(counter) != null) {
 				try {
 					playerInformation.get(counter).getPlayerterritories().add(pt);
+					// initial army assignment is 1, and it is deducted from remaining armies by
+					// player
+					pt.setArmyOnterritory(1);
+					armyRemainsForPlayer = playerInformation.get(counter).getArmyOwns();
+					playerInformation.get(counter).setArmyOwns(armyRemainsForPlayer - 1);
 				} catch (NullPointerException e) {
 					e.printStackTrace();
 				}
@@ -89,6 +106,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#getTerritories(com.riskgame.model.RiskMap)
 	 */
 	@Override
@@ -115,23 +133,27 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.service.PlayerHandlerInterface#placeAllArmyByRoundRobin(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
 	public GamePlayPhase placeAllArmyByRoundRobin(GamePlayPhase gamePlayPhase) {
-		
+
 		int armyPerPlayer = findTotalArmy(gamePlayPhase.getPlayerList().size());
-		
-		
+
 		for (int index = 0; index < gamePlayPhase.getPlayerList().size(); index++) {
 			gamePlayPhase.getPlayerList().get(index).setArmyOwns(armyPerPlayer);
 			int track = 0;
-			for (int territoryIndex = 0; territoryIndex < gamePlayPhase.getPlayerList().get(index).getPlayerterritories().size(); territoryIndex++) {
+			for (int territoryIndex = 0; territoryIndex < gamePlayPhase.getPlayerList().get(index)
+					.getPlayerterritories().size(); territoryIndex++) {
 				if (armyPerPlayer >= gamePlayPhase.getPlayerList().get(index).getPlayerterritories().size()) {
 					if (track < armyPerPlayer) {
-						int armies = gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex).getArmyOnterritory() + 1;
-						gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex).setArmyOnterritory(armies);
-						if (territoryIndex + 1 == gamePlayPhase.getPlayerList().get(index).getPlayerterritories().size()) {
+						int armies = gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex)
+								.getArmyOnterritory() + 1;
+						gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex)
+								.setArmyOnterritory(armies);
+						if (territoryIndex + 1 == gamePlayPhase.getPlayerList().get(index).getPlayerterritories()
+								.size()) {
 							territoryIndex = -1;
 						}
 						track++;
@@ -139,8 +161,10 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 						break;
 					}
 				} else {
-					int armies = gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex).getArmyOnterritory() + 1;
-					gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex).setArmyOnterritory(armies);
+					int armies = gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex)
+							.getArmyOnterritory() + 1;
+					gamePlayPhase.getPlayerList().get(index).getPlayerterritories().get(territoryIndex)
+							.setArmyOnterritory(armies);
 				}
 			}
 		}

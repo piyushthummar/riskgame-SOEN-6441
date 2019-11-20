@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.riskgame.controller;
 
 import java.io.IOException;
@@ -137,7 +134,16 @@ public class StartupPhaseController implements Initializable {
 	public boolean startGame = false;
 
 	public boolean placeAll = false;
+	
+	private static int playerIndex = -1;
+	
+	private String playerName = "";
+	private int playerTotalArmies = 0;
 
+	private static String turnStartedMsg = "";
+	private static String leftArmyToPlaceMsg = "";
+	private static String NEWLINE = System.getProperty("line.separator");
+	private StringBuilder sb;
 	/**
 	 * This method will use to initialize the controller of this class
 	 * 
@@ -154,7 +160,9 @@ public class StartupPhaseController implements Initializable {
 		setPlayerTableColumnProperties();
 		playerList.clear();
 		loadPlayerDetails();
-
+		
+		sb = new StringBuilder();
+		
 		mapComboValue.clear();
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 		mapComboValue.addAll(mapNameList);
@@ -307,12 +315,13 @@ public class StartupPhaseController implements Initializable {
 					txtConsoleLog.setText(commandGamePlayer(command));
 				} else if (command.startsWith("populatecountries")) {
 					txtConsoleLog.setText(commandPopulateCountries());
+					txtConsoleLog.appendText(changeUserTurn());
 				} else if (command.startsWith("placearmy")) {
 
 					if (!placeAll) {
 						if (globGamePlayPhase != null) {
 
-							txtConsoleLog.setText(placeArmy(command));
+							txtConsoleLog.setText(placeArmyInRoundRobin(command));
 
 						} else {
 							txtConsoleLog.setText("Please fire populatecountries command first");
@@ -347,16 +356,18 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
-	private String placeArmy(String commandLine) {
+	private String placeArmyInRoundRobin(String commandLine)
+	{
 
-		String result = "";
 		List<String> command = Arrays.asList(commandLine.split(" "));
 		String countryName = command.get(1);
 		PlayerTerritory pTerritory = null;
-
-		for (Player player : playerList) {
-
-			List<PlayerTerritory> ptList = player.getPlayerterritories();
+		String result = null;
+		int totalArmyOfPlayer = 0;
+		
+		Player player = playerList.get(playerIndex);
+		totalArmyOfPlayer = playerList.get(playerIndex).getArmyOwns();
+		List<PlayerTerritory> ptList = player.getPlayerterritories();
 			for (PlayerTerritory playerTerritory : ptList) {
 
 				if (playerTerritory.getTerritoryName().equalsIgnoreCase(countryName)) {
@@ -365,20 +376,45 @@ public class StartupPhaseController implements Initializable {
 				}
 			}
 
-		}
-
-		if (pTerritory != null) {
+		if (pTerritory != null && totalArmyOfPlayer > 0) {
+						
 			int army = pTerritory.getArmyOnterritory();
 			pTerritory.setArmyOnterritory(army + 1);
+			player.setArmyOwns(totalArmyOfPlayer - 1);
+			loadPlayerDetails();
 			result = "Army Successfully Assign to " + countryName;
-
+			result = result + "\n" + playerName + "'s turn ended.";
+			result = result + "\n" + changeUserTurn();
 		} else {
 			result = "Country not found. Please provide valid country";
 		}
-
 		return result;
 	}
+	
+	private String changeUserTurn() {
 
+		if (playerIndex < playerList.size() - 1) {
+			playerIndex++;
+			if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
+				playerIndex = 0;
+			}
+		} else {
+			playerIndex = 0;
+		}
+
+		txtCommandLine.clear();
+		txtConsoleLog.clear();
+
+		playerName = playerList.get(playerIndex).getPlayerName();
+		playerTotalArmies = playerList.get(playerIndex).getArmyOwns();
+		
+		turnStartedMsg = playerName + "'s turn is started";
+		leftArmyToPlaceMsg = playerName + " is left with total " + playerTotalArmies + " armies to place.";
+		sb.delete(0, sb.length());
+		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyToPlaceMsg).append(NEWLINE);
+		return sb.toString();
+
+	}
 	/**
 	 * This method will load the map and give the appropriate message string
 	 * 
@@ -768,7 +804,6 @@ public class StartupPhaseController implements Initializable {
 		playerId = playerList.size() + 1;
 
 		globGamePlayPhase = playPhase;
-
 	}
 
 	/**
