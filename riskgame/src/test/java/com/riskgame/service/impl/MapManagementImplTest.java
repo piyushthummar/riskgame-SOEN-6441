@@ -22,6 +22,8 @@ import com.riskgame.service.Impl.MapManagementImpl;
  * will check map validity and other functionalities related to map
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @see com.riskgame.service.Impl.MapManagementImpl
+ * @version 1.0.0
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -38,12 +40,19 @@ public class MapManagementImplTest {
 	@Autowired
 	MapManagementImpl map;
 
+	/**
+	 * Setup method to setup object initially
+	 */
 	@Before
 	public void setup() {
 		riskMap = map.readMap(VALID_MAP_NAME);
 		
 	}
 
+	/**
+	 * The context load method to initialize springboot context
+	 * @throws Exception
+	 */
 	@Test
 	public void contextLoads() throws Exception {
 	}

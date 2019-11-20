@@ -32,6 +32,7 @@ import com.riskgame.service.Impl.RiskPlayImpl;
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @see com.riskgame.service.Impl.RiskPlayImpl
  * @see com.riskgame.service.RiskPlayInterface
+ * @version 1.0.0
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -64,6 +65,9 @@ public class RiskPlayImplTest {
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
 	
+	/**
+	 * Thus is setup method to setup objects before running the test file.
+	 */
 	@Before
 	public void beforeTest()
 	{

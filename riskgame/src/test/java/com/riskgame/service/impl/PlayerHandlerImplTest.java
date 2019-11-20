@@ -25,8 +25,11 @@ import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.PlayerHandlerImpl;
 
 /**
+ * This is the test cases file for PlayerHandlerImpl services.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @version 1.0.0
+ * @see com.riskgame.service.Impl.PlayerHandlerImpl
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -45,6 +48,9 @@ public class PlayerHandlerImplTest {
 	@Autowired
 	PlayerHandlerImpl playerHandler;
 
+	/**
+	 * Setup methods to set objects
+	 */
 	@Before
 	public void setup() {
 		riskMap = map.readMap(VALID_SMALL_MAP1);
@@ -54,17 +60,15 @@ public class PlayerHandlerImplTest {
 		territoryList.add("CA");
 		territoryList.add("USA");
 		territoryList.add("test");
-		
-		
+
 		List<Player> plist = new ArrayList<Player>();
 		Player playerOne = new Player();
 		Player playerTwo = new Player();
-		
+
 		plist.add(playerOne);
 		plist.add(playerTwo);
 		gamePlayPhase.setFileName(VALID_MAP_NAME);
 		gamePlayPhase.setPlayerList(plist);
-		
 
 	}
 
@@ -117,20 +121,18 @@ public class PlayerHandlerImplTest {
 		boolean result = territoryList.containsAll(territoriesStringList);
 		assertEquals(true, result);
 	}
-	
+
 	/**
-	 * This method will Test populateTerritoriesRandomly which will populate countries randomly to player
-	 * return same Gameplayphase object
-	 * true if Gameplayephase is equal.
+	 * This method will Test populateTerritoriesRandomly which will populate
+	 * countries randomly to player return same Gameplayphase object true if
+	 * Gameplayephase is equal.
 	 */
 	@Test
 	public void populateTerritoriesRandomlyTest() {
-		
+
 		GamePlayPhase gamePlayPhaseReturn = playerHandler.populateTerritoriesRandomly(gamePlayPhase);
 		assertEquals(gamePlayPhaseReturn, gamePlayPhase);
-		
+
 	}
-	
-	
 
 }
