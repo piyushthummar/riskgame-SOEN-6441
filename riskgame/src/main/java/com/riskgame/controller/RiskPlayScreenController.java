@@ -411,8 +411,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
 				if (armyToMove > 0 && armyToMove < toTerritory.getArmyOnterritory()) {
 
-					moveArmy(fromCountryAttack, toCountryAttack, armyToMove);
-					attackMove = false;
+					if(armyToMove >= attackerDice)
+					{
+						moveArmy(fromCountryAttack, toCountryAttack, armyToMove);
+						attackMove = false;
+					} else {
+						sb.append("Army to Move should be greater than or equal to ").append(attackerDice).append(" - that is number of dices rolled by attacker").append(NEWLINE);
+					}		
 
 				} else {
 					sb.append("Please Enter Valid Army to Move").append(NEWLINE);
