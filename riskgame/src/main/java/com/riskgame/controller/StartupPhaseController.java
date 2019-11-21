@@ -8,12 +8,16 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.config.StageManager;
+import com.riskgame.constant.COMPUTERSTRATEGY;
+import com.riskgame.constant.HumanStrategy;
+import com.riskgame.constant.StrategyType;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
@@ -61,16 +65,18 @@ public class StartupPhaseController implements Initializable {
 
 	@FXML
 	private Button btnPlaceAll;
-	
 
-    @FXML
-    private Button btnTournament;
+	@FXML
+	private Button btnTournament;
 
-    @FXML
-    private Button btnLoadGame;
+	@FXML
+	private Button btnLoadGame;
 
 	@FXML
 	private ComboBox<String> comboBoxchosenMap;
+
+	@FXML
+	private ComboBox<String> comboBoxSelectStrategy;
 
 	@FXML
 	private TextField txtCommandLine;
@@ -128,6 +134,7 @@ public class StartupPhaseController implements Initializable {
 
 	private ObservableList<Player> playerList = FXCollections.observableArrayList();
 	private ObservableList<String> mapComboValue = FXCollections.observableArrayList();
+	private ObservableList<String> listOfStrategy = FXCollections.observableArrayList();
 
 	private GamePlayPhase globGamePlayPhase;
 
@@ -141,41 +148,46 @@ public class StartupPhaseController implements Initializable {
 	public boolean startGame = false;
 
 	public boolean placeAll = false;
-	
+
 	private static int playerIndex = -1;
-	
+
 	private String playerName = "";
+	private String currentPlayerStrategyName ="";
 	private int playerTotalArmies = 0;
 
 	private static String turnStartedMsg = "";
 	private static String leftArmyToPlaceMsg = "";
 	private static String NEWLINE = System.getProperty("line.separator");
 	private StringBuilder sb;
-	
+	private static StrategyType[] strategyArray = StrategyType.values();
 
-    /**
-     * On action method for tournament start button
-     * @param event
-     */
-    @FXML
-    void btnTournament(ActionEvent event) {
+	/**
+	 * On action method for tournament start button
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void btnTournament(ActionEvent event) {
 
-    }
+	}
 
-    /**
-     * On action method for the button load previous game
-     * @param event
-     */
-    @FXML
-    void btnLoadGame(ActionEvent event) {
+	/**
+	 * On action method for the button load previous game
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void btnLoadGame(ActionEvent event) {
 
-    }
-    
+	}
+
 	/**
 	 * This method will use to initialize the controller of this class
 	 * 
-	 * @param location  of the FXML file
-	 * @param resources is properties information
+	 * @param location
+	 *            of the FXML file
+	 * @param resources
+	 *            is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 * 
@@ -187,14 +199,18 @@ public class StartupPhaseController implements Initializable {
 		setPlayerTableColumnProperties();
 		playerList.clear();
 		loadPlayerDetails();
-		
-		sb = new StringBuilder();
-		
-		mapComboValue.clear();
-		List<String> mapNameList = mapManagementImpl.getAvailableMap();
-		mapComboValue.addAll(mapNameList);
-		comboBoxchosenMap.setItems(mapComboValue);
 
+		sb = new StringBuilder();
+
+		mapComboValue.clear();
+		listOfStrategy.clear();
+		List<String> mapNameList = mapManagementImpl.getAvailableMap();
+		List<String> stringListforstrategy = Arrays.asList(StrategyType.values()).stream().map(e -> e.toString().toLowerCase())
+				.collect(Collectors.toList());
+		mapComboValue.addAll(mapNameList);
+		listOfStrategy.addAll(stringListforstrategy);
+		comboBoxchosenMap.setItems(mapComboValue);
+		comboBoxSelectStrategy.setItems(listOfStrategy);
 		startGame = false;
 		mapFileName = "";
 		placeAll = false;
@@ -280,7 +296,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will start the game and redirect to playgame screen
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 * @throws IOException
 	 */
 	@FXML
@@ -305,7 +322,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will redirect user to welcome screen
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void backToMainPage(ActionEvent event) {
@@ -316,7 +334,8 @@ public class StartupPhaseController implements Initializable {
 	 * This method represent fire command button onAction where all commands got
 	 * separated and sent it to respective methods.
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
@@ -383,28 +402,27 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
-	private String placeArmyInRoundRobin(String commandLine)
-	{
+	private String placeArmyInRoundRobin(String commandLine) {
 
 		List<String> command = Arrays.asList(commandLine.split(" "));
 		String countryName = command.get(1);
 		PlayerTerritory pTerritory = null;
 		String result = null;
 		int totalArmyOfPlayer = 0;
-		
+
 		Player player = playerList.get(playerIndex);
 		totalArmyOfPlayer = playerList.get(playerIndex).getArmyOwns();
 		List<PlayerTerritory> ptList = player.getPlayerterritories();
-			for (PlayerTerritory playerTerritory : ptList) {
+		for (PlayerTerritory playerTerritory : ptList) {
 
-				if (playerTerritory.getTerritoryName().equalsIgnoreCase(countryName)) {
+			if (playerTerritory.getTerritoryName().equalsIgnoreCase(countryName)) {
 
-					pTerritory = playerTerritory;
-				}
+				pTerritory = playerTerritory;
 			}
+		}
 
 		if (pTerritory != null && totalArmyOfPlayer > 0) {
-						
+
 			int army = pTerritory.getArmyOnterritory();
 			pTerritory.setArmyOnterritory(army + 1);
 			player.setArmyOwns(totalArmyOfPlayer - 1);
@@ -417,7 +435,7 @@ public class StartupPhaseController implements Initializable {
 		}
 		return result;
 	}
-	
+
 	private String changeUserTurn() {
 
 		if (playerIndex < playerList.size() - 1) {
@@ -434,7 +452,7 @@ public class StartupPhaseController implements Initializable {
 
 		playerName = playerList.get(playerIndex).getPlayerName();
 		playerTotalArmies = playerList.get(playerIndex).getArmyOwns();
-		
+
 		turnStartedMsg = playerName + "'s turn is started";
 		leftArmyToPlaceMsg = playerName + " is left with total " + playerTotalArmies + " armies to place.";
 		sb.delete(0, sb.length());
@@ -442,10 +460,12 @@ public class StartupPhaseController implements Initializable {
 		return sb.toString();
 
 	}
+
 	/**
 	 * This method will load the map and give the appropriate message string
 	 * 
-	 * @param commandLine is the loadMap command given from user
+	 * @param commandLine
+	 *            is the loadMap command given from user
 	 * @return proper message of result after LoadMap command
 	 */
 	private String commandloadMapCommand(String commandLine) {
@@ -477,7 +497,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will add player in the game
 	 * 
-	 * @param commandLine is the command given from user to add user
+	 * @param commandLine
+	 *            is the command given from user to add user
 	 * @return proper message of result after player addition
 	 */
 	private String commandGamePlayer(String commandLine) {
@@ -485,41 +506,36 @@ public class StartupPhaseController implements Initializable {
 		StringBuilder result = new StringBuilder();
 		String playerName = "";
 		List<String> command = Arrays.asList(commandLine.split(" "));
-
+		String strategy = "";
 		for (int i = 0; i < command.size(); i++) {
-
 			if (command.get(i).equalsIgnoreCase("-add")) {
 				playerName = command.get(i + 1);
+				strategy = command.get(i + 2);
 				String message = "-add " + playerName + " :=> ";
-				if (validateInput(playerName, "[a-zA-Z]+")) {
-					if (!playerName.equalsIgnoreCase(NEUTRAL)) {
-						boolean isvalidName = true;
-						for (Player player : playerList) {
-							if (player != null && playerName.equalsIgnoreCase(player.getPlayerName())) {
-								result.append(message + playerName + " player name already exists")
-										.append(System.getProperty("line.separator"));
-								isvalidName = false;
-								break;
-							}
-						}
-						if (isvalidName) {
-							if (playerList.size() <= 5) {
-								saveCommonPlayer(playerName);
-								result.append(message + playerName + " player saved successfully")
-										.append(System.getProperty("line.separator"));
-							} else {
-								result.append(message + playerName + " Max 6 Playes are allowed in the game")
-										.append(System.getProperty("line.separator"));
-							}
+				if (validateInput(playerName, "[a-zA-Z]+") && ValidateStrategy(strategy)) {
+					boolean isvalidName = true;
 
+					for (Player player : playerList) {
+						if (player != null && playerName.equalsIgnoreCase(player.getPlayerName())) {
+							result.append(message + playerName + " player name already exists")
+									.append(System.getProperty("line.separator"));
+							isvalidName = false;
+							break;
 						}
-					} else {
-						result.append(message + playerName + " playername not allowed. This is system generated user")
-								.append(System.getProperty("line.separator"));
 					}
+					if (isvalidName) {
+						if (playerList.size() <= 5) {
 
+							saveCommonPlayer(playerName, strategy);
+							result.append(message + playerName + " player saved successfully")
+									.append(System.getProperty("line.separator"));
+						} else {
+							result.append(message + playerName + " Max 6 Playes are allowed in the game")
+									.append(System.getProperty("line.separator"));
+						}
+					}
 				} else {
-					result.append(message + "Please enter valid PlayerName")
+					result.append(message + "Please enter valid PlayerName or strategy Name")
 							.append(System.getProperty("line.separator"));
 				}
 
@@ -527,7 +543,6 @@ public class StartupPhaseController implements Initializable {
 				playerName = command.get(i + 1);
 				String message = "-remove " + playerName + " :=> ";
 				if (validateInput(playerName, "[a-zA-Z]+")) {
-
 					if (deleteCommonplayer(playerName)) {
 						result.append(message + playerName + " player removed successfully")
 								.append(System.getProperty("line.separator"));
@@ -541,18 +556,47 @@ public class StartupPhaseController implements Initializable {
 							.append(System.getProperty("line.separator"));
 				}
 			}
-
 		}
-
 		return result.toString();
 
+	}
+
+	/**
+	 * This method will check if given strategy by command from user is corret or
+	 * not.
+	 * 
+	 * @param strategy
+	 * @return true if stratgy is correct
+	 */
+	private boolean ValidateStrategy(String strategy) {
+		if (validateInput(strategy, "[a-zA-Z]+")) {
+			List<StrategyType> list = Arrays.asList(strategyArray);
+			List<String> stringlist = list.stream().map(e -> e.toString().toLowerCase()).collect(Collectors.toList());
+			if (stringlist.contains(strategy)) {
+				return true;
+			} else
+				return false;
+		}
+		return false;
+
+	}
+
+	/**
+	 * This is onaction method for select strategy combo box
+	 * 
+	 * @param event
+	 */
+	@FXML
+	void OnActionSelectStrategy(ActionEvent event) {
+		currentPlayerStrategyName = comboBoxSelectStrategy.getSelectionModel().getSelectedItem();
 	}
 
 	/**
 	 * This is onAction method of button addPlayer of GUI. It'll add player
 	 * according to the rules
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void addPlayer(ActionEvent event) {
@@ -562,7 +606,7 @@ public class StartupPhaseController implements Initializable {
 			if (!playerNameText.getText().equalsIgnoreCase(NEUTRAL)) {
 
 				if (playerList.size() <= 5) {
-					saveCommonPlayer(playerNameText.getText());
+					saveCommonPlayer(playerNameText.getText(),currentPlayerStrategyName);
 					alertMesage("Player saved successfully");
 					clearPlayerFields();
 				} else {
@@ -581,16 +625,25 @@ public class StartupPhaseController implements Initializable {
 	 * This is the common method for both GUI and command line to save player in the
 	 * game
 	 * 
-	 * @param name of the player
+	 * @param name
+	 *            of the player
+	 * @param strategy
 	 */
-	private void saveCommonPlayer(String name) {
+	private void saveCommonPlayer(String name, String strategy) {
 		Player player = new Player();
 		player.setPlayerId(playerId);
 		playerId++;
 		player.setPlayerName(name);
 		player.setArmyOwns(0);
+		if (strategy.equalsIgnoreCase(HumanStrategy.HUMAN.toString())) {
+			player.setPlayerType(HumanStrategy.HUMAN.toString());
+		} else {
+			player.setPlayerType(COMPUTERSTRATEGY.COMPUTER.toString());
+		}
+		player.setStrategyName(strategy);
 		playerList.add(player);
 		loadPlayerDetails();
+		System.out.println(player);
 	}
 
 	/**
@@ -625,7 +678,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will delete player from the game
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	private
 
@@ -674,9 +728,12 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This is the common method for controller to validate all field passed in it
 	 * 
-	 * @param field   is the name you want to print in alert box
-	 * @param value   is the string you want to validate
-	 * @param pattern is regex
+	 * @param field
+	 *            is the name you want to print in alert box
+	 * @param value
+	 *            is the string you want to validate
+	 * @param pattern
+	 *            is regex
 	 * @return true is validation got succeed
 	 */
 	private boolean validate(String field, String value, String pattern) {
@@ -699,8 +756,10 @@ public class StartupPhaseController implements Initializable {
 	 * This method will validate all types of input given by user through
 	 * commandLine or GUI
 	 * 
-	 * @param value   is a string to be matched
-	 * @param pattern is a regex
+	 * @param value
+	 *            is a string to be matched
+	 * @param pattern
+	 *            is a regex
 	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -720,7 +779,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will give alertBox in some operation when needed
 	 * 
-	 * @param alertMessage is message you want to give in alertBox
+	 * @param alertMessage
+	 *            is message you want to give in alertBox
 	 */
 	private void alertMesage(String alertMessage) {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -733,8 +793,10 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will return true if field is empty and false if not.
 	 * 
-	 * @param field is a string to be validated
-	 * @param empty false if not empty
+	 * @param field
+	 *            is a string to be validated
+	 * @param empty
+	 *            false if not empty
 	 * @return
 	 */
 	private boolean emptyValidation(String field, boolean empty) {
@@ -749,8 +811,10 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will be used to give alert message at the time of validation
 	 * 
-	 * @param field is a string you want to print in alert message
-	 * @param empty will return true check if alertContext is settled.
+	 * @param field
+	 *            is a string you want to print in alert message
+	 * @param empty
+	 *            will return true check if alertContext is settled.
 	 */
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
@@ -767,7 +831,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will assign countries to the user in random fashion
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void populateCountries(ActionEvent event) {
@@ -859,7 +924,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will place initial army to all player created in the game at once
 	 * 
-	 * @param even will represents value sent from view
+	 * @param even
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void placeAllArmy(ActionEvent event) {
@@ -867,6 +933,7 @@ public class StartupPhaseController implements Initializable {
 		if (globGamePlayPhase != null) {
 			commonPlaceAllArmy();
 			comboBoxchosenMap.setDisable(true);
+			comboBoxSelectStrategy.setDisable(true);
 			playerNameText.setDisable(true);
 			btnAddPlayer.setDisable(true);
 			btnPopulatecountry.setDisable(true);
@@ -914,12 +981,14 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will reset all buttons and fields once it got clicked
 	 * 
-	 * @param event will represents value sent from view
+	 * @param event
+	 *            will represents value sent from view
 	 */
 	@FXML
 	void btnReset(ActionEvent event) {
 		comboBoxchosenMap.setDisable(false);
 		playerNameText.setDisable(false);
+		comboBoxSelectStrategy.setDisable(false);
 		btnAddPlayer.setDisable(false);
 		btnPopulatecountry.setDisable(false);
 		btnPlaceAll.setDisable(false);

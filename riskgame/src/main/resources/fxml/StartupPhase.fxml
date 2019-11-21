@@ -17,7 +17,7 @@
                </font>
             </Label>
             <ComboBox fx:id="comboBoxchosenMap" layoutX="211.0" layoutY="31.0" prefHeight="36.0" prefWidth="170.0" promptText="Select Map" />
-            <Label layoutX="62.0" layoutY="116.0" text="Add Player">
+            <Label layoutX="62.0" layoutY="85.0" text="Add Player">
                <font>
                   <Font name="System Italic" size="20.0" />
                </font>
@@ -54,9 +54,9 @@
                   <Font size="20.0" />
                </font>
             </Button>
-            <TextField fx:id="playerNameText" layoutX="211.0" layoutY="111.0" prefHeight="36.0" prefWidth="170.0" promptText="Player Name" />
-            <Button fx:id="btnAddPlayer" layoutX="211.0" layoutY="161.0" mnemonicParsing="false" onAction="#addPlayer" prefHeight="28.0" prefWidth="65.0" text="Add" />
-            <TableView fx:id="playertable" layoutX="211.0" layoutY="204.0" prefHeight="201.0" prefWidth="351.0" tableMenuButtonVisible="true">
+            <TextField fx:id="playerNameText" layoutX="211.0" layoutY="80.0" prefHeight="36.0" prefWidth="170.0" promptText="Player Name" />
+            <Button fx:id="btnAddPlayer" layoutX="211.0" layoutY="175.0" mnemonicParsing="false" onAction="#addPlayer" prefHeight="28.0" prefWidth="65.0" text="Add" />
+            <TableView fx:id="playertable" layoutX="211.0" layoutY="214.0" prefHeight="191.0" prefWidth="351.0" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn fx:id="id" prefWidth="47.0" text="id" />
                 <TableColumn fx:id="name" prefWidth="135.0" text="Name" />
@@ -86,6 +86,12 @@
                   <Font size="20.0" />
                </font>
             </Button>
+            <Label layoutX="52.0" layoutY="136.0" text="Add Strategy">
+               <font>
+                  <Font name="System Italic" size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="comboBoxSelectStrategy" layoutX="211.0" layoutY="131.0" onAction="#OnActionSelectStrategy" prefHeight="36.0" prefWidth="170.0" promptText="Select Strategy" />
          </children></AnchorPane>
   </content>
 </ScrollPane>
