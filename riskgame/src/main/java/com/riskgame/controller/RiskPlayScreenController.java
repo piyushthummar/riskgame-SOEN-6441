@@ -417,8 +417,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				int armyToMove = getint(commandData.get(1));
 
 				Player player = riskPlayImpl.getPlayerByCountry(fromCountryAttack, playerList);
-				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
-				if (armyToMove > 0 && armyToMove < toTerritory.getArmyOnterritory()) {
+				PlayerTerritory fromTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
+				if (armyToMove > 0 && armyToMove < fromTerritory.getArmyOnterritory()) {
 
 					if(armyToMove >= attackerDice) {
 						moveArmy(fromCountryAttack, toCountryAttack, armyToMove);
