@@ -571,7 +571,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				fillAdjacentTerritoryList();
 
 				sb.append(toCountryAttack).append(
-						" country has been conquered Please move number of armies to this country from the attacking country")
+						" country has been conquered Please move number of armies >= ").append(attackerDice).append(" to this country from the attacking country")
 						.append(NEWLINE);
 
 			}
