@@ -394,7 +394,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						fillAdjacentTerritoryList();
 
 						sb.append(toCountryAttack).append(
-								" country has been conquered Please move number of armies to this country from the attacking country")
+								" country has been conquered Please move number of armies >= ").append(attackerDice).append(" to this country from the attacking country")
 								.append(NEWLINE);
 
 					}
@@ -411,8 +411,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountryAttack, player);
 				if (armyToMove > 0 && armyToMove < toTerritory.getArmyOnterritory()) {
 
-					if(armyToMove >= attackerDice)
-					{
+					if(armyToMove >= attackerDice) {
 						moveArmy(fromCountryAttack, toCountryAttack, armyToMove);
 						attackMove = false;
 					} else {
@@ -554,8 +553,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		int armyOnFromC = riskPlayImpl.getCurrentAramyByCountryName(fromCountryAttack, playerList);
 		int armyOnToC = riskPlayImpl.getCurrentAramyByCountryName(toCountryAttack, playerList);
 
-		int attackerDice = riskPlayImpl.getAttackerDiesCount(armyOnFromC);
-		int defenderDice = riskPlayImpl.getDefenderDiceCount(armyOnToC);
+		attackerDice = riskPlayImpl.getAttackerDiesCount(armyOnFromC);
+		defenderDice = riskPlayImpl.getDefenderDiceCount(armyOnToC);
 
 		if (attackerDice > 0 && defenderDice > 0) {
 
