@@ -1,0 +1,51 @@
+[Map]
+image=india.bmp
+wrap=no
+scroll=vertical
+author=Neel
+warn=yes
+
+[Continents]
+
+southern states=5
+eastern states=5 
+north east states=5
+western states=8
+Northern states=7
+
+[Territories]
+
+kashmir,202,80,northern states,himachal pradesh, punjab
+himachal pradesh,218,140,northern states,punjab,haryana,uttaranchal,uttar pradesh,kashmir
+punjab,180,156,northern states,haryana,rajasthan,himachal pradesh,kashmir
+haryana,198,193,northern states,uttar pradesh,rajasthan,himachal pradesh,punjab
+uttaranchal,254,174,northern states,himachal pradesh,uttar pradesh
+uttar pradesh,273,237,northern states,rajasthan,madhya pradesh,bihar,jharkhand,haryana,chattisgarh,himachal pradesh,uttaranchal
+
+rajasthan,146,243,western states,punjab,haryana,madhya pradesh,gujarat,uttar pradesh
+madhya pradesh,232,316,western states,gujarat,maharastra,chattisgarh,uttar pradesh,rajasthan
+gujarat,97,318,western states,maharastra,madhya pradesh,rajasthan
+maharastra,175,397,western states,goa,karnataka,andhra pradesh,chattisgarh,madhya pradesh,gujarat
+goa,136,485,western states,karnataka,maharastra
+
+
+chattisgarh,302,359,eastern states,madhya pradesh,maharastra,orissa,andhra pradesh,jharkhand,uttar pradesh
+orissa,348,372,eastern states,andhra pradesh,chattisgarh,west bengal,jharkhand,andaman nicobar islands
+jharkhand,367,314,eastern states,uttar pradesh,orissa,bihar,west bengal,chattisgarh
+west bengal,415,325,eastern states,sikkim,bihar,jharkhand,orissa,assam
+bihar,372,275,eastern states,uttar pradesh,west bengal,jharkhand
+
+sikkim,425,230,north east states,west bengal
+assam,513,251,north east states,west bengal,arunachal pradesh,nagaland,manipur,mizoram,meghalaya,tirupura
+meghalaya,491,265,north east states,assam
+manipur,531,278,north east states,assam,mizoram,nagaland
+mizoram,513,315,north east states,assam,manipur,tirupura
+nagaland,543,249,north east states,assam,manipur,arunachal pradesh
+tirupura,489,305,north east states,mizoram,assam
+arunachal pradesh,547,208,north east states,nagaland,assam
+
+karnataka,175,508,southern states,goa,maharastra,andhra pradesh,tamil nadu,kerala
+andhra pradesh,243,470,southern states,chattisgarh,maharastra,tamil nadu,orissa,karnataka
+kerala,183,595,southern states,karnataka,tamil nadu
+andaman nicobar islands,530,546,southern states,tamil nadu,orissa
+tamil nadu,222,585,southern states,kerala,karnataka,andhra pradesh,andaman nicobar islands
