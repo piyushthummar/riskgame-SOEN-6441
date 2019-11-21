@@ -350,20 +350,27 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				if (riskPlayImpl.validateFromCountry(fromCountryAttack, playerList.get(playerIndex))
 						&& riskPlayImpl.validateToCountry(fromCountryAttack, toCountryAttack, riskMap,
-								playerList.get(playerIndex))
-						&& riskPlayImpl.validateAttackerDice(attackerDice, fromCountryAttack,
 								playerList.get(playerIndex))) {
 
-					defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
+					for (PlayerTerritory playerTerritory : currentPlayer.getPlayerterritories()) {
 
-					attackFire = true;
+						if (fromCountryAttack.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+							if(attackerDice < playerTerritory.getArmyOnterritory()) {
+								defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 
-					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
-							defenderPlayer);
+								attackFire = true;
 
-					sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
-					sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
-							.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
+								PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
+										defenderPlayer);
+
+								sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
+								sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
+										.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
+							} else {
+								sb.append("Attacker dices should be less than army owned on Attacking territory").append(NEWLINE);
+							}
+						}
+					}
 
 				} else {
 					sb.append("Invalid attacker's fromCountry or toCountry or dice").append(NEWLINE);
@@ -374,33 +381,35 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				defenderDice = getint(commandData.get(1));
 
-				if (riskPlayImpl.validateDefenderDice(defenderDice, toCountryAttack, defenderPlayer)) {
+				for (PlayerTerritory playerTerritory : defenderPlayer.getPlayerterritories()) {
 
-					attackFire = false;
-					// sb.append("Correct ==>").append(NEWLINE);
+					if (toCountryAttack.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+						if(defenderDice <= playerTerritory.getArmyOnterritory()) {
+							attackFire = false;
+							// sb.append("Correct ==>").append(NEWLINE);
 
-					decideBattle(attackerDice, defenderDice);
-					defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
-					PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
-							defenderPlayer);
+							decideBattle(attackerDice, defenderDice);
+							defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
+							PlayerTerritory toTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack,
+									defenderPlayer);
 
-					if (toTerritory.getArmyOnterritory() == 0) {
+							if (toTerritory.getArmyOnterritory() == 0) {
 
-						countryConquredInSingleAttack = true;
-						attackMove = true;
+								countryConquredInSingleAttack = true;
+								attackMove = true;
 
-						moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
+								moveCountryToWinPlayer(fromCountryAttack, toCountryAttack);
+								fillTerritoryList();
+								fillAdjacentTerritoryList();
 
-						sb.append(toCountryAttack).append(
-								" country has been conquered Please move number of armies >= ").append(attackerDice).append(" to this country from the attacking country")
-								.append(NEWLINE);
-
+								sb.append(toCountryAttack).append(
+										" country has been conquered Please move number of armies >= ").append(attackerDice).append(" to this country from the attacking country")
+										.append(NEWLINE);
+							}
+						} else {
+							sb.append("Defender dices should be less than or equal to armies owned on defending territory").append(NEWLINE);
+						}
 					}
-
-				} else {
-					sb.append("Please do attack first or invalid defender dice").append(NEWLINE);
 				}
 
 			} else if (commandData.get(0).equals("attackmove") && validateInput(commandData.get(1), "[1-9][0-9]*")) {
