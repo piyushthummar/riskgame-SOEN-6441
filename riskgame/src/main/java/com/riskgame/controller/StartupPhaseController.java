@@ -61,6 +61,13 @@ public class StartupPhaseController implements Initializable {
 
 	@FXML
 	private Button btnPlaceAll;
+	
+
+    @FXML
+    private Button btnTournament;
+
+    @FXML
+    private Button btnLoadGame;
 
 	@FXML
 	private ComboBox<String> comboBoxchosenMap;
@@ -144,6 +151,26 @@ public class StartupPhaseController implements Initializable {
 	private static String leftArmyToPlaceMsg = "";
 	private static String NEWLINE = System.getProperty("line.separator");
 	private StringBuilder sb;
+	
+
+    /**
+     * On action method for tournament start button
+     * @param event
+     */
+    @FXML
+    void btnTournament(ActionEvent event) {
+
+    }
+
+    /**
+     * On action method for the button load previous game
+     * @param event
+     */
+    @FXML
+    void btnLoadGame(ActionEvent event) {
+
+    }
+    
 	/**
 	 * This method will use to initialize the controller of this class
 	 * 

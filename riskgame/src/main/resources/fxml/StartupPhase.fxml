@@ -6,11 +6,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="895.0" prefWidth="1022.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.StartupPhaseController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="874.0" prefWidth="923.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.riskgame.controller.StartupPhaseController">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="875.0" prefWidth="1001.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="876.0" prefWidth="917.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="856.0" layoutX="35.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="956.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="836.0" layoutX="43.0" layoutY="14.0" stroke="BLACK" strokeType="INSIDE" width="853.0" />
             <Label layoutX="54.0" layoutY="36.0" text="Choose Map">
                <font>
                   <Font size="20.0" />
@@ -22,12 +22,12 @@
                   <Font name="System Italic" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="btnStartGame" layoutX="732.0" layoutY="29.0" mnemonicParsing="false" onAction="#startGame" prefHeight="40.0" prefWidth="136.0" text="Start Game">
+            <Button fx:id="btnStartGame" layoutX="706.0" layoutY="29.0" mnemonicParsing="false" onAction="#startGame" prefHeight="30.0" prefWidth="162.0" text="Start Game">
                <font>
                   <Font size="20.0" />
                </font>
             </Button>
-            <Button fx:id="btnback" layoutX="732.0" layoutY="109.0" mnemonicParsing="false" onAction="#backToMainPage" prefHeight="40.0" prefWidth="136.0" text="Back">
+            <Button fx:id="btnback" layoutX="707.0" layoutY="109.0" mnemonicParsing="false" onAction="#backToMainPage" prefHeight="40.0" prefWidth="161.0" text="Back">
                <font>
                   <Font size="20.0" />
                </font>
@@ -71,7 +71,17 @@
                   </ContextMenu>
                </contextMenu>
             </TableView>
-            <Button fx:id="btnReset" layoutX="732.0" layoutY="184.0" mnemonicParsing="false" onAction="#btnReset" prefHeight="40.0" prefWidth="136.0" text="Reset">
+            <Button fx:id="btnReset" layoutX="709.0" layoutY="175.0" mnemonicParsing="false" onAction="#btnReset" prefHeight="41.0" prefWidth="159.0" text="Reset">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnTournament" layoutX="622.0" layoutY="298.0" mnemonicParsing="false" onAction="#btnTournament" prefHeight="41.0" prefWidth="227.0" text="Start Tournament">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnLoadGame" layoutX="621.0" layoutY="364.0" mnemonicParsing="false" onAction="#btnLoadGame" prefHeight="41.0" prefWidth="228.0" text="Load Previous Game">
                <font>
                   <Font size="20.0" />
                </font>
