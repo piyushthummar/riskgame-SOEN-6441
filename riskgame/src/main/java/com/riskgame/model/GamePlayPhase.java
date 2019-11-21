@@ -41,11 +41,26 @@ public class GamePlayPhase {
 	 * List of total risk cards
 	 */
 	private List<RiskCard> riskCardList;
+	
+	/**
+	 * Winner player name
+	 */
+	private String winner;
+	
+	/**
+	 * Total number of games in tournament
+	 */
+	private int numberOfGames;
+	
+	/**
+	 * number of turn in one game
+	 */
+	private int maxNumberOfTurns;
 
 	@Override
 	public String toString() {
 		return "GamePlayPhase [playerList=" + playerList + ", gamePhase=" + gamePhase + ", fileName=" + fileName
-				+ ", riskCardList=" + riskCardList + "]";
+				+ ", riskCardList=" + riskCardList + ", winner=" + winner + ", numberOfGames=" + numberOfGames
+				+ ", maxNumberOfTurns=" + maxNumberOfTurns + "]";
 	}
-
 }
