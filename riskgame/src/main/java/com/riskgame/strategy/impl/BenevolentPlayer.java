@@ -21,9 +21,9 @@ public class BenevolentPlayer implements StrategyInterface {
 	 * @see com.riskgame.strategy.StrategyInterface#reinforce(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
-	public GamePlayPhase reinforce(GamePlayPhase gps) {
+	public GamePlayPhase reinforce(GamePlayPhase gamePlayPhase) {
 		// TODO Auto-generated method stub
-		return null;
+		return gamePlayPhase;
 	}
 
 	/**
@@ -31,9 +31,9 @@ public class BenevolentPlayer implements StrategyInterface {
 	 * @see com.riskgame.strategy.StrategyInterface#attack(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
-	public GamePlayPhase attack(GamePlayPhase gps) {
+	public GamePlayPhase attack(GamePlayPhase gamePlayPhase) {
 		// TODO Auto-generated method stub
-		return null;
+		return gamePlayPhase;
 	}
 
 	/**
@@ -41,9 +41,9 @@ public class BenevolentPlayer implements StrategyInterface {
 	 * @see com.riskgame.strategy.StrategyInterface#fortify(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
-	public GamePlayPhase fortify(GamePlayPhase gps) {
+	public GamePlayPhase fortify(GamePlayPhase gamePlayPhase) {
 		// TODO Auto-generated method stub
-		return null;
+		return gamePlayPhase;
 	}
 
 }

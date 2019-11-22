@@ -23,7 +23,7 @@ public interface StrategyInterface {
 	 *            is a gameplayphase object, which is current state of the game.
 	 * @return GamePlayPhase after reinforcement phase.
 	 */
-	public abstract GamePlayPhase reinforce(GamePlayPhase gps);
+	GamePlayPhase reinforce(GamePlayPhase gps);
 
 	/**
 	 * This method will be implemented for different strategy for attacks, it will
@@ -33,7 +33,7 @@ public interface StrategyInterface {
 	 *            is a gameplayphase object, which is current state of the game.
 	 * @return GamePlayPhase after attack done with changes.
 	 */
-	public abstract GamePlayPhase attack(GamePlayPhase gps);
+	GamePlayPhase attack(GamePlayPhase gps);
 
 	/**
 	 * This method will be implemented for different strategy player for
@@ -43,6 +43,6 @@ public interface StrategyInterface {
 	 *            is a gameplayphase object, which is current state of the game.
 	 * @return gamePlayPhase after fortification done.
 	 */
-	public abstract GamePlayPhase fortify(GamePlayPhase gps);
+	GamePlayPhase fortify(GamePlayPhase gps);
 
 }
