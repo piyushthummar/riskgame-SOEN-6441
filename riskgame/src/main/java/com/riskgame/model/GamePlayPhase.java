@@ -56,6 +56,21 @@ public class GamePlayPhase {
 	 * number of turn in one game
 	 */
 	private int maxNumberOfTurns;
+	
+	/**
+	 * game play phase id (unique)
+	 */
+	private int gamePlayPhaseId;
+	
+	/**
+	 * entire map information
+	 */
+	private RiskMap riskMap;
+	
+	/**
+	 * current player id who is playing the game
+	 */
+	private int currentPlayerId;
 
 	@Override
 	public String toString() {

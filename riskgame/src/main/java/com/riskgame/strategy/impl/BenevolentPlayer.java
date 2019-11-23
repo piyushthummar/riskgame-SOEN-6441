@@ -4,11 +4,15 @@
 package com.riskgame.strategy.impl;
 
 import com.riskgame.model.GamePlayPhase;
+import com.riskgame.service.MapManagementInterface;
+import com.riskgame.service.RiskPlayInterface;
+import com.riskgame.service.Impl.MapManagementImpl;
+import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.strategy.StrategyInterface;
 
 /**
- * Concrete implementation of Strategy interface of design pattern for Benevolent
- * strategy of player
+ * Concrete implementation of Strategy interface of design pattern for
+ * Benevolent strategy of player
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @version 1.0.0
@@ -16,8 +20,17 @@ import com.riskgame.strategy.StrategyInterface;
  */
 public class BenevolentPlayer implements StrategyInterface {
 
+	private MapManagementInterface mapManagementImpl;
+	private RiskPlayInterface riskPlayImpl;
+
+	public BenevolentPlayer() {
+		mapManagementImpl = new MapManagementImpl();
+		riskPlayImpl = new RiskPlayImpl();
+	}
+
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.strategy.StrategyInterface#reinforce(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
@@ -28,6 +41,7 @@ public class BenevolentPlayer implements StrategyInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.strategy.StrategyInterface#attack(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override
@@ -38,6 +52,7 @@ public class BenevolentPlayer implements StrategyInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
 	 * @see com.riskgame.strategy.StrategyInterface#fortify(com.riskgame.model.GamePlayPhase)
 	 */
 	@Override

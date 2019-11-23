@@ -16,7 +16,7 @@ import lombok.Setter;
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
- *         documenation added
+ *         documentation added
  * @see PlayerTerritory
  */
 
@@ -54,12 +54,12 @@ public class Player {
 	private List<RiskCard> cardListOwnedByPlayer = new ArrayList<RiskCard>();
 
 	/**
-	 * How many times player has exchnaged the cards
+	 * How many times player has exchanged the cards
 	 */
 	private int exchangeCount;
 
 	/**
-	 * boolean represents territory conqured or not
+	 * boolean represents territory conquered or not
 	 */
 	private boolean isTerritoryConqured;
 
@@ -74,7 +74,7 @@ public class Player {
 	private String strategyName;
 
 	/**
-	 * Stategy representation of the player (different player strategy will have
+	 * Strategy representation of the player (different player strategy will have
 	 * different reinforcement, attack and fortification.
 	 */
 	private StrategyInterface strategy;
@@ -87,6 +87,26 @@ public class Player {
 	public void placeReinforcement(int armyToPlace) {
 
 		this.playerReinforceArmy = this.playerReinforceArmy - armyToPlace;
+	}
+
+	/**
+	 * This method is used to execute player's reinforce, attack, fortification
+	 * method
+	 * 
+	 * @param methodName    Like REINFORCE, ATTACK, FORTIFY
+	 * @param gamePlayPhase GamePlayPhase Object
+	 * @return updated GamePlayPhase object
+	 */
+	public GamePlayPhase executeStrategy(String methodName, GamePlayPhase gamePlayPhase) {
+		if (methodName.equalsIgnoreCase("REINFORCE")) {
+			this.strategy.reinforce(gamePlayPhase);
+		} else if (methodName.equalsIgnoreCase("ATTACK")) {
+			this.strategy.attack(gamePlayPhase);
+		} else if (methodName.equalsIgnoreCase("FORTIFY")) {
+			this.strategy.fortify(gamePlayPhase);
+		}
+
+		return gamePlayPhase;
 	}
 
 	@Override

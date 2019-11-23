@@ -4,6 +4,10 @@
 package com.riskgame.strategy.impl;
 
 import com.riskgame.model.GamePlayPhase;
+import com.riskgame.service.MapManagementInterface;
+import com.riskgame.service.RiskPlayInterface;
+import com.riskgame.service.Impl.MapManagementImpl;
+import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.strategy.StrategyInterface;
 
 /**
@@ -15,6 +19,14 @@ import com.riskgame.strategy.StrategyInterface;
  * @see com.riskgame.strategy
  */
 public class AggresivePlayer implements StrategyInterface {
+
+	private MapManagementInterface mapManagementImpl;
+	private RiskPlayInterface riskPlayImpl;
+	
+	public AggresivePlayer() {
+		mapManagementImpl = new MapManagementImpl();
+		riskPlayImpl = new RiskPlayImpl();
+	}
 
 	/**
 	 * {@inheritDoc}
