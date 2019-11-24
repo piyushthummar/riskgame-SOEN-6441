@@ -249,13 +249,13 @@ public class RiskPlayImplTest {
 	 * @result based on count of it will update Army and returns updateArmy
 	 * 
 	 */
-	@Test
-	public void validUpdateArmyAfterCardExchange() {
-		player.setExchangeCount(5);
-		int expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
-		assertEquals(25, expectedUpdateArmy);
-		
-	}
+//	@Test
+//	public void validUpdateArmyAfterCardExchange() {
+//		player.setExchangeCount(5);
+//		int expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
+//		assertEquals(25, expectedUpdateArmy);
+//		
+//	}
 	
 	/**
 	 * Test for invalidUpdateArmyAfterCardExchange.

@@ -329,7 +329,7 @@ public class MapManagementImpl implements MapManagementInterface {
 	public RiskMap readMap(String fileName) {
 
 		String mapline = "";
-		System.out.println("files====> >" + fileName);
+	//	System.out.println("files====> >" + fileName);
 		boolean isFiles = false;
 		boolean isContinents = false;
 		boolean isCountries = false;
@@ -353,14 +353,14 @@ public class MapManagementImpl implements MapManagementInterface {
 					if (mapline.startsWith(NAME)) {
 						String name = mapline.substring(5);
 						riskMap.setMapName(name);
-						System.out.println("filename====>> " + name);
+						//System.out.println("filename====>> " + name);
 					}
 					if (mapline.equalsIgnoreCase(FILES)) {
 						isFiles = true;
 						continue;
 					}
 					if (isFiles) {
-						System.out.println("files---> " + mapline);
+						//System.out.println("files---> " + mapline);
 					}
 					if (mapline.equalsIgnoreCase(CONTINENTS)) {
 						isFiles = false;
@@ -368,7 +368,7 @@ public class MapManagementImpl implements MapManagementInterface {
 						continue;
 					}
 					if (isContinents && !mapline.equalsIgnoreCase(COUNTRIES)) {
-						System.out.println("Continents-------> " + mapline);
+						//System.out.println("Continents-------> " + mapline);
 						continent = new Continent();
 						String[] continentArray = mapline.split(" ");
 						continent.setContinentName(continentArray[0]);
@@ -398,7 +398,7 @@ public class MapManagementImpl implements MapManagementInterface {
 
 						continentMap.put(continentIndex, continent1);
 
-						System.out.println("countries-------> " + mapline);
+						//System.out.println("countries-------> " + mapline);
 
 					}
 					if (mapline.equalsIgnoreCase(BORDERS)) {
@@ -407,7 +407,7 @@ public class MapManagementImpl implements MapManagementInterface {
 						continue;
 					}
 					if (isBoarders) {
-						System.out.println("borders-------> " + mapline);
+						//System.out.println("borders-------> " + mapline);
 
 						String[] neighbourArray = mapline.split(" ");
 						Continent continent2 = getContinentDetailsbyCountryId(continentMap,
@@ -435,7 +435,7 @@ public class MapManagementImpl implements MapManagementInterface {
 				}
 			}
 			riskMap.setContinents(continentMap);
-			System.out.println("riskMap =====> " + riskMap);
+			//System.out.println("riskMap =====> " + riskMap);
 		} catch (Exception e) {
 			riskMap.setStatus("INVALID");
 			e.printStackTrace();
