@@ -22,12 +22,9 @@ public interface MapManagementInterface {
 	/**
 	 * This method will convert data added by user to map and make .map file
 	 * 
-	 * @param continentList
-	 *            is list of continentDto added by user
-	 * @param countryList
-	 *            is list of country DTO
-	 * @param neighbourList
-	 *            is list of NeighbourTerritoriesDto
+	 * @param continentList is list of continentDto added by user
+	 * @param countryList   is list of country DTO
+	 * @param neighbourList is list of NeighbourTerritoriesDto
 	 * @return
 	 */
 	RiskMap convertToRiskMap(List<ContinentDto> continentList, List<CountryDto> countryList,
@@ -37,8 +34,7 @@ public interface MapManagementInterface {
 	 * This is a reverse from above method. It will read data from .map file and
 	 * convert it to DTo and send it to view side.
 	 * 
-	 * @param riskMap
-	 *            is model sent by service side
+	 * @param riskMap is model sent by service side
 	 * @return map of DTO
 	 */
 	Map<String, Object> convertRiskMapToDtos(RiskMap riskMap);
@@ -54,8 +50,7 @@ public interface MapManagementInterface {
 	 * This method will make returns true if riskmap file successfully created from
 	 * data given from user side.
 	 * 
-	 * @param riskMap
-	 *            is model sent by service side
+	 * @param riskMap is model sent by service side
 	 * @return true if file got saved successfully
 	 * @throws UnsupportedEncodingException
 	 * @throws FileNotFoundException
@@ -82,14 +77,23 @@ public interface MapManagementInterface {
 	boolean validateMap(RiskMap riskMap);
 
 	/**
-	 * This method will return List of all adjacent territories of the given country.
+	 * This method will return List of all adjacent territories of the given
+	 * country.
 	 * 
-	 * @param riskMap
-	 *            model
-	 * @param countryName
-	 *            name of the country for which you want the adjacentTerritories
+	 * @param riskMap     model
+	 * @param countryName name of the country for which you want the
+	 *                    adjacentTerritories
 	 * @return
 	 */
 	List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName);
+
+	/**
+	 * This method will check if given file is conquest or not and then caller
+	 * method will call respected adapter for further process
+	 * 
+	 * @param fileName
+	 * @return true if given map file is of type conquest
+	 */
+	boolean isMapConquest(String fileName);
 
 }

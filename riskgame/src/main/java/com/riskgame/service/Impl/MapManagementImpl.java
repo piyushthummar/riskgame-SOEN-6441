@@ -54,7 +54,6 @@ public class MapManagementImpl implements MapManagementInterface {
 	public static final String CONTINENTS = "[continents]";
 	public static final String COUNTRIES = "[countries]";
 	public static final String BORDERS = "[borders]";
-
 	/**
 	 * {@inheritDoc}
 	 * 
@@ -578,6 +577,31 @@ public class MapManagementImpl implements MapManagementInterface {
 			}
 		} catch (Exception e) {
 			result = false;
+		}
+		return result;
+	}
+
+	@Override
+	public boolean isMapConquest(String fileName) {
+		String mapline = "";
+		boolean result = false;
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(MAP_DIR_PATH + fileName)))
+		{
+			while ((mapline = bufferedReader.readLine()) != null) {
+				if(mapline.startsWith(";"))
+				{
+					result=false;
+					break;
+				}
+				else {
+					result=true;
+					break;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 		return result;
 	}

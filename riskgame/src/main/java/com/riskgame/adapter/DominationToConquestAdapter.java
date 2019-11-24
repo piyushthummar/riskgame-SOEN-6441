@@ -66,4 +66,10 @@ public class DominationToConquestAdapter implements MapManagementInterface {
 		return null;
 	}
 
+	@Override
+	public boolean isMapConquest(String fileName) {
+		
+		return false;
+	}
+
 }
