@@ -54,6 +54,7 @@ public interface RiskPlayInterface {
 	 * This method will update armyCount after card exchange
 	 * 
 	 * @param player
+	 * @return 
 	 */
 	int updateArmyAfterCardExchange(Player player);
 
@@ -162,4 +163,29 @@ public interface RiskPlayInterface {
 	String getPlayerPercentageByCountry(Player player, int totalCountry);
 
 	int getTotalArmyByPlayer(List<Player> players, Player currentPlayer);
+
+	/**
+	 * This method prepares a CardTrade Object for any Computer Player
+	 * 
+	 * @param currentPlayer Current player who is about to exchange card
+	 * @return RiskCardExchange has the set of three cards to be exchange
+	 */
+	RiskCardExchange prepareCard(Player currentPlayer);
+
+	/**
+	 * This method exchange cards during reinforcement phase of the game
+	 * 
+	 * @param gamePlayPhase State of the game at point of time holding the entire
+	 *                      info about game. Like the current phase and player.
+	 * @return gamePlayPhase after updating info on exchange cards.
+	 */
+	GamePlayPhase exchangeCards(GamePlayPhase gamePlayPhase);
+
+	/**
+	 * This method updates current player's card list also free card lists after player's exchange cards
+	 * @param player current Player.
+	 * @param freeRiskCards list of freeRiskCards
+	 * @param exchangeCard 3 card of current Users which will be exchange
+	 */
+	void updateCardList(Player player, List<RiskCard> freeRiskCards, RiskCardExchange exchangeCard);
 }

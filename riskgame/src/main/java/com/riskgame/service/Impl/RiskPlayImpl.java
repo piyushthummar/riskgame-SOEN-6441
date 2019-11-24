@@ -37,6 +37,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
 
+	public static StringBuilder sb;
+	private static String NEWLINE = System.getProperty("line.separator");
+
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
 
@@ -146,22 +149,38 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	@Override
 	public int updateArmyAfterCardExchange(Player player) {
 		int updatedArmy = 0;
-		if (player.getExchangeCount() == 1) {
-			updatedArmy = 5;
+		if (player.getExchangeCount() == 0) {
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 5));
+			player.setExchangeCount(1);
+		} else if (player.getExchangeCount() == 1) {
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 10));
+			player.setExchangeCount(2);
 		} else if (player.getExchangeCount() == 2) {
-			updatedArmy = 10;
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 15));
+			player.setExchangeCount(3);
 		} else if (player.getExchangeCount() == 3) {
-			updatedArmy = 15;
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 20));
+			player.setExchangeCount(4);
 		} else if (player.getExchangeCount() == 4) {
-			updatedArmy = 20;
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 25));
+			player.setExchangeCount(5);
 		} else if (player.getExchangeCount() == 5) {
-			updatedArmy = 25;
-		} else if (player.getExchangeCount() == 6) {
-			updatedArmy = 30;
-		} else if (player.getExchangeCount() == 0) {
-			updatedArmy = 0;
+
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 30));
+			player.setExchangeCount(6);
+		} else if (player.getExchangeCount() > 5) {
+			player.setPlayerReinforceArmy(
+					player.getPlayerReinforceArmy() + 30 + ((player.getPlayerReinforceArmy() - 5) * 5));
+			player.setExchangeCount(player.getExchangeCount() + 1);
 		}
+		
 		return updatedArmy;
+
 	}
 
 	/**
@@ -489,7 +508,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		int size = player.getPlayerterritories().size();
 		float percent = size * 100f / totalCountry;
 
-		return Float.toString(percent)+"%";
+		return Float.toString(percent) + "%";
 
 	}
 
@@ -509,6 +528,137 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		}
 		return totalArmy;
+	}
+
+	/**
+	 * This method prepares a CardTrade Object for any Computer Player
+	 * 
+	 * @param currentPlayer Current player who is about to exchange card
+	 * @return RiskCardExchange has the set of three cards to be exchange
+	 */
+	@Override
+	public RiskCardExchange prepareCard(Player currentPlayer) {
+
+		Boolean validCard = false;
+
+		RiskCardExchange riskCardExchange = null;
+		RiskCard card1 = null;
+		RiskCard card2 = null;
+		RiskCard card3 = null;
+
+		for (int i = 0; i < currentPlayer.getCardListOwnedByPlayer().size() - 2; i++) {
+			card1 = currentPlayer.getCardListOwnedByPlayer().get(i);
+			for (int j = i + 1; j < currentPlayer.getCardListOwnedByPlayer().size() - 1; j++) {
+				card2 = currentPlayer.getCardListOwnedByPlayer().get(j);
+				for (int k = j + 1; k < currentPlayer.getCardListOwnedByPlayer().size(); k++) {
+					card3 = currentPlayer.getCardListOwnedByPlayer().get(k);
+					if ((card1.getArmyType().equalsIgnoreCase(card2.getArmyType())
+							&& card1.getArmyType().equalsIgnoreCase(card3.getArmyType()))
+							|| (!card1.getArmyType().equalsIgnoreCase(card2.getArmyType())
+									&& !card2.getArmyType().equalsIgnoreCase(card3.getArmyType())
+									&& !card3.getArmyType().equalsIgnoreCase(card1.getArmyType()))) {
+						validCard = true;
+						break;
+					}
+					if (validCard) {
+						break;
+					}
+
+				}
+				if (validCard) {
+					break;
+				}
+			}
+		}
+		if (validCard && card1 != null && card2 != null && card3 != null) {
+			riskCardExchange = new RiskCardExchange();
+			riskCardExchange.setExchange1(card1);
+			riskCardExchange.setExchange2(card2);
+			riskCardExchange.setExchange3(card3);
+		}
+		return riskCardExchange;
+	}
+
+	/**
+	 * This method exchange cards during reinforcement phase of the game
+	 * 
+	 * @param gamePlayPhase State of the game at point of time holding the entire
+	 *                      info about game. Like the current phase and player.
+	 * @return gamePlayPhase after updating info on exchange cards.
+	 */
+	@Override
+	public GamePlayPhase exchangeCards(GamePlayPhase gamePlayPhase) {
+		sb = new StringBuilder();
+		RiskCardExchange riskCardExchange = gamePlayPhase.getRiskCardExchange();
+
+		if (riskCardExchange != null) {
+			if (riskCardExchange.getExchange1() == null || riskCardExchange.getExchange2() == null
+					|| riskCardExchange.getExchange3() == null) {
+				sb.append("Exchange Card requires a minimum of three cards to be selected").append(NEWLINE);
+				// gamePlayPhase.setStatus("Trading requires a minimum of three cards to be
+				// selected.\n");
+			} else {
+
+				if ((riskCardExchange.getExchange1().getArmyType()
+						.equalsIgnoreCase(riskCardExchange.getExchange2().getArmyType())
+						&& riskCardExchange.getExchange1().getArmyType()
+								.equalsIgnoreCase(riskCardExchange.getExchange3().getArmyType()))
+						|| (!riskCardExchange.getExchange1().getArmyType()
+								.equalsIgnoreCase(riskCardExchange.getExchange2().getArmyType())
+								&& !riskCardExchange.getExchange2().getArmyType()
+										.equalsIgnoreCase(riskCardExchange.getExchange3().getArmyType())
+								&& !riskCardExchange.getExchange3().getArmyType()
+										.equalsIgnoreCase(riskCardExchange.getExchange1().getArmyType()))) {
+
+					int currentPlayerId = gamePlayPhase.getCurrentPlayerId();
+
+					for (Player player : gamePlayPhase.getPlayerList()) {
+
+						if (player.getPlayerId() == currentPlayerId) {
+
+							updateArmyAfterCardExchange(player);
+							updateCardList(player, gamePlayPhase.getRiskCardList(), riskCardExchange);
+
+							break;
+						}
+					}
+				} else {
+					sb.append("Either all three cards should have same army type or all three have different army type")
+							.append(NEWLINE);
+					// gamePlayPhase.setStatus("Either all three cards should have same image or all
+					// three different.\n");
+				}
+			}
+		} else {
+			sb.append("Inavlid exchange cards").append(NEWLINE);
+			// gamePlayPhase.setStatus("Inavlid exchange cards");
+		}
+		gamePlayPhase.setStatus(sb.toString());
+		return gamePlayPhase;
+	}
+
+	/**
+	 * This method updates current player's card list also free card lists after player's exchange cards
+	 * @param player current Player.
+	 * @param freeRiskCards list of freeRiskCards
+	 * @param exchangeCard 3 card of current Users which will be exchange
+	 */
+	@Override
+	public void updateCardList(Player player, List<RiskCard> freeRiskCards, RiskCardExchange exchangeCard) {
+		freeRiskCards.add(exchangeCard.getExchange1());
+		freeRiskCards.add(exchangeCard.getExchange2());
+		freeRiskCards.add(exchangeCard.getExchange3());
+		Iterator<RiskCard> iterator = player.getCardListOwnedByPlayer().iterator();
+		while (iterator.hasNext()) {
+			RiskCard card = (RiskCard) iterator.next();
+			if ((card.getArmyType().equalsIgnoreCase(exchangeCard.getExchange1().getArmyType())
+
+					|| (card.getArmyType().equalsIgnoreCase(exchangeCard.getExchange2().getArmyType())
+
+							|| (card.getArmyType().equalsIgnoreCase(exchangeCard.getExchange3().getArmyType()))))) {
+				iterator.remove();
+			}
+		}
 	}
 
 }
