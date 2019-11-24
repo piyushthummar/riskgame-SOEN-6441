@@ -25,26 +25,26 @@ public class DominationToConquestAdapter implements MapManagementInterface {
 	@Override
 	public RiskMap convertToRiskMap(List<ContinentDto> continentList, List<CountryDto> countryList,
 			List<NeighbourTerritoriesDto> neighbourList) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public Map<String, Object> convertRiskMapToDtos(RiskMap riskMap) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public List<String> getAvailableMap() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public boolean saveMapToFile(RiskMap riskMap)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
-		// TODO Auto-generated method stub
+	
 		return adaptee.saveMapToFile(riskMap);
 	}
 
