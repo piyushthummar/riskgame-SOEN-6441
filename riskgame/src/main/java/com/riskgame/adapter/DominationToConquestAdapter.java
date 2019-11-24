@@ -24,51 +24,44 @@ public class DominationToConquestAdapter implements MapManagementInterface {
 
 	@Override
 	public RiskMap convertToRiskMap(List<ContinentDto> continentList, List<CountryDto> countryList,
-			List<NeighbourTerritoriesDto> neighbourList) {
-		
+			List<NeighbourTerritoriesDto> neighbourList) {		
 		return null;
 	}
 
 	@Override
-	public Map<String, Object> convertRiskMapToDtos(RiskMap riskMap) {
-		
+	public Map<String, Object> convertRiskMapToDtos(RiskMap riskMap) {	
 		return null;
 	}
 
 	@Override
-	public List<String> getAvailableMap() {
-		
+	public List<String> getAvailableMap() {		
 		return null;
 	}
 
 	@Override
 	public boolean saveMapToFile(RiskMap riskMap)
-			throws UnsupportedEncodingException, FileNotFoundException, IOException {
-	
+			throws UnsupportedEncodingException, FileNotFoundException, IOException {	
 		return adaptee.saveMapToFile(riskMap);
 	}
 
 	@Override
 	public RiskMap readMap(String fileName) {
-		// TODO Auto-generated method stub
 		return adaptee.readMap(fileName);
 	}
 
 	@Override
 	public boolean validateMap(RiskMap riskMap) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public List<String> getNeighbourCountriesListByCountryName(RiskMap riskMap, String countryName) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
-	public boolean isMapConquest(String fileName) {
-		
+	public boolean isMapConquest(String fileName) {		
 		return false;
 	}
 

@@ -1,7 +1,7 @@
 ; Yura Mamyrin
 ; Risk Map
 
-; Risk ashish Game Map
+; Risk validSmall Game Map
 ; Dimensions: 677 x 425 Pixels
 
 ; Made by Zankhanaben Patel
@@ -10,7 +10,7 @@
 ;         Raj Mistry
 ;         Jaswanth Banavathu
 
-name validsmall map
+name validSmall map
 
 [files]
 pic world_pic.jpg
@@ -38,3 +38,4 @@ East 23 none
 4 5
 5 4
 6 1
+

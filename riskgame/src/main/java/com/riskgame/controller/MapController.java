@@ -16,11 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.config.StageManager;
 import com.riskgame.dto.ContinentDto;
 import com.riskgame.dto.CountryDto;
 import com.riskgame.dto.NeighbourTerritoriesDto;
 import com.riskgame.model.RiskMap;
+import com.riskgame.service.ConquestMapInterface;
+import com.riskgame.service.MapManagementInterface;
+import com.riskgame.service.Impl.ConquestMapImpl;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.view.FxmlView;
 
@@ -299,6 +303,7 @@ public class MapController implements Initializable {
 	private static int continentId = 1;
 	private static int countryId = 1;
 	private static int neighbourId = 1;
+	private static boolean isConquestRead=false;
 
 	private ObservableList<ContinentDto> continentList = FXCollections.observableArrayList();
 	private ObservableList<CountryDto> countryList = FXCollections.observableArrayList();
@@ -1222,8 +1227,9 @@ public class MapController implements Initializable {
 					if (validateInput(editFileName, "[a-zA-Z]+")) {
 
 						List<String> mapNameList = mapManagementImpl.getAvailableMap();
+						
 
-						if (mapNameList.contains(editFileName.toLowerCase() + ".map")) {
+						if (mapNameList.contains(editFileName + ".map")) {
 							consoleArea.setText(EditMap(editFileName + ".map"));
 						} else {
 							consoleArea
@@ -1536,10 +1542,19 @@ public class MapController implements Initializable {
 	 */
 	private String EditMap(String fileName) {
 		String result = "";
-
+		RiskMap riskMap = null;
 		try {
 
-			RiskMap riskMap = mapManagementImpl.readMap(fileName);
+			boolean isConquest = mapManagementImpl.isMapConquest(fileName);
+			if(isConquest) {
+				isConquestRead = true;
+				ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+				MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+				riskMap = mapInterface.readMap(fileName);				
+			}
+			else{
+			riskMap = mapManagementImpl.readMap(fileName);
+			}
 
 			boolean validMap = mapManagementImpl.validateMap(riskMap);
 
@@ -1621,14 +1636,26 @@ public class MapController implements Initializable {
 			if (validateInput(mapName, "[a-zA-Z]+")) {
 
 				List<String> mapNameList = mapManagementImpl.getAvailableMap();
-				if (!mapNameList.contains(mapName.toLowerCase() + ".map") || fileNameTextField.isDisable()) {
-
+				if (!mapNameList.contains(mapName + ".map") || fileNameTextField.isDisable()) {
+					
 					RiskMap riskMap = mapManagementImpl.convertToRiskMap(continentList, countryList, neighbourList);
 					riskMap.setMapName(mapName);
 					boolean validMap = mapManagementImpl.validateMap(riskMap);
 
 					if (validMap) {
-						Boolean bResult = mapManagementImpl.saveMapToFile(riskMap);
+						
+						Boolean bResult = false;
+						
+						if(isConquestRead)
+						{
+							ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+							MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+							bResult = mapInterface.saveMapToFile(riskMap);
+							
+						}else {
+							bResult = mapManagementImpl.saveMapToFile(riskMap);
+						}
+							
 						if (bResult) {
 							initMapView();
 							result = "Map successfully saved to filesystem";

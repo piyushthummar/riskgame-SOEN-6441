@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.config.StageManager;
 import com.riskgame.constant.COMPUTERSTRATEGY;
 import com.riskgame.constant.HumanStrategy;
@@ -22,6 +23,9 @@ import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskMap;
+import com.riskgame.service.ConquestMapInterface;
+import com.riskgame.service.MapManagementInterface;
+import com.riskgame.service.Impl.ConquestMapImpl;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.PlayerHandlerImpl;
 import com.riskgame.view.FxmlView;
@@ -152,7 +156,7 @@ public class StartupPhaseController implements Initializable {
 	private static int playerIndex = -1;
 
 	private String playerName = "";
-	private String currentPlayerStrategyName ="";
+	private String currentPlayerStrategyName = "";
 	private int playerTotalArmies = 0;
 
 	private static String turnStartedMsg = "";
@@ -184,10 +188,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will use to initialize the controller of this class
 	 * 
-	 * @param location
-	 *            of the FXML file
-	 * @param resources
-	 *            is properties information
+	 * @param location  of the FXML file
+	 * @param resources is properties information
 	 * @see javafx.fxml.Initializable#initialize(java.net.URL,
 	 *      java.util.ResourceBundle)
 	 * 
@@ -205,8 +207,8 @@ public class StartupPhaseController implements Initializable {
 		mapComboValue.clear();
 		listOfStrategy.clear();
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
-		List<String> stringListforstrategy = Arrays.asList(StrategyType.values()).stream().map(e -> e.toString().toLowerCase())
-				.collect(Collectors.toList());
+		List<String> stringListforstrategy = Arrays.asList(StrategyType.values()).stream()
+				.map(e -> e.toString().toLowerCase()).collect(Collectors.toList());
 		mapComboValue.addAll(mapNameList);
 		listOfStrategy.addAll(stringListforstrategy);
 		comboBoxchosenMap.setItems(mapComboValue);
@@ -296,8 +298,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will start the game and redirect to playgame screen
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 * @throws IOException
 	 */
 	@FXML
@@ -322,8 +323,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will redirect user to welcome screen
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void backToMainPage(ActionEvent event) {
@@ -334,8 +334,7 @@ public class StartupPhaseController implements Initializable {
 	 * This method represent fire command button onAction where all commands got
 	 * separated and sent it to respective methods.
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
@@ -464,20 +463,25 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will load the map and give the appropriate message string
 	 * 
-	 * @param commandLine
-	 *            is the loadMap command given from user
+	 * @param commandLine is the loadMap command given from user
 	 * @return proper message of result after LoadMap command
 	 */
 	private String commandloadMapCommand(String commandLine) {
 		String result = "";
 		List<String> command = Arrays.asList(commandLine.split(" "));
 		String fileName = command.get(1);
-
+		RiskMap map = null;
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
 
-		if (mapNameList.contains(fileName.toLowerCase() + ".map")) {
+		if (mapNameList.contains(fileName + ".map")) {
 
-			RiskMap map = mapManagementImpl.readMap(fileName.toLowerCase() + ".map");
+			if (mapManagementImpl.isMapConquest(fileName+ ".map")) {
+				ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+				MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+				map = mapInterface.readMap(fileName + ".map");
+			} else {
+				map = mapManagementImpl.readMap(fileName + ".map");
+			}
 			boolean validMap = mapManagementImpl.validateMap(map);
 			if (validMap) {
 				result = fileName + " map loaded successfully!";
@@ -485,20 +489,17 @@ public class StartupPhaseController implements Initializable {
 			} else {
 				result = "Map validation fail. Invalid map loaded. Please correct map";
 			}
-
 		} else {
 			result = "Map not found in system Please enter valid name";
 
 		}
-
 		return result;
 	}
 
 	/**
 	 * This method will add player in the game
 	 * 
-	 * @param commandLine
-	 *            is the command given from user to add user
+	 * @param commandLine is the command given from user to add user
 	 * @return proper message of result after player addition
 	 */
 	private String commandGamePlayer(String commandLine) {
@@ -595,8 +596,7 @@ public class StartupPhaseController implements Initializable {
 	 * This is onAction method of button addPlayer of GUI. It'll add player
 	 * according to the rules
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void addPlayer(ActionEvent event) {
@@ -606,7 +606,7 @@ public class StartupPhaseController implements Initializable {
 			if (!playerNameText.getText().equalsIgnoreCase(NEUTRAL)) {
 
 				if (playerList.size() <= 5) {
-					saveCommonPlayer(playerNameText.getText(),currentPlayerStrategyName);
+					saveCommonPlayer(playerNameText.getText(), currentPlayerStrategyName);
 					alertMesage("Player saved successfully");
 					clearPlayerFields();
 				} else {
@@ -625,8 +625,7 @@ public class StartupPhaseController implements Initializable {
 	 * This is the common method for both GUI and command line to save player in the
 	 * game
 	 * 
-	 * @param name
-	 *            of the player
+	 * @param name     of the player
 	 * @param strategy
 	 */
 	private void saveCommonPlayer(String name, String strategy) {
@@ -678,8 +677,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will delete player from the game
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	private
 
@@ -728,12 +726,9 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This is the common method for controller to validate all field passed in it
 	 * 
-	 * @param field
-	 *            is the name you want to print in alert box
-	 * @param value
-	 *            is the string you want to validate
-	 * @param pattern
-	 *            is regex
+	 * @param field   is the name you want to print in alert box
+	 * @param value   is the string you want to validate
+	 * @param pattern is regex
 	 * @return true is validation got succeed
 	 */
 	private boolean validate(String field, String value, String pattern) {
@@ -756,10 +751,8 @@ public class StartupPhaseController implements Initializable {
 	 * This method will validate all types of input given by user through
 	 * commandLine or GUI
 	 * 
-	 * @param value
-	 *            is a string to be matched
-	 * @param pattern
-	 *            is a regex
+	 * @param value   is a string to be matched
+	 * @param pattern is a regex
 	 * @return
 	 */
 	private boolean validateInput(String value, String pattern) {
@@ -779,8 +772,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will give alertBox in some operation when needed
 	 * 
-	 * @param alertMessage
-	 *            is message you want to give in alertBox
+	 * @param alertMessage is message you want to give in alertBox
 	 */
 	private void alertMesage(String alertMessage) {
 		Alert alert = new Alert(AlertType.INFORMATION);
@@ -793,10 +785,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will return true if field is empty and false if not.
 	 * 
-	 * @param field
-	 *            is a string to be validated
-	 * @param empty
-	 *            false if not empty
+	 * @param field is a string to be validated
+	 * @param empty false if not empty
 	 * @return
 	 */
 	private boolean emptyValidation(String field, boolean empty) {
@@ -811,10 +801,8 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will be used to give alert message at the time of validation
 	 * 
-	 * @param field
-	 *            is a string you want to print in alert message
-	 * @param empty
-	 *            will return true check if alertContext is settled.
+	 * @param field is a string you want to print in alert message
+	 * @param empty will return true check if alertContext is settled.
 	 */
 	private void validationAlert(String field, boolean empty) {
 		Alert alert = new Alert(AlertType.WARNING);
@@ -831,8 +819,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will assign countries to the user in random fashion
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void populateCountries(ActionEvent event) {
@@ -924,8 +911,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will place initial army to all player created in the game at once
 	 * 
-	 * @param even
-	 *            will represents value sent from view
+	 * @param even will represents value sent from view
 	 */
 	@FXML
 	void placeAllArmy(ActionEvent event) {
@@ -981,8 +967,7 @@ public class StartupPhaseController implements Initializable {
 	/**
 	 * This method will reset all buttons and fields once it got clicked
 	 * 
-	 * @param event
-	 *            will represents value sent from view
+	 * @param event will represents value sent from view
 	 */
 	@FXML
 	void btnReset(ActionEvent event) {

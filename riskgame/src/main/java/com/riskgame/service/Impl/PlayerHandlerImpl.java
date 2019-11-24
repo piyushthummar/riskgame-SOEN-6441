@@ -13,12 +13,15 @@ import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskMap;
 import com.riskgame.model.Territory;
+import com.riskgame.service.ConquestMapInterface;
+import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.PlayerHandlerInterface;
 
 /**
@@ -69,13 +72,20 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 		List<Player> playerInformation = playPhase.getPlayerList();
 		// initial army is assigned to players
 		int noOfPlayer = playerInformation.size();
+		RiskMap riskMap = null;
 		int armyPerPlayer = findTotalArmy(noOfPlayer);
 
 		for (Player player : playerInformation) {
 			player.setArmyOwns(armyPerPlayer);
 		}
+		if (mapManagementImpl.isMapConquest(playPhase.getFileName())) {
+			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+			riskMap = mapInterface.readMap(playPhase.getFileName());
+		} else {
+			riskMap = mapManagementImpl.readMap(playPhase.getFileName());
+		}
 		
-		RiskMap riskMap = mapManagementImpl.readMap(playPhase.getFileName());
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
 		Collections.shuffle(territoriesOwnedByPlayer);
 
