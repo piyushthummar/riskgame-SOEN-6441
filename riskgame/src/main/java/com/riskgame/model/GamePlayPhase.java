@@ -71,11 +71,27 @@ public class GamePlayPhase {
 	 * current player id who is playing the game
 	 */
 	private int currentPlayerId;
+	
+	/**
+	 * current status of game
+	 */
+	private String status;
+	
+	
+	/**
+	 * current player riskcardExchane will store in this model
+	 */
+	private RiskCardExchange riskCardExchange;
+
 
 	@Override
 	public String toString() {
 		return "GamePlayPhase [playerList=" + playerList + ", gamePhase=" + gamePhase + ", fileName=" + fileName
 				+ ", riskCardList=" + riskCardList + ", winner=" + winner + ", numberOfGames=" + numberOfGames
-				+ ", maxNumberOfTurns=" + maxNumberOfTurns + "]";
+				+ ", maxNumberOfTurns=" + maxNumberOfTurns + ", gamePlayPhaseId=" + gamePlayPhaseId + ", riskMap="
+				+ riskMap + ", currentPlayerId=" + currentPlayerId + ", status=" + status + ", riskCardExchange="
+				+ riskCardExchange + "]";
 	}
+
+	
 }
