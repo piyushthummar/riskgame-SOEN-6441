@@ -1,5 +1,17 @@
 package com.riskgame.service.Impl;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -8,7 +20,12 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +42,8 @@ import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.RiskPlayInterface;
 
 /**
- * This is a implementation class of RiskPlayInterface where all buisness logic.
+ * This is a implementation class of RiskPlayInterface where all buisness logic
+ * of game playing screen is writeen.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
@@ -40,7 +58,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public static final String INFANTRY = "INFANTRY";
 	public static final String CAVALRY = "CAVALRY";
 	public static final String ARTILLERY = "ARTILLERY";
-
+	public static final String GAME_DIR_PATH = "src/main/resources/savedgames/";
 	public static StringBuilder sb;
 	private static String NEWLINE = System.getProperty("line.separator");
 
@@ -105,9 +123,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 				.collect(Collectors.toList());
-		
+
 		Map<Integer, Continent> continentMap;
-		
+
 		if (mapManagementImpl.isMapConquest(fileName)) {
 			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
 			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
@@ -115,8 +133,6 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		} else {
 			continentMap = mapManagementImpl.readMap(fileName).getContinents();
 		}
-		
-		
 
 		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
 			Continent continent = entry.getValue();
@@ -140,7 +156,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				.collect(Collectors.toList());
 
 		Map<Integer, Continent> continentMap;
-		
+
 		if (mapManagementImpl.isMapConquest(fileName)) {
 			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
 			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
@@ -710,7 +726,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		return playerStrongestTerritory;
 	}
-	
+
 	/**
 	 * This method finds and returns the weakest territory that the current player
 	 * 
@@ -720,11 +736,11 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	@Override
 	public PlayerTerritory getWeakestTerritory(Player player) {
 		PlayerTerritory playerWeakestTerritory = null;
-		
-		if(player.getPlayerterritories().size()>0) {
-			
+
+		if (player.getPlayerterritories().size() > 0) {
+
 			int min = player.getPlayerterritories().get(0).getArmyOnterritory();
-			
+
 			for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
 				if (playerTerritory.getArmyOnterritory() <= min) {
 					min = playerTerritory.getArmyOnterritory();
@@ -732,7 +748,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				}
 			}
 		}
-		
+
 		return playerWeakestTerritory;
 	}
 
@@ -779,4 +795,81 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	}
 
+	/**
+	 * 
+	 * {@inheritDoc}
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws UnsupportedEncodingException
+	 * @throws IOException
+	 */
+	@Override
+	public void convertObjectToJsonFile(GamePlayPhase gamePlayPhase, String fileName)
+			throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = "";
+		try (PrintWriter writer = new PrintWriter(new BufferedWriter(
+				new OutputStreamWriter(new FileOutputStream(GAME_DIR_PATH + fileName + ".json"), "utf-8")))) {
+			try {
+				jsonInString = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(gamePlayPhase);
+			} catch (JsonGenerationException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			writer.println(jsonInString);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	@Override
+	public GamePlayPhase convertJsonFileToObject(String fileName) throws FileNotFoundException, IOException {
+		GamePlayPhase gamePlayPhase = new GamePlayPhase();
+		ObjectMapper mapper = new ObjectMapper();
+		String jsonInString = "";
+		String line="";
+		StringBuilder sb = new StringBuilder();
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(GAME_DIR_PATH + fileName))) {
+			while((line = bufferedReader.readLine())!=null)
+			{
+				sb.append(line);
+			}
+			jsonInString = sb.toString();
+			try {
+				gamePlayPhase = mapper.readValue(jsonInString, GamePlayPhase.class);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return gamePlayPhase;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public List<String> getAvailableGameFiles() {
+		List<String> gameList = new ArrayList<String>();
+
+		try (Stream<Path> path = Files.walk(Paths.get(GAME_DIR_PATH))) {
+
+			gameList = path.map(filePath -> filePath.toFile().getName()).filter(fileName -> fileName.endsWith(".json"))
+					.collect(Collectors.toList());
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return gameList;
+	}
 }

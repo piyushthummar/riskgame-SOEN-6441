@@ -1,5 +1,8 @@
 package com.riskgame.service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +30,7 @@ public interface RiskPlayInterface {
 	 * This method will check in new turn how many number of army player can get for
 	 * reinforcement.
 	 * 
-	 * @param totalOwnedCountries
-	 *            is a number of country owned by player
+	 * @param totalOwnedCountries is a number of country owned by player
 	 * @return army to reinforce
 	 */
 	int checkForReinforcement(int totalOwnedCountries, Player player, String fileName);
@@ -55,7 +57,7 @@ public interface RiskPlayInterface {
 	 * This method will update armyCount after card exchange
 	 * 
 	 * @param player
-	 * @return 
+	 * @return
 	 */
 	int updateArmyAfterCardExchange(Player player);
 
@@ -64,8 +66,7 @@ public interface RiskPlayInterface {
 	 * add again to total card list
 	 * 
 	 * @param player
-	 * @param cards
-	 *            total cards in game
+	 * @param cards          total cards in game
 	 * @param exchangedCards
 	 */
 	void updateCardListAfterExchange(Player player, List<RiskCard> cards, RiskCardExchange exchangedCards);
@@ -124,8 +125,7 @@ public interface RiskPlayInterface {
 	 * This method will assign 1 risk card randomly from original list of cards to
 	 * player
 	 * 
-	 * @param playerName
-	 *            is the name of the player who want to add list of cards
+	 * @param playerName    is the name of the player who want to add list of cards
 	 * @param gamePlayPhase
 	 */
 	void addRiskCardToPlayer(String playerName, GamePlayPhase gamePlayPhase);
@@ -134,8 +134,7 @@ public interface RiskPlayInterface {
 	 * This method will check if player can exchange card to get more army based on
 	 * risk rules.
 	 * 
-	 * @param cardExchange
-	 *            has 3 card, which player want to exchnage
+	 * @param cardExchange has 3 card, which player want to exchnage
 	 * @return true if player can exchnage card
 	 */
 	boolean checkForExchange(RiskCardExchange cardExchange);
@@ -143,8 +142,7 @@ public interface RiskPlayInterface {
 	/**
 	 * This method will return list of card number current player is having.
 	 * 
-	 * @param player
-	 *            is current player in game
+	 * @param player is current player in game
 	 * @return
 	 */
 	List<Integer> getCardNumbersFromPlayer(Player player);
@@ -153,10 +151,8 @@ public interface RiskPlayInterface {
 	 * This method will return particular card whose number is provided from current
 	 * player risk card list
 	 * 
-	 * @param player
-	 *            is current player
-	 * @param cardNumber
-	 *            is which card this method need to return
+	 * @param player     is current player
+	 * @param cardNumber is which card this method need to return
 	 * @return RiskCard object whose number is provided
 	 */
 	RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber);
@@ -183,15 +179,18 @@ public interface RiskPlayInterface {
 	GamePlayPhase exchangeCards(GamePlayPhase gamePlayPhase);
 
 	/**
-	 * This method updates current player's card list also free card lists after player's exchange cards
-	 * @param player current Player.
+	 * This method updates current player's card list also free card lists after
+	 * player's exchange cards
+	 * 
+	 * @param player        current Player.
 	 * @param freeRiskCards list of freeRiskCards
-	 * @param exchangeCard 3 card of current Users which will be exchange
+	 * @param exchangeCard  3 card of current Users which will be exchange
 	 */
 	void updateCardList(Player player, List<RiskCard> freeRiskCards, RiskCardExchange exchangeCard);
 
 	/**
 	 * This method finds and returns the strongest territory that the current player
+	 * 
 	 * @param player Currently player in game.
 	 * @return PlayerTerritory Strongest Territory.
 	 */
@@ -273,4 +272,29 @@ public interface RiskPlayInterface {
 	 * @return PlayerTerritory weakest Territory.
 	 */
 	PlayerTerritory getWeakestTerritory(Player player);
+
+	/**
+	 * This method will convert gameplayphase object to JSON file and save the game
+	 * 
+	 * @param gamePlayPhase current phase of game
+	 * @throws FileNotFoundException, IOException 
+	 * @throws UnsupportedEncodingException 
+	 */
+	void convertObjectToJsonFile(GamePlayPhase gamePlayPhase, String fileName) throws UnsupportedEncodingException, FileNotFoundException, IOException;
+
+	/**
+	 * This method will convert JSON file to GamePlayPhase object while loading game
+	 * 
+	 * @param fileName is JSON file which you want to load
+	 * @return GamePlayPhase object
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	GamePlayPhase convertJsonFileToObject(String fileName) throws FileNotFoundException, IOException;
+	
+	/**
+	 * This method will return list of available saved game file's names
+	 * @return List of available saved games
+	 */
+	public List<String> getAvailableGameFiles();
 }

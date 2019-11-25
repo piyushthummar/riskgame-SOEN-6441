@@ -1,5 +1,6 @@
 package com.riskgame.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -11,6 +12,10 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -56,7 +61,7 @@ import javafx.scene.control.TextField;
 @Controller
 public class RiskPlayScreenController extends Observer implements Initializable {
 
-	GamePlayPhase gameplayphase = new GamePlayPhase();
+	static GamePlayPhase gameplayphase = new GamePlayPhase();
 
 	@FXML
 	private Button btnFireCommand;
