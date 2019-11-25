@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
@@ -19,6 +20,8 @@ import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
+import com.riskgame.service.ConquestMapInterface;
+import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.RiskPlayInterface;
 
 /**
@@ -102,8 +105,18 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 				.collect(Collectors.toList());
-
-		Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
+		
+		Map<Integer, Continent> continentMap;
+		
+		if (mapManagementImpl.isMapConquest(fileName)) {
+			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+			continentMap = mapInterface.readMap(fileName).getContinents();
+		} else {
+			continentMap = mapManagementImpl.readMap(fileName).getContinents();
+		}
+		
+		
 
 		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
 			Continent continent = entry.getValue();
@@ -126,7 +139,15 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		List<String> territoryStringList = territoryList.stream().map(e -> e.getTerritoryName())
 				.collect(Collectors.toList());
 
-		Map<Integer, Continent> continentMap = mapManagementImpl.readMap(fileName).getContinents();
+		Map<Integer, Continent> continentMap;
+		
+		if (mapManagementImpl.isMapConquest(fileName)) {
+			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+			continentMap = mapInterface.readMap(fileName).getContinents();
+		} else {
+			continentMap = mapManagementImpl.readMap(fileName).getContinents();
+		}
 
 		for (Map.Entry<Integer, Continent> entry : continentMap.entrySet()) {
 			Continent continent = entry.getValue();
