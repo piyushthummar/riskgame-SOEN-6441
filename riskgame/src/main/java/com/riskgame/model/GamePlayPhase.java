@@ -82,6 +82,8 @@ public class GamePlayPhase {
 	 * current player riskcardExchane will store in this model
 	 */
 	private RiskCardExchange riskCardExchange;
+	
+	
 
 
 	@Override

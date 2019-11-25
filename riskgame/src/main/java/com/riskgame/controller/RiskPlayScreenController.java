@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
+import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.config.StageManager;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
@@ -25,6 +26,9 @@ import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 import com.riskgame.observerpattern.Observer;
 import com.riskgame.observerpattern.Subject;
+import com.riskgame.service.ConquestMapInterface;
+import com.riskgame.service.MapManagementInterface;
+import com.riskgame.service.Impl.ConquestMapImpl;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.RiskPlayImpl;
 import com.riskgame.view.FxmlView;
@@ -1045,7 +1049,15 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerList.clear();
 		// Display the message
 		gameplayphase = (GamePlayPhase) object;
-		riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+		
+		if (mapManagementImpl.isMapConquest(gameplayphase.getFileName())) {
+			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+			riskMap = mapInterface.readMap(gameplayphase.getFileName());
+		} else {
+			riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+		}
+		
 		// System.out.println("===> " + gameplayphase);
 		// System.out.println(riskMap);
 
