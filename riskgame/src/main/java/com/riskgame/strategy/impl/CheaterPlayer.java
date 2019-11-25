@@ -19,6 +19,9 @@ import com.riskgame.strategy.StrategyInterface;
  * @version 1.0.0
  */
 public class CheaterPlayer implements StrategyInterface {
+	
+	public static StringBuilder sb;
+	private static String NEWLINE = System.getProperty("line.separator");
 
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;

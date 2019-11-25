@@ -19,6 +19,9 @@ import com.riskgame.strategy.StrategyInterface;
  * @see com.riskgame.strategy
  */
 public class HumanPlayer implements StrategyInterface {
+	
+	public static StringBuilder sb;
+	private static String NEWLINE = System.getProperty("line.separator");
 
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
