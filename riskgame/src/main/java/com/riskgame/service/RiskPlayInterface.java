@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
+import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
@@ -188,4 +189,88 @@ public interface RiskPlayInterface {
 	 * @param exchangeCard 3 card of current Users which will be exchange
 	 */
 	void updateCardList(Player player, List<RiskCard> freeRiskCards, RiskCardExchange exchangeCard);
+
+	/**
+	 * This method finds and returns the strongest territory that the current player
+	 * @param player Currently player in game.
+	 * @return PlayerTerritory Strongest Territory.
+	 */
+	PlayerTerritory getStrongestTerritory(Player player);
+
+	List<String> getContinentControlledByPlayer(Player player, String fileName);
+
+	/**
+	 * This method will return dice count for attacker based on his army.
+	 * 
+	 * @param currentArmy
+	 * @return count of dice attacker can play with
+	 */
+	int getAttackerDiesCount(int currentArmy);
+
+	/**
+	 * This method will return current army on particular country given
+	 * 
+	 * @param country
+	 * @param playerList
+	 * @return number of army on country
+	 */
+	int getCurrentAramyByCountryName(String country, List<Player> playerList);
+
+	/**
+	 * This method will return whole object of PlayerTerritory of given player based
+	 * upon given territory(country) name
+	 * 
+	 * @param country is name of country whose object is needed
+	 * @param player  is the player object whose PlayerTerritory needed
+	 * @return
+	 */
+	PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player);
+
+	/**
+	 * This method will return number of dice defender can use based upon number of
+	 * army he is having
+	 * 
+	 * @param currentArmy is number of army defender is having
+	 * @return number of dice defender can have
+	 */
+	int getDefenderDiceCount(int currentArmy);
+
+	/**
+	 * This method will return one list having count of generated dice
+	 * 
+	 * @param dice number of dice selected from user
+	 * @return sorted list of dice
+	 */
+	List<Integer> getCountFromDies(int dice);
+
+	/**
+	 * Generate random number for dice with random function
+	 * 
+	 * @param min number provided
+	 * @param max number provided
+	 * @return random number for dice
+	 */
+	int generateRandomIntRange(int min, int max);
+
+	/**
+	 * This method will give total countries from the map.
+	 * 
+	 * @param riskmap of current game
+	 */
+	void checkForWinner(GamePlayPhase gamePlayPhase);
+
+	/**
+	 * This method will give total countries from the map.
+	 * 
+	 * @param riskmap of current game
+	 */
+	int getTotalCountries(RiskMap riskMap);
+
+	/**
+	 * This method finds and returns the weakest territory that the current player
+	 * 
+	 * @param player Currently player in game.
+	 * @return PlayerTerritory weakest Territory.
+	 */
+	PlayerTerritory getWeakestTerritory(Player player);
 }

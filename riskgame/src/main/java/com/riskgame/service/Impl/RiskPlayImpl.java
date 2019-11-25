@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return controlvalueTosend;
 	}
 
+	@Override
 	public List<String> getContinentControlledByPlayer(Player player, String fileName) {
 		List<String> continentLst = new ArrayList<String>();
 
@@ -178,7 +180,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 					player.getPlayerReinforceArmy() + 30 + ((player.getPlayerReinforceArmy() - 5) * 5));
 			player.setExchangeCount(player.getExchangeCount() + 1);
 		}
-		
+
 		return updatedArmy;
 
 	}
@@ -282,6 +284,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param currentArmy
 	 * @return count of dice attacker can play with
 	 */
+	@Override
 	public int getAttackerDiesCount(int currentArmy) {
 		int numDies = 0;
 		if (currentArmy >= 4) {
@@ -326,6 +329,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param playerList
 	 * @return number of army on country
 	 */
+	@Override
 	public int getCurrentAramyByCountryName(String country, List<Player> playerList) {
 		int army = 0;
 
@@ -350,6 +354,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param player  is the player object whose PlayerTerritory needed
 	 * @return
 	 */
+	@Override
 	public PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player) {
 		return player.getPlayerterritories().stream().filter(x -> country.equals(x.getTerritoryName())).findAny()
 				.orElse(null);
@@ -384,6 +389,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param currentArmy is number of army defender is having
 	 * @return number of dice defender can have
 	 */
+	@Override
 	public int getDefenderDiceCount(int currentArmy) {
 		int numDies = 0;
 		if (currentArmy >= 2) {
@@ -400,6 +406,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param dice number of dice selected from user
 	 * @return sorted list of dice
 	 */
+	@Override
 	public List<Integer> getCountFromDies(int dice) {
 
 		List<Integer> countList = new ArrayList<Integer>();
@@ -419,6 +426,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param max number provided
 	 * @return random number for dice
 	 */
+	@Override
 	public int generateRandomIntRange(int min, int max) {
 		Random r = new Random();
 		return r.nextInt((max - min) + 1) + min;
@@ -638,10 +646,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method updates current player's card list also free card lists after player's exchange cards
-	 * @param player current Player.
+	 * This method updates current player's card list also free card lists after
+	 * player's exchange cards
+	 * 
+	 * @param player        current Player.
 	 * @param freeRiskCards list of freeRiskCards
-	 * @param exchangeCard 3 card of current Users which will be exchange
+	 * @param exchangeCard  3 card of current Users which will be exchange
 	 */
 	@Override
 	public void updateCardList(Player player, List<RiskCard> freeRiskCards, RiskCardExchange exchangeCard) {
@@ -659,6 +669,93 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				iterator.remove();
 			}
 		}
+	}
+
+	/**
+	 * This method finds and returns the strongest territory that the current player
+	 * 
+	 * @param player Currently player in game.
+	 * @return PlayerTerritory Strongest Territory.
+	 */
+	@Override
+	public PlayerTerritory getStrongestTerritory(Player player) {
+		PlayerTerritory playerStrongestTerritory = null;
+		int max = 0;
+		for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+			if (playerTerritory.getArmyOnterritory() > max) {
+				max = playerTerritory.getArmyOnterritory();
+				playerStrongestTerritory = playerTerritory;
+			}
+		}
+		return playerStrongestTerritory;
+	}
+	
+	/**
+	 * This method finds and returns the weakest territory that the current player
+	 * 
+	 * @param player Currently player in game.
+	 * @return PlayerTerritory weakest Territory.
+	 */
+	@Override
+	public PlayerTerritory getWeakestTerritory(Player player) {
+		PlayerTerritory playerWeakestTerritory = null;
+		
+		if(player.getPlayerterritories().size()>0) {
+			
+			int min = player.getPlayerterritories().get(0).getArmyOnterritory();
+			
+			for (PlayerTerritory playerTerritory : player.getPlayerterritories()) {
+				if (playerTerritory.getArmyOnterritory() <= min) {
+					min = playerTerritory.getArmyOnterritory();
+					playerWeakestTerritory = playerTerritory;
+				}
+			}
+		}
+		
+		return playerWeakestTerritory;
+	}
+
+	/**
+	 * This method will give total countries from the map.
+	 * 
+	 * @param riskmap of current game
+	 */
+	@Override
+	public int getTotalCountries(RiskMap riskMap) {
+		Map<Integer, Continent> continentMap = riskMap.getContinents();
+		Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
+		int totalCountries = 0;
+		while (i.hasNext()) {
+			Entry<Integer, Continent> e = i.next();
+			Continent c = e.getValue();
+			totalCountries += c.getTerritoryList().size();
+		}
+		return totalCountries;
+	}
+
+	/**
+	 * This method is used for current player is winner or not
+	 * 
+	 * @param gamePlayPhase Current gamePlayPhase
+	 */
+	@Override
+	public void checkForWinner(GamePlayPhase gamePlayPhase) {
+
+		for (Player player : gamePlayPhase.getPlayerList()) {
+			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
+
+				if (getTotalCountries(gamePlayPhase.getRiskMap()) == player.getPlayerterritories().size()) {
+					gamePlayPhase.setGamePhase("GAME_FINISH");
+					gamePlayPhase.setStatus(
+							"Congratulations ! " + player.getPlayerName() + " You are the Winner of the Game");
+					gamePlayPhase.setWinner("Player: " + player.getPlayerName() + " Behaviour : "
+							+ player.getPlayerType() + "is Winner");
+				}
+
+				break;
+			}
+		}
+
 	}
 
 }
