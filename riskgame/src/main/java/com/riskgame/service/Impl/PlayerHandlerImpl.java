@@ -25,6 +25,9 @@ import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.PlayerHandlerInterface;
 
 /**
+ * This is PlayerHandlerImpl which is implementation of service which includes
+ * populatecountries, placeall, add player methods
+ * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
  * @see com.riskgame.model.Player
@@ -85,7 +88,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 		} else {
 			riskMap = mapManagementImpl.readMap(playPhase.getFileName());
 		}
-		
+
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
 		Collections.shuffle(territoriesOwnedByPlayer);
 
