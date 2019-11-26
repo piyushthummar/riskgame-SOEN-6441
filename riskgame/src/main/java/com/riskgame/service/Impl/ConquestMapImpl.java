@@ -22,6 +22,8 @@ import com.riskgame.model.Territory;
 import com.riskgame.service.ConquestMapInterface;
 
 /**
+ * This is ConquestMapImpl which is service implementation which can read and
+ * write to/from conquest map file to playe riskgame.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @version 1.0.0

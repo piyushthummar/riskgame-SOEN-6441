@@ -29,11 +29,14 @@ import com.riskgame.strategy.StrategyInterface;
 public class CheaterPlayer implements StrategyInterface {
 
 	public static StringBuilder sb;
-	private static String NEWLINE = System.getProperty("line.separator");
+	//private static String NEWLINE = System.getProperty("line.separator");
 
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
-
+	
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public CheaterPlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
@@ -75,52 +78,50 @@ public class CheaterPlayer implements StrategyInterface {
 	public GamePlayPhase attack(GamePlayPhase gamePlayPhase) {
 		sb = new StringBuilder();
 		List<String> countriesList = new ArrayList<String>();
-		Player currentPlayer = null;
+		//Player currentPlayer = null;
 		for (Player player : gamePlayPhase.getPlayerList()) {
+			
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
-				currentPlayer = player;
-				break;
-			} else {
-				continue;
-			}
-		}
-		if (currentPlayer != null) {
-			List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(currentPlayer);
+				//currentPlayer = player;
+				
+				List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(player);
 
-			for (PlayerTerritory territory : currentPlayer.getPlayerterritories()) {
+				for (PlayerTerritory territory : player.getPlayerterritories()) {
 
-				List<String> neighbourList = mapManagementImpl.getNeighbourCountriesListByCountryName(
-						gamePlayPhase.getRiskMap(), territory.getTerritoryName());
+					List<String> neighbourList = mapManagementImpl.getNeighbourCountriesListByCountryName(
+							gamePlayPhase.getRiskMap(), territory.getTerritoryName());
 
-				if (neighbourList.size() > 0) {
+					if (neighbourList.size() > 0) {
 
-					for (String neighbourCountry : neighbourList) {
+						for (String neighbourCountry : neighbourList) {
 
-						if (!playerOwnCountries.contains(neighbourCountry)) {
+							if (!playerOwnCountries.contains(neighbourCountry)) {
 
-							PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountry(neighbourCountry,
-									gamePlayPhase.getPlayerList());
+								PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountry(neighbourCountry,
+										gamePlayPhase.getPlayerList());
 
-							if (playerTerritory != null) {
+								if (playerTerritory != null) {
 
-								// adding country
-								playerTerritory.setArmyOnterritory(1);
-								currentPlayer.getPlayerterritories().add(playerTerritory);
+									// adding country
+									playerTerritory.setArmyOnterritory(1);
+									player.getPlayerterritories().add(playerTerritory);
 
-								countriesList.add(playerTerritory.getContinentName());
+									countriesList.add(playerTerritory.getContinentName());
 
-								// Fore removing country
-								for (Player playertoLst : gamePlayPhase.getPlayerList()) {
+									// Fore removing country
+									for (Player playertoLst : gamePlayPhase.getPlayerList()) {
 
-									ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories()
-											.listIterator();
+										ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories()
+												.listIterator();
 
-									while (playerTerritories.hasNext()) {
-										if (playerTerritories.next().getTerritoryName()
-												.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
-											playerTerritories.remove();
+										while (playerTerritories.hasNext()) {
+											if (playerTerritories.next().getTerritoryName()
+													.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
+												playerTerritories.remove();
+											}
 										}
 									}
+
 								}
 
 							}
@@ -130,10 +131,15 @@ public class CheaterPlayer implements StrategyInterface {
 					}
 
 				}
-
+				
+				
+				
+				break;
+			} else {
+				continue;
 			}
-
 		}
+
 		
 		gamePlayPhase.setStatus(
 				"Territories won by Cheater: " + StringUtils.collectionToCommaDelimitedString(countriesList) + "\n");
@@ -152,43 +158,43 @@ public class CheaterPlayer implements StrategyInterface {
 
 		sb = new StringBuilder();
 		List<String> countriesList = new ArrayList<String>();
-		Player currentPlayer = null;
+		//Player currentPlayer = null;
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
-				currentPlayer = player;
-				break;
-			} else {
-				continue;
-			}
-		}
-		if (currentPlayer != null) {
+				//currentPlayer = player;
+				
+				List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(player);
 
-			List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(currentPlayer);
+				for (PlayerTerritory territory : player.getPlayerterritories()) {
 
-			for (PlayerTerritory territory : currentPlayer.getPlayerterritories()) {
+					List<String> neighbourList = mapManagementImpl.getNeighbourCountriesListByCountryName(
+							gamePlayPhase.getRiskMap(), territory.getTerritoryName());
 
-				List<String> neighbourList = mapManagementImpl.getNeighbourCountriesListByCountryName(
-						gamePlayPhase.getRiskMap(), territory.getTerritoryName());
+					if (neighbourList.size() > 0) {
 
-				if (neighbourList.size() > 0) {
+						for (String neighbourCountry : neighbourList) {
 
-					for (String neighbourCountry : neighbourList) {
+							if (!playerOwnCountries.contains(neighbourCountry)) {
 
-						if (!playerOwnCountries.contains(neighbourCountry)) {
+								territory.setArmyOnterritory(territory.getArmyOnterritory() * 2);
+								countriesList.add(territory.getTerritoryName());
 
-							territory.setArmyOnterritory(territory.getArmyOnterritory() * 2);
-							countriesList.add(territory.getTerritoryName());
+								break;
+							}
 
-							break;
 						}
 
 					}
 
 				}
-
+				
+				
+				break;
+			} else {
+				continue;
 			}
-
 		}
+
 
 		gamePlayPhase.setStatus("Territories fortified by Cheater: "
 				+ StringUtils.collectionToCommaDelimitedString(countriesList) + "\n");

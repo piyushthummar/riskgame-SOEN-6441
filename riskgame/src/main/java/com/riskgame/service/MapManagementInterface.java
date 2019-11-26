@@ -12,6 +12,9 @@ import com.riskgame.dto.NeighbourTerritoriesDto;
 import com.riskgame.model.RiskMap;
 
 /**
+ * This is the interface file of MapManagement which can handle all map related
+ * operation include read/write to/from files.
+ * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @see com.riskgame.model.RiskMap
  * @see com.riskgame.model.Continent

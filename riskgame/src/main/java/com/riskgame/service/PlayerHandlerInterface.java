@@ -48,4 +48,6 @@ public interface PlayerHandlerInterface {
 	 */
 	GamePlayPhase placeAllArmyByRoundRobin(GamePlayPhase gamePlayPhase);
 
+	Object getStrategyByName(String strategy);
+
 }

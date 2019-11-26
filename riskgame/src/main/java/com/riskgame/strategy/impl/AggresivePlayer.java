@@ -32,6 +32,9 @@ public class AggresivePlayer implements StrategyInterface {
 	public static StringBuilder sb;
 	private static String NEWLINE = System.getProperty("line.separator");
 
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public AggresivePlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
@@ -94,13 +97,8 @@ public class AggresivePlayer implements StrategyInterface {
 					.append(playerStrongestTerritory.getArmyOnterritory()).append(gamePlayPhase.getStatus())
 					.append(NEWLINE);
 				}
-			}
-
-			
+			}		
 		}
-
-		
-
 		gamePlayPhase.setStatus(sb.toString());
 
 		return gamePlayPhase;
@@ -147,7 +145,6 @@ public class AggresivePlayer implements StrategyInterface {
 					break;
 				}
 			}
-
 			if (toCountry != null) {
 
 				int armyOnFromC = playerStrongestTerritory.getArmyOnterritory();
@@ -204,7 +201,6 @@ public class AggresivePlayer implements StrategyInterface {
 							gamePlayPhase.getRiskCardList().remove(0);
 							
 						}
-
 					}
 
 				} else {
@@ -241,8 +237,8 @@ public class AggresivePlayer implements StrategyInterface {
 		Player currentPlayer = null;
 		Boolean isneighbour = false;
 
-		String aggressive_fortify_message = "";
-		String old_message = "";
+		String aggressiveMessageForFortify = "";
+		String messgeOld = "";
 
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
@@ -255,41 +251,41 @@ public class AggresivePlayer implements StrategyInterface {
 
 		if (currentPlayer != null) {
 
-			for (PlayerTerritory territory_a : currentPlayer.getPlayerterritories()) {
+			for (PlayerTerritory territoryA : currentPlayer.getPlayerterritories()) {
 
-				if (territory_a.getArmyOnterritory() == 1) {
+				if (territoryA.getArmyOnterritory() == 1) {
 					continue;
 				}
-				for (PlayerTerritory territory_b : currentPlayer.getPlayerterritories()) {
+				for (PlayerTerritory territoryB : currentPlayer.getPlayerterritories()) {
 
 					isneighbour = false;
 
-					if (territory_a.getTerritoryName().equalsIgnoreCase(territory_b.getTerritoryName())
-							|| territory_b.getArmyOnterritory() == 1) {
+					if (territoryA.getTerritoryName().equalsIgnoreCase(territoryB.getTerritoryName())
+							|| territoryB.getArmyOnterritory() == 1) {
 						continue;
 					} else {
 
 						List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(
-								gamePlayPhase.getRiskMap(), territory_a.getTerritoryName());
-						if (neighbourCountriesList.contains(territory_b.getTerritoryName())) {
+								gamePlayPhase.getRiskMap(), territoryA.getTerritoryName());
+						if (neighbourCountriesList.contains(territoryB.getTerritoryName())) {
 							isneighbour = true;
 						}
 					}
 
 					if (isneighbour == true) {
 
-						old_message = (territory_b.getArmyOnterritory() - 1) + " army moved from "
-								+ territory_b.getTerritoryName() + " to " + territory_a.getTerritoryName() + "\n";
-						aggressive_fortify_message = old_message + aggressive_fortify_message;
-						territory_a.setArmyOnterritory(
-								territory_a.getArmyOnterritory() + territory_b.getArmyOnterritory() - 1);
-						territory_b.setArmyOnterritory(1);
+						messgeOld = (territoryB.getArmyOnterritory() - 1) + " army moved from "
+								+ territoryB.getTerritoryName() + " to " + territoryA.getTerritoryName() + "\n";
+						aggressiveMessageForFortify = messgeOld + aggressiveMessageForFortify;
+						territoryA.setArmyOnterritory(
+								territoryA.getArmyOnterritory() + territoryB.getArmyOnterritory() - 1);
+						territoryB.setArmyOnterritory(1);
 					}
 				}
 			}
 		}
 
-		gamePlayPhase.setStatus(aggressive_fortify_message);
+		gamePlayPhase.setStatus(aggressiveMessageForFortify);
 		return gamePlayPhase;
 	}
 

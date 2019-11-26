@@ -33,6 +33,9 @@ public class RandomPlayer implements StrategyInterface {
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
 
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public RandomPlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
@@ -46,7 +49,7 @@ public class RandomPlayer implements StrategyInterface {
 	@Override
 	public GamePlayPhase reinforce(GamePlayPhase gamePlayPhase) {
 		sb = new StringBuilder();
-		List<String> countriesList = new ArrayList<String>();
+		//List<String> countriesList = new ArrayList<String>();
 
 		for (Player player : gamePlayPhase.getPlayerList()) {
 
@@ -90,7 +93,6 @@ public class RandomPlayer implements StrategyInterface {
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
 				currentPlayer = player;
-
 				for (PlayerTerritory territory : player.getPlayerterritories()) {
 					playerCountry.add(territory.getTerritoryName());
 				}
@@ -99,10 +101,8 @@ public class RandomPlayer implements StrategyInterface {
 		}
 
 		if (currentPlayer.getPlayerterritories().size() > 0) {
-
 			int randomNumberAttack = riskPlayImpl.generateRandomIntRange(1,
 					currentPlayer.getPlayerterritories().size());
-
 			for (int index = 0; index < randomNumberAttack; index++) {
 
 				PlayerTerritory playerTerritory = currentPlayer.getPlayerterritories()
@@ -120,7 +120,6 @@ public class RandomPlayer implements StrategyInterface {
 							break;
 						}
 					}
-
 					if (toCountry != null) {
 
 						int armyOnFromC = playerTerritory.getArmyOnterritory();
@@ -159,7 +158,6 @@ public class RandomPlayer implements StrategyInterface {
 								// alloutFinish = true;
 
 								moveCountryToWinPlayer(fromCountry, toCountry, gamePlayPhase);
-
 								Player attackerPlayer = riskPlayImpl.getPlayerByCountry(fromCountry,
 										gamePlayPhase.getPlayerList());
 								PlayerTerritory fromTerritory = riskPlayImpl
@@ -171,16 +169,13 @@ public class RandomPlayer implements StrategyInterface {
 								}
 
 								if (gamePlayPhase.getRiskCardList().size() > 0) {
-
 									RiskCard riskCard = gamePlayPhase.getRiskCardList().get(0);
 									currentPlayer.getCardListOwnedByPlayer().add(riskCard);
 									sb.append(riskCard).append(" Assigned to ").append(currentPlayer.getPlayerName())
 											.append(NEWLINE);
-
 									gamePlayPhase.getRiskCardList().remove(0);
 
 								}
-
 							}
 
 						} else {
@@ -221,8 +216,8 @@ public class RandomPlayer implements StrategyInterface {
 		Player currentPlayer = null;
 		sb = new StringBuilder();
 		List<String> playerCountry = new ArrayList<>();
-		String fromCountry = null;
-		String toCountry = null;
+		//String fromCountry = null;
+		//String toCountry = null;
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
 				currentPlayer = player;

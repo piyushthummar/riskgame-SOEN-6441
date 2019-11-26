@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.riskgame.adapter.DominationToConquestAdapter;
+import com.riskgame.constant.StrategyType;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
@@ -23,8 +24,16 @@ import com.riskgame.model.Territory;
 import com.riskgame.service.ConquestMapInterface;
 import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.PlayerHandlerInterface;
+import com.riskgame.strategy.impl.AggresivePlayer;
+import com.riskgame.strategy.impl.BenevolentPlayer;
+import com.riskgame.strategy.impl.CheaterPlayer;
+import com.riskgame.strategy.impl.HumanPlayer;
+import com.riskgame.strategy.impl.RandomPlayer;
 
 /**
+ * This is PlayerHandlerImpl which is implementation of service which includes
+ * populatecountries, placeall, add player methods
+ * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @author <a href="mailto:ko_pate@encs.concordia.ca">Koshaben Patel</a>
  * @see com.riskgame.model.Player
@@ -85,7 +94,7 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 		} else {
 			riskMap = mapManagementImpl.readMap(playPhase.getFileName());
 		}
-		
+
 		List<PlayerTerritory> territoriesOwnedByPlayer = getTerritories(riskMap);
 		Collections.shuffle(territoriesOwnedByPlayer);
 
@@ -179,6 +188,24 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 			}
 		}
 		return gamePlayPhase;
+	}
+	
+	@Override
+	public Object getStrategyByName(String strategy) {
+		
+		if(StrategyType.HUMAN.toString().equalsIgnoreCase(strategy)) {
+			return new HumanPlayer();
+		}else if(StrategyType.AGGRESIVE.toString().equalsIgnoreCase(strategy)) {
+			return new AggresivePlayer();
+		}else if(StrategyType.BENEVOLENT.toString().equalsIgnoreCase(strategy)) {
+			return new BenevolentPlayer();
+		}else if(StrategyType.RANDOM.toString().equalsIgnoreCase(strategy)) {
+			return new RandomPlayer();
+		}else if(StrategyType.CHEATER.toString().equalsIgnoreCase(strategy)) {
+			return new CheaterPlayer();
+		}else {
+			return null;
+		}
 	}
 
 }

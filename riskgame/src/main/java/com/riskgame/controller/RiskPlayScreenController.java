@@ -1,6 +1,5 @@
 package com.riskgame.controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,16 +11,14 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.config.StageManager;
+import com.riskgame.constant.HumanStrategy;
+import com.riskgame.constant.StrategyType;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
@@ -120,7 +117,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private static String turnStartedMsg = "";
 	private static String leftArmyMsg = "";
 
-	public static final String NEUTRAL = "NEUTRAL";
+	//public static final String NEUTRAL = "NEUTRAL";
 	private Player currentPlayer;
 
 	private static String NEWLINE = System.getProperty("line.separator");
@@ -209,6 +206,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	@FXML
 	void fireCommand(ActionEvent event) {
 
+		singleGameMode();
+
+	}
+
+	private void singleGameMode() {
+		
+		
 		if (!gamewin) {
 
 			// txtConsoleLog.clear();
@@ -221,60 +225,180 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			System.out.println("Before playerList = > " + playerList);
 
 			try {
-				String command = txtCommandLine.getText();
-				if (command != null && !command.isEmpty()) {
+				
+				if(currentPlayer.getPlayerType().equalsIgnoreCase(HumanStrategy.HUMAN.toString())) {
+					
+					
+					String command = txtCommandLine.getText();
+					if (command != null && !command.isEmpty()) {
 
-					// if (!attackFire) {
+						// if (!attackFire) {
 
-					// if (!attackMove) {
+						// if (!attackMove) {
 
-					if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
-						if (currentPlayer.getPlayerReinforceArmy() != 0) {
+						if (command.startsWith("reinforce") || command.startsWith("exchangecards")) {
+							if (currentPlayer.getPlayerReinforceArmy() != 0) {
 
-							txtConsoleLog.setText(placeReinforcement(command));
-						} else {
-							sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
-							txtConsoleLog.setText(sb.toString());
+								txtConsoleLog.setText(placeReinforcement(command));
+							} else {
+								sb.append(playerName).append(" 's Reinforcement Phase done.").append(NEWLINE);
+								txtConsoleLog.setText(sb.toString());
 
-						}
+							}
 
-					} else if ((command.startsWith("attack") || command.startsWith("defend")
-							|| command.startsWith("attackmove")) && !fortificationStarted) {
+						} else if ((command.startsWith("attack") || command.startsWith("defend")
+								|| command.startsWith("attackmove")) && !fortificationStarted) {
 
-						if (currentPlayer.getPlayerReinforceArmy() == 0) {
-							txtConsoleLog.setText(attackPhase(command));
-
-						} else {
-							sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
-									.append(NEWLINE);
-							txtConsoleLog.setText(sb.toString());
-						}
-
-					} else if (command.startsWith("fortify")) {
-						if (currentPlayer.getPlayerReinforceArmy() == 0) {
-							if (attackphaseEnded) {
-
-								txtConsoleLog.setText(fortification(command));
+							if (currentPlayer.getPlayerReinforceArmy() == 0) {
+								txtConsoleLog.setText(attackPhase(command));
 
 							} else {
-								sb.append("Please fire \"attack -noattck\" before starting fortification phase")
+								sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
+										.append(NEWLINE);
+								txtConsoleLog.setText(sb.toString());
+							}
+
+						} else if (command.startsWith("fortify")) {
+							if (currentPlayer.getPlayerReinforceArmy() == 0) {
+								if (attackphaseEnded) {
+
+									txtConsoleLog.setText(fortification(command));
+
+								} else {
+									sb.append("Please fire \"attack -noattck\" before starting fortification phase")
+											.append(NEWLINE);
+									txtConsoleLog.setText(sb.toString());
+								}
+							} else {
+								sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
 										.append(NEWLINE);
 								txtConsoleLog.setText(sb.toString());
 							}
 						} else {
-							sb.append("you have left ").append(currentPlayer.getPlayerReinforceArmy()).append(" to reinforcement")
-									.append(NEWLINE);
+							sb.append("Please Enter Valid phase Command").append(NEWLINE);
 							txtConsoleLog.setText(sb.toString());
 						}
+
 					} else {
 						sb.append("Please Enter Valid phase Command").append(NEWLINE);
 						txtConsoleLog.setText(sb.toString());
 					}
-
-				} else {
-					sb.append("Please Enter Valid phase Command").append(NEWLINE);
-					txtConsoleLog.setText(sb.toString());
+					
+					
+				}else {
+					
+					
+					if(currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.AGGRESIVE.toString())) {
+						
+						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("ATTACK");
+						gameplayphase = currentPlayer.executeStrategy("ATTACK",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("FORTIFICATION");
+						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						changeUserTurn();
+						//singleGameMode();
+						
+						
+					}else if(currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.BENEVOLENT.toString())) {
+						
+						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("ATTACK");
+						gameplayphase = currentPlayer.executeStrategy("ATTACK",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("FORTIFICATION");
+						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						changeUserTurn();
+						//singleGameMode();
+						
+					}else if(currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.RANDOM.toString())) {
+						
+						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("ATTACK");
+						gameplayphase = currentPlayer.executeStrategy("ATTACK",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("FORTIFICATION");
+						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						changeUserTurn();
+						//singleGameMode();
+						
+					}else if(currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.CHEATER.toString())) {
+						
+						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("ATTACK");
+						gameplayphase = currentPlayer.executeStrategy("ATTACK",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						
+						subject.setPlayerPhaseViewMessage("FORTIFICATION");
+						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION",gameplayphase);
+						fillTerritoryList();
+						fillAdjacentTerritoryList();
+						txtPhaseView.setText(gameplayphase.getStatus());
+						txtConsoleLog.setText(gameplayphase.getStatus());
+						changeUserTurn();
+						//singleGameMode();
+						
+					}
+					
+					
 				}
+				
+				
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -290,7 +414,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		} else {
 			sb.append("Game Finished ..!");
 		}
-
+		
 	}
 
 	/**
@@ -1073,6 +1197,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		} else {
 			riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
 		}
+		gameplayphase.setRiskMap(riskMap);
 		
 		// System.out.println("===> " + gameplayphase);
 		// System.out.println(riskMap);
@@ -1115,6 +1240,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		subject.setPlayerPhaseViewMessage("REINFORCEMENT");
 		//printPlayerDominationView();
 		subject.setPlayerDominationViewMessage(sb.toString());
+		
+		singleGameMode();
 	}
 
 	/**
@@ -1126,9 +1253,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			if (playerIndex < playerList.size() - 1) {
 				playerIndex++;
-				if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
-					playerIndex = 0;
-				}
+
 			} else {
 				playerIndex = 0;
 			}
@@ -1153,7 +1278,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
 			sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
 
-			if (currentPlayer.getCardListOwnedByPlayer().size() >= 5) {
+			if (currentPlayer.getCardListOwnedByPlayer().size() >= 5 && currentPlayer.getPlayerType().equalsIgnoreCase("human")) {
 
 				sb.append("Your Risk card is more than 5 please exchange it");
 				exchangeRequired = true;
@@ -1168,6 +1293,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			//printPhaseView("REINFORCEMENT");
 			subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+			
+			singleGameMode();
 
 		} else {
 
