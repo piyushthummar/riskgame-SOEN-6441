@@ -26,6 +26,9 @@ public class HumanPlayer implements StrategyInterface {
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
 
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public HumanPlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
@@ -38,7 +41,7 @@ public class HumanPlayer implements StrategyInterface {
 	 */
 	@Override
 	public GamePlayPhase reinforce(GamePlayPhase gamePlayPhase) {
-		// TODO Auto-generated method stub
+		
 		return gamePlayPhase;
 	}
 
@@ -49,7 +52,7 @@ public class HumanPlayer implements StrategyInterface {
 	 */
 	@Override
 	public GamePlayPhase attack(GamePlayPhase gamePlayPhase) {
-		// TODO Auto-generated method stub
+		
 		return gamePlayPhase;
 	}
 
@@ -60,7 +63,7 @@ public class HumanPlayer implements StrategyInterface {
 	 */
 	@Override
 	public GamePlayPhase fortify(GamePlayPhase gamePlayPhase) {
-		// TODO Auto-generated method stub
+		
 		return gamePlayPhase;
 	}
 

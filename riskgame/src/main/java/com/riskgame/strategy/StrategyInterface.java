@@ -16,7 +16,7 @@ import com.riskgame.model.GamePlayPhase;
 public interface StrategyInterface {
 
 	/**
-	 * This method will be omplemented for different strategy for reinforcement as
+	 * This method will be implemented for different strategy for reinforcement as
 	 * well as card exchange.
 	 * 
 	 * @param gps

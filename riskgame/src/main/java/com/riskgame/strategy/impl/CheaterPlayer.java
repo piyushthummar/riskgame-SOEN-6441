@@ -29,11 +29,14 @@ import com.riskgame.strategy.StrategyInterface;
 public class CheaterPlayer implements StrategyInterface {
 
 	public static StringBuilder sb;
-	private static String NEWLINE = System.getProperty("line.separator");
+	//private static String NEWLINE = System.getProperty("line.separator");
 
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
-
+	
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public CheaterPlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();

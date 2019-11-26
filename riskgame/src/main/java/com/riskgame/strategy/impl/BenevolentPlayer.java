@@ -35,6 +35,9 @@ public class BenevolentPlayer implements StrategyInterface {
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
 
+	/**
+	 * Constructor which will initialize object of services
+	 */
 	public BenevolentPlayer() {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
@@ -78,11 +81,8 @@ public class BenevolentPlayer implements StrategyInterface {
 
 				}
 			}
-
 		}
-
 		gamePlayPhase.setStatus(sb.toString());
-
 		return gamePlayPhase;
 	}
 
@@ -107,7 +107,7 @@ public class BenevolentPlayer implements StrategyInterface {
 
 		sb = new StringBuilder();
 		Player currentPlayer = null;
-		PlayerTerritory playerWeakestTerritory = null;
+		//PlayerTerritory playerWeakestTerritory = null;
 		if (gamePlayPhase != null) {
 
 			for (Player player : gamePlayPhase.getPlayerList()) {
@@ -118,75 +118,79 @@ public class BenevolentPlayer implements StrategyInterface {
 					continue;
 				}
 			}
-
 			if (currentPlayer != null) {
 
 				player_occupied_territory = new ArrayList<>();
-				List<Integer> armies_no_list = getListofArmiesValues(currentPlayer.getPlayerterritories());
-				moveArmiesFromStrongToWeakTerritory(armies_no_list, currentPlayer.getPlayerterritories(),
+				List<Integer> noOfArmyList = getListofArmiesValues(currentPlayer.getPlayerterritories());
+				moveArmiesFromStrongToWeakTerritory(noOfArmyList, currentPlayer.getPlayerterritories(),
 						gamePlayPhase);
 
 			}
-
 		}
-
 		return gamePlayPhase;
 	}
 
-	private void moveArmiesFromStrongToWeakTerritory(List<Integer> armies_no_list,
+	/**
+	 * This method will move armies from strong country to weak country
+	 * 
+	 * @param noOfArmyList
+	 * @param playerterritories
+	 * @param gamePlayPhase
+	 */
+	private void moveArmiesFromStrongToWeakTerritory(List<Integer> noOfArmyList,
 			List<PlayerTerritory> playerterritories, GamePlayPhase gamePlayPhase) {
 
-		PlayerTerritory weak_territory = null;
-		PlayerTerritory strong_territory = null;
+		PlayerTerritory weakTerritory = null;
+		PlayerTerritory strongTerritory = null;
 		String message = "";
 		setListofPlayerTerritories(playerterritories);
 
-		List<PlayerTerritory> weak_territories_list = getWeakTerritoriesOfPlayer(armies_no_list, playerterritories);
+		List<PlayerTerritory> weakTerritoriesList = getWeakTerritoriesOfPlayer(noOfArmyList, playerterritories);
 
-		HashMap<String, List<PlayerTerritory>> territory_to_neighbouring = getNeighboursForFortifyPhase(
-				weak_territories_list, gamePlayPhase);
+		HashMap<String, List<PlayerTerritory>> territoryToNeighbouringMap = getNeighboursForFortifyPhase(
+				weakTerritoriesList, gamePlayPhase);
 
-		if (territory_to_neighbouring != null) {
+		if (territoryToNeighbouringMap != null) {
 
-			for (Entry<String, List<PlayerTerritory>> neighbor : territory_to_neighbouring.entrySet()) {
+			for (Entry<String, List<PlayerTerritory>> neighbor : territoryToNeighbouringMap.entrySet()) {
 
-				weak_territory = getTerritoryObjectFromString(weak_territories_list, neighbor.getKey());
+				weakTerritory = getTerritoryObjectFromString(weakTerritoriesList, neighbor.getKey());
 				int max = 0;
-				List<PlayerTerritory> neigbours_list = neighbor.getValue();
+				List<PlayerTerritory> neigboursList = neighbor.getValue();
 
-				if (neigbours_list.size() > 0) {
+				if (neigboursList.size() > 0) {
 
-					for (int neighbours_index = 0; neighbours_index < neigbours_list.size(); neighbours_index++) {
-						if (neigbours_list.get(neighbours_index).getArmyOnterritory() > max) {
-							max = neigbours_list.get(neighbours_index).getArmyOnterritory();
-							strong_territory = neigbours_list.get(neighbours_index);
+					for (int i = 0; i < neigboursList.size(); i++) {
+						if (neigboursList.get(i).getArmyOnterritory() > max) {
+							max = neigboursList.get(i).getArmyOnterritory();
+							strongTerritory = neigboursList.get(i);
 						}
 					}
 					int diff = (int) Math.floor(
-							Math.abs(strong_territory.getArmyOnterritory() - weak_territory.getArmyOnterritory()) / 2);
+							Math.abs(strongTerritory.getArmyOnterritory() - weakTerritory.getArmyOnterritory()) / 2);
 					if (diff < 1) {
 						message += "Fortification not possible because ";
-						message += " Strong Territory Info : [ " + strong_territory.getTerritoryName() + ","
-								+ strong_territory.getArmyOnterritory() + " ] and ";
-						message += " Weak Territory Info : [ " + weak_territory.getTerritoryName() + ","
-								+ weak_territory.getArmyOnterritory() + " ]\n";
+						message += " Strong Territory Info : [ " + strongTerritory.getTerritoryName() + ","
+								+ strongTerritory.getArmyOnterritory() + " ] and ";
+						message += " Weak Territory Info : [ " + weakTerritory.getTerritoryName() + ","
+								+ weakTerritory.getArmyOnterritory() + " ]\n";
 						gamePlayPhase.setStatus(message);
 						continue;
 					} else {
-						weak_territory.setArmyOnterritory(weak_territory.getArmyOnterritory() + diff);
-						strong_territory.setArmyOnterritory(strong_territory.getArmyOnterritory() - diff);
+						weakTerritory.setArmyOnterritory(weakTerritory.getArmyOnterritory() + diff);
+						strongTerritory.setArmyOnterritory(strongTerritory.getArmyOnterritory() - diff);
 						message += "Fortification Successful\n";
-						message += "Strong Territory Info : [ " + strong_territory.getTerritoryName() + ","
-								+ strong_territory.getArmyOnterritory() + " ] and ";
-						message += "Weak Territory Info : [ " + weak_territory.getTerritoryName() + ","
-								+ weak_territory.getArmyOnterritory() + " ]\n";
-						message += diff + " armies moved from " + strong_territory.getTerritoryName() + " to "
-								+ weak_territory.getTerritoryName();
+						message += "Strong Territory Info : [ " + strongTerritory.getTerritoryName() + ","
+								+ strongTerritory.getArmyOnterritory() + " ] and ";
+						message += "Weak Territory Info : [ " + weakTerritory.getTerritoryName() + ","
+								+ weakTerritory.getArmyOnterritory() + " ]\n";
+						message += diff + " armies moved from " + strongTerritory.getTerritoryName() + " to "
+								+ weakTerritory.getTerritoryName();
 						gamePlayPhase.setStatus(message);
 						return;
 					}
 				} else {
-					message += "No Strong Territory Neighbours Found For Territory " + weak_territory.getTerritoryName()
+					message += "No Strong Territory Neighbours Found For Territory " + weakTerritory.getTerritoryName()
 							+ "\n";
 					gamePlayPhase.setStatus(message);
 					continue;
@@ -196,52 +200,79 @@ public class BenevolentPlayer implements StrategyInterface {
 
 	}
 
-	private PlayerTerritory getTerritoryObjectFromString(List<PlayerTerritory> weak_territories_list,
+	/**
+	 * This method will return PlayerTerritoryObject from given TerritoryName and
+	 * list of playerTerritory
+	 * 
+	 * @param weakTerritoryList
+	 * @param territoryName
+	 * @return playerTerritory
+	 */
+	private PlayerTerritory getTerritoryObjectFromString(List<PlayerTerritory> weakTerritoryList,
 			String territoryName) {
-		PlayerTerritory weak_territory_object = null;
-		for (int i = 0; i < weak_territories_list.size(); i++) {
-			if (weak_territories_list.get(i).getTerritoryName().equalsIgnoreCase(territoryName)) {
-				weak_territory_object = weak_territories_list.get(i);
+		PlayerTerritory weakTerritoryObject = null;
+		for (int i = 0; i < weakTerritoryList.size(); i++) {
+			if (weakTerritoryList.get(i).getTerritoryName().equalsIgnoreCase(territoryName)) {
+				weakTerritoryObject = weakTerritoryList.get(i);
 			}
 		}
-		return weak_territory_object;
+		return weakTerritoryObject;
 	}
 
+	/**
+	 * This method will return map for fortify benevolent strategy
+	 * 
+	 * @param currentPlayerTerritory
+	 * @param gamePlay
+	 * @return hashMap of territoryName and List of playerTerritory
+	 */
 	private HashMap<String, List<PlayerTerritory>> getNeighboursForFortifyPhase(
-			List<PlayerTerritory> current_player_territories, GamePlayPhase game_play) {
+			List<PlayerTerritory> currentPlayerTerritory, GamePlayPhase gamePlay) {
 
-		HashMap<String, List<PlayerTerritory>> territory_to_neighbouring = new LinkedHashMap<>();
+		HashMap<String, List<PlayerTerritory>> territoryToNeighbouringMap = new LinkedHashMap<>();
 
-		for (PlayerTerritory player_territory : current_player_territories) {
+		for (PlayerTerritory playerTerritory : currentPlayerTerritory) {
 
-			List<PlayerTerritory> player_own_occupied_neighbours_list = new ArrayList<>();
+			List<PlayerTerritory> playerOwnedneighbourList = new ArrayList<>();
 
-			List<String> neighbourCountriesList = mapManagementImpl.getNeighbourCountriesListByCountryName(
-					game_play.getRiskMap(), player_territory.getTerritoryName());
+			List<String> neighbourCountriesList = mapManagementImpl
+					.getNeighbourCountriesListByCountryName(gamePlay.getRiskMap(), playerTerritory.getTerritoryName());
 
 			for (String country : neighbourCountriesList) {
-				PlayerTerritory territory_object = isPlayerOwnTerritory(country);
-				if (territory_object != null) {
-					player_own_occupied_neighbours_list.add(territory_object);
+				PlayerTerritory territoryObj = isPlayerOwnTerritory(country);
+				if (territoryObj != null) {
+					playerOwnedneighbourList.add(territoryObj);
 				}
 			}
 
-			territory_to_neighbouring.put(player_territory.getTerritoryName(), player_own_occupied_neighbours_list);
+			territoryToNeighbouringMap.put(playerTerritory.getTerritoryName(), playerOwnedneighbourList);
 
 		}
 
-		return territory_to_neighbouring;
+		return territoryToNeighbouringMap;
 	}
 
-	private PlayerTerritory isPlayerOwnTerritory(String territory_name) {
+	/**
+	 * This method will return playerTerritory model by given territoryName
+	 * 
+	 * @param territory_name
+	 * @return model of PlayerTerritory
+	 */
+	private PlayerTerritory isPlayerOwnTerritory(String territoryName) {
 		for (int i = 0; i < player_occupied_territory.size(); i++) {
-			if (player_occupied_territory.get(i).getTerritoryName().equalsIgnoreCase(territory_name)) {
+			if (player_occupied_territory.get(i).getTerritoryName().equalsIgnoreCase(territoryName)) {
 				return player_occupied_territory.get(i);
 			}
 		}
 		return null;
 	}
 
+	/**
+	 * This method will return list of army values of given list of playerTerritory
+	 * 
+	 * @param playerterritories
+	 * @return list of army values
+	 */
 	private List<Integer> getListofArmiesValues(List<PlayerTerritory> playerterritories) {
 
 		List<Integer> armies = new ArrayList<>();
@@ -252,18 +283,30 @@ public class BenevolentPlayer implements StrategyInterface {
 
 	}
 
-	public List<PlayerTerritory> getWeakTerritoriesOfPlayer(List<Integer> armies_no_list,
-			List<PlayerTerritory> player_territories_list) {
-		List<PlayerTerritory> weak_territories_list = new ArrayList<>();
-		int min = Collections.min(armies_no_list);
-		for (int i = 0; i < armies_no_list.size(); i++) {
-			if (armies_no_list.get(i) <= min) {
-				weak_territories_list.add(player_territories_list.get(i));
+	/**
+	 * This method will return list of playerTerritory which is weak by army
+	 * 
+	 * @param noOfArmyList
+	 * @param playerTerritoryList
+	 * @return List of PlayerTerritory
+	 */
+	public List<PlayerTerritory> getWeakTerritoriesOfPlayer(List<Integer> noOfArmyList,
+			List<PlayerTerritory> playerTerritoryList) {
+		List<PlayerTerritory> weakTerritoryList = new ArrayList<>();
+		int min = Collections.min(noOfArmyList);
+		for (int i = 0; i < noOfArmyList.size(); i++) {
+			if (noOfArmyList.get(i) <= min) {
+				weakTerritoryList.add(playerTerritoryList.get(i));
 			}
 		}
-		return weak_territories_list;
+		return weakTerritoryList;
 	}
 
+	/**
+	 * This method will set List of player territories in playerTerritory model.
+	 * 
+	 * @param playerterritories
+	 */
 	private void setListofPlayerTerritories(List<PlayerTerritory> playerterritories) {
 
 		for (PlayerTerritory territory : playerterritories) {
