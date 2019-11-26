@@ -28,6 +28,7 @@ import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.Impl.ConquestMapImpl;
 import com.riskgame.service.Impl.MapManagementImpl;
 import com.riskgame.service.Impl.PlayerHandlerImpl;
+import com.riskgame.strategy.StrategyInterface;
 import com.riskgame.view.FxmlView;
 
 import javafx.collections.FXCollections;
@@ -147,7 +148,7 @@ public class StartupPhaseController implements Initializable {
 
 	private String mapFileName;
 
-	public static final String NEUTRAL = "NEUTRAL";
+	//public static final String NEUTRAL = "NEUTRAL";
 
 	public boolean startGame = false;
 
@@ -439,9 +440,6 @@ public class StartupPhaseController implements Initializable {
 
 		if (playerIndex < playerList.size() - 1) {
 			playerIndex++;
-			if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
-				playerIndex = 0;
-			}
 		} else {
 			playerIndex = 0;
 		}
@@ -603,7 +601,7 @@ public class StartupPhaseController implements Initializable {
 
 		if (validate("Player Name", playerNameText.getText(), "[a-zA-Z]+")
 				&& isValidPlayerName(playerNameText.getText())) {
-			if (!playerNameText.getText().equalsIgnoreCase(NEUTRAL)) {
+			
 
 				if (playerList.size() <= 5) {
 					saveCommonPlayer(playerNameText.getText(), currentPlayerStrategyName);
@@ -613,9 +611,7 @@ public class StartupPhaseController implements Initializable {
 					alertMesage("Max 6 Playes are allowed in the game");
 				}
 
-			} else {
-				alertMesage(NEUTRAL + " name not allowed. this is system generated user");
-			}
+			
 
 		}
 
@@ -640,6 +636,9 @@ public class StartupPhaseController implements Initializable {
 			player.setPlayerType(ComputerStrategy.COMPUTER.toString());
 		}
 		player.setStrategyName(strategy);
+		
+		player.setStrategy((StrategyInterface) playerHandlerImpl.getStrategyByName(strategy));
+		
 		playerList.add(player);
 		loadPlayerDetails();
 		System.out.println(player);
@@ -851,16 +850,6 @@ public class StartupPhaseController implements Initializable {
 	 * to user
 	 */
 	private void commonPopulateCountries() {
-
-		if (playerList.size() == 2 && !playerList.stream().anyMatch(p -> p.getPlayerName().equalsIgnoreCase(NEUTRAL))) {
-
-			Player player = new Player();
-			player.setPlayerId(playerId);
-			player.setPlayerName(NEUTRAL);
-			player.setArmyOwns(0);
-			playerList.add(player);
-
-		}
 
 		GamePlayPhase playPhase = new GamePlayPhase();
 

@@ -120,7 +120,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private static String turnStartedMsg = "";
 	private static String leftArmyMsg = "";
 
-	public static final String NEUTRAL = "NEUTRAL";
+	//public static final String NEUTRAL = "NEUTRAL";
 	private Player currentPlayer;
 
 	private static String NEWLINE = System.getProperty("line.separator");
@@ -1115,6 +1115,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		subject.setPlayerPhaseViewMessage("REINFORCEMENT");
 		//printPlayerDominationView();
 		subject.setPlayerDominationViewMessage(sb.toString());
+		
+		
 	}
 
 	/**
@@ -1126,9 +1128,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			if (playerIndex < playerList.size() - 1) {
 				playerIndex++;
-				if (playerList.get(playerIndex).getPlayerName().equalsIgnoreCase(NEUTRAL)) {
-					playerIndex = 0;
-				}
+
 			} else {
 				playerIndex = 0;
 			}
