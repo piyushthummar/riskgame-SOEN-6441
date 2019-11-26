@@ -148,7 +148,7 @@ public class StartupPhaseController implements Initializable {
 
 	private String mapFileName;
 
-	//public static final String NEUTRAL = "NEUTRAL";
+	// public static final String NEUTRAL = "NEUTRAL";
 
 	public boolean startGame = false;
 
@@ -267,7 +267,6 @@ public class StartupPhaseController implements Initializable {
 						setText(null);
 					}
 				}
-
 				private void viewPlayer(Player player) {
 
 					List<PlayerTerritory> ptList = player.getPlayerterritories();
@@ -282,7 +281,6 @@ public class StartupPhaseController implements Initializable {
 					}
 					txtConsoleLog.clear();
 					txtConsoleLog.setText(builder.toString());
-
 				}
 			};
 			return cell;
@@ -368,14 +366,12 @@ public class StartupPhaseController implements Initializable {
 						if (globGamePlayPhase != null) {
 
 							txtConsoleLog.setText(placeArmyInRoundRobin(command));
-
 						} else {
 							txtConsoleLog.setText("Please fire populatecountries command first");
 						}
 					} else {
 						txtConsoleLog.setText("Placeall command previously executed. Army already assigned");
 					}
-
 				} else if (command.startsWith("placeall")) {
 
 					if (globGamePlayPhase != null) {
@@ -402,6 +398,12 @@ public class StartupPhaseController implements Initializable {
 
 	}
 
+	/**
+	 * This is roundrobin algorithm to placearmy in turn.
+	 * 
+	 * @param commandLine
+	 * @return message string to display in console
+	 */
 	private String placeArmyInRoundRobin(String commandLine) {
 
 		List<String> command = Arrays.asList(commandLine.split(" "));
@@ -420,7 +422,6 @@ public class StartupPhaseController implements Initializable {
 				pTerritory = playerTerritory;
 			}
 		}
-
 		if (pTerritory != null && totalArmyOfPlayer > 0) {
 
 			int army = pTerritory.getArmyOnterritory();
@@ -436,6 +437,12 @@ public class StartupPhaseController implements Initializable {
 		return result;
 	}
 
+	/**
+	 * This method will change user's turn for placearmy country name command to
+	 * placearmy in roundrobin fashion
+	 * 
+	 * @return message to change user's turn
+	 */
 	private String changeUserTurn() {
 
 		if (playerIndex < playerList.size() - 1) {
@@ -446,10 +453,8 @@ public class StartupPhaseController implements Initializable {
 
 		txtCommandLine.clear();
 		txtConsoleLog.clear();
-
 		playerName = playerList.get(playerIndex).getPlayerName();
 		playerTotalArmies = playerList.get(playerIndex).getArmyOwns();
-
 		turnStartedMsg = playerName + "'s turn is started";
 		leftArmyToPlaceMsg = playerName + " is left with total " + playerTotalArmies + " armies to place.";
 		sb.delete(0, sb.length());
@@ -473,7 +478,7 @@ public class StartupPhaseController implements Initializable {
 
 		if (mapNameList.contains(fileName + ".map")) {
 
-			if (mapManagementImpl.isMapConquest(fileName+ ".map")) {
+			if (mapManagementImpl.isMapConquest(fileName + ".map")) {
 				ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
 				MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
 				map = mapInterface.readMap(fileName + ".map");
@@ -601,20 +606,15 @@ public class StartupPhaseController implements Initializable {
 
 		if (validate("Player Name", playerNameText.getText(), "[a-zA-Z]+")
 				&& isValidPlayerName(playerNameText.getText())) {
-			
 
-				if (playerList.size() <= 5) {
-					saveCommonPlayer(playerNameText.getText(), currentPlayerStrategyName);
-					alertMesage("Player saved successfully");
-					clearPlayerFields();
-				} else {
-					alertMesage("Max 6 Playes are allowed in the game");
-				}
-
-			
-
+			if (playerList.size() <= 5) {
+				saveCommonPlayer(playerNameText.getText(), currentPlayerStrategyName);
+				alertMesage("Player saved successfully");
+				clearPlayerFields();
+			} else {
+				alertMesage("Max 6 Playes are allowed in the game");
+			}
 		}
-
 	}
 
 	/**
@@ -636,9 +636,9 @@ public class StartupPhaseController implements Initializable {
 			player.setPlayerType(ComputerStrategy.COMPUTER.toString());
 		}
 		player.setStrategyName(strategy);
-		
+
 		player.setStrategy((StrategyInterface) playerHandlerImpl.getStrategyByName(strategy));
-		
+
 		playerList.add(player);
 		loadPlayerDetails();
 		System.out.println(player);
@@ -870,7 +870,6 @@ public class StartupPhaseController implements Initializable {
 		playertable.getItems().clear();
 		playertable.setItems(playerList);
 		playerId = playerList.size() + 1;
-
 		globGamePlayPhase = playPhase;
 	}
 
@@ -893,7 +892,6 @@ public class StartupPhaseController implements Initializable {
 		} else {
 			result = "Please fire loadmap command first to load your map";
 		}
-
 		return result;
 	}
 
@@ -932,7 +930,6 @@ public class StartupPhaseController implements Initializable {
 				playerTerritory.setArmyOnterritory(0);
 
 			}
-
 		}
 
 		GamePlayPhase playPhase = new GamePlayPhase();
@@ -968,6 +965,9 @@ public class StartupPhaseController implements Initializable {
 		btnPlaceAll.setDisable(false);
 		mapFileName = "";
 		playerList.clear();
+		playerId = 1;
 		loadPlayerDetails();
+		txtConsoleLog.clear();
+		playerIndex = -1;
 	}
 }
