@@ -41,7 +41,6 @@ public class HumanPlayer implements StrategyInterface {
 	 */
 	@Override
 	public GamePlayPhase reinforce(GamePlayPhase gamePlayPhase) {
-		
 		return gamePlayPhase;
 	}
 
