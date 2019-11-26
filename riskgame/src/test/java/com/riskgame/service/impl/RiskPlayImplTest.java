@@ -266,8 +266,8 @@ public class RiskPlayImplTest {
 	@Test
 	public void invalidUpdateArmyAfterCardExchange() {
 		player.setExchangeCount(6);
-		int expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
-		assertNotEquals(25, expectedUpdateArmy);
+		Player playerReturn = riskplay.updateArmyAfterCardExchange(player);
+		assertNotEquals(25, playerReturn.getPlayerReinforceArmy());
 		
 	}
 	/**
@@ -370,7 +370,7 @@ public class RiskPlayImplTest {
 		expectedPlayerTerritory.setContinentName("South-America");
 		expectedPlayerTerritory.setTerritoryName("Argentina");
 		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
-		assertNotEquals(expectedPlayerTerritory, riskplayimpl.getPlayerTerritoryByCountryName("Argentina", player));
+		assertNotEquals(expectedPlayerTerritory, riskplayimpl.getPlayerTerritoryByCountryName("Argentina1", player));
 		
 	}
 	

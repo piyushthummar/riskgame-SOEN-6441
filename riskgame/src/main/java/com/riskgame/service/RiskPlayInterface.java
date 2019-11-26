@@ -59,7 +59,7 @@ public interface RiskPlayInterface {
 	 * @param player
 	 * @return
 	 */
-	int updateArmyAfterCardExchange(Player player);
+	Player updateArmyAfterCardExchange(Player player);
 
 	/**
 	 * This method will be called after card exchange has been done and card need to
@@ -297,4 +297,10 @@ public interface RiskPlayInterface {
 	 * @return List of available saved games
 	 */
 	public List<String> getAvailableGameFiles();
+
+	List<String> getPlayersCountries(Player player);
+
+	PlayerTerritory getPlayerTerritoryByCountry(String countryName, List<Player> playerList);
+
+	int newArmyAfterCardExchange(Player player);
 }

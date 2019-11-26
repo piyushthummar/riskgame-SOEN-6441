@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.aspectj.apache.bcel.util.Play;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -186,8 +187,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @see com.riskgame.service.RiskPlayInterface#updateArmyAfterCardExchange(com.riskgame.model.Player)
 	 */
 	@Override
-	public int updateArmyAfterCardExchange(Player player) {
-		int updatedArmy = 0;
+	public Player updateArmyAfterCardExchange(Player player) {
+		
 		if (player.getExchangeCount() == 0) {
 
 			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 5));
@@ -213,13 +214,41 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 30));
 			player.setExchangeCount(6);
 		} else if (player.getExchangeCount() > 5) {
-			player.setPlayerReinforceArmy(
-					player.getPlayerReinforceArmy() + 30 + ((player.getPlayerReinforceArmy() - 5) * 5));
+			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 35));
 			player.setExchangeCount(player.getExchangeCount() + 1);
 		}
 
-		return updatedArmy;
+		return player;
 
+	}
+	
+	@Override
+	public int newArmyAfterCardExchange(Player player) {
+		int updatedArmy = 0;
+		if (player.getExchangeCount() == 0) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 5;
+			
+		} else if (player.getExchangeCount() == 1) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 10;
+		} else if (player.getExchangeCount() == 2) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 15;
+		} else if (player.getExchangeCount() == 3) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 20;
+		} else if (player.getExchangeCount() == 4) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 25;
+		} else if (player.getExchangeCount() == 5) {
+
+			updatedArmy = player.getPlayerReinforceArmy() + 30;
+		} else if (player.getExchangeCount() > 5) {
+			updatedArmy = player.getPlayerReinforceArmy() + 35;
+		}
+
+		return updatedArmy;
 	}
 
 	/**
@@ -783,8 +812,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 				if (getTotalCountries(gamePlayPhase.getRiskMap()) == player.getPlayerterritories().size()) {
 					gamePlayPhase.setGamePhase("GAME_FINISH");
-					gamePlayPhase.setStatus(
-							"Congratulations ! " + player.getPlayerName() + " You are the Winner of the Game");
+					gamePlayPhase.setStatus(gamePlayPhase.getStatus()+ " \n Congratulations ! " + player.getPlayerName() + " You are the Winner of the Game");
 					gamePlayPhase.setWinner("Player: " + player.getPlayerName() + " Behaviour : "
 							+ player.getPlayerType() + "is Winner");
 				}
@@ -825,19 +853,19 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	/**
 	 * {@inheritDoc}
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * 
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
 	@Override
 	public GamePlayPhase convertJsonFileToObject(String fileName) throws FileNotFoundException, IOException {
 		GamePlayPhase gamePlayPhase = new GamePlayPhase();
 		ObjectMapper mapper = new ObjectMapper();
 		String jsonInString = "";
-		String line="";
+		String line = "";
 		StringBuilder sb = new StringBuilder();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(GAME_DIR_PATH + fileName))) {
-			while((line = bufferedReader.readLine())!=null)
-			{
+			while ((line = bufferedReader.readLine()) != null) {
 				sb.append(line);
 			}
 			jsonInString = sb.toString();
@@ -851,7 +879,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return gamePlayPhase;
 	}
 
@@ -871,5 +899,40 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			e.printStackTrace();
 		}
 		return gameList;
+	}
+
+	@Override
+	public List<String> getPlayersCountries(Player player) {
+
+		List<String> countries = new ArrayList<String>();
+		for (PlayerTerritory territory : player.getPlayerterritories()) {
+
+			countries.add(territory.getTerritoryName());
+
+		}
+		return countries;
+	}
+	
+	@Override
+	public PlayerTerritory getPlayerTerritoryByCountry(String countryName,List<Player> playerList) {
+		PlayerTerritory playerTerritory = null;
+		for (Player player : playerList) {
+			
+			List<PlayerTerritory> playerTerritories = player.getPlayerterritories();
+			for (PlayerTerritory playercountry : playerTerritories) {
+				
+				
+				if(playercountry.getContinentName().equalsIgnoreCase(countryName)) {
+					
+					playerTerritory = playercountry;
+					return playerTerritory;
+					
+				}
+				
+			}
+			
+			
+		}
+		return playerTerritory;
 	}
 }
