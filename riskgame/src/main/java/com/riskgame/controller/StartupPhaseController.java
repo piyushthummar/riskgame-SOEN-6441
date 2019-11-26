@@ -576,7 +576,7 @@ public class StartupPhaseController implements Initializable {
 		if (validateInput(strategy, "[a-zA-Z]+")) {
 			List<StrategyType> list = Arrays.asList(strategyArray);
 			List<String> stringlist = list.stream().map(e -> e.toString().toLowerCase()).collect(Collectors.toList());
-			if (stringlist.contains(strategy)) {
+			if (stringlist.contains(strategy.toLowerCase())) {
 				return true;
 			} else
 				return false;

@@ -277,8 +277,9 @@ public interface RiskPlayInterface {
 	 * This method will give total countries from the map.
 	 * 
 	 * @param riskmap of current game
+	 * @return 
 	 */
-	void checkForWinner(GamePlayPhase gamePlayPhase);
+	GamePlayPhase checkForWinner(GamePlayPhase gamePlayPhase);
 
 	/**
 	 * This method will give total countries from the map.

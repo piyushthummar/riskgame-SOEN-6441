@@ -828,7 +828,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 * @param gamePlayPhase Current gamePlayPhase
 	 */
 	@Override
-	public void checkForWinner(GamePlayPhase gamePlayPhase) {
+	public GamePlayPhase checkForWinner(GamePlayPhase gamePlayPhase) {
 
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
@@ -839,11 +839,14 @@ public class RiskPlayImpl implements RiskPlayInterface {
 							+ player.getPlayerName() + " You are the Winner of the Game");
 					gamePlayPhase.setWinner("Player: " + player.getPlayerName() + " Behaviour : "
 							+ player.getPlayerType() + "is Winner");
+					
+					return gamePlayPhase;
 				}
 
 				break;
 			}
 		}
+		return gamePlayPhase;
 
 	}
 

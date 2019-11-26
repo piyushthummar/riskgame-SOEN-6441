@@ -98,11 +98,11 @@ public class Player {
 	 * @return updated GamePlayPhase object
 	 */
 	public GamePlayPhase executeStrategy(String methodName, GamePlayPhase gamePlayPhase) {
-		if (methodName.equalsIgnoreCase("REINFORCE")) {
+		if (methodName.equalsIgnoreCase("REINFORCEMENT")) {
 			this.strategy.reinforce(gamePlayPhase);
 		} else if (methodName.equalsIgnoreCase("ATTACK")) {
 			this.strategy.attack(gamePlayPhase);
-		} else if (methodName.equalsIgnoreCase("FORTIFY")) {
+		} else if (methodName.equalsIgnoreCase("FORTIFICATION")) {
 			this.strategy.fortify(gamePlayPhase);
 		}
 
