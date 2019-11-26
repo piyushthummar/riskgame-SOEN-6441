@@ -13,8 +13,8 @@ import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 
 /**
- * This is a interface of RiskPlayGame business logic. Where reinforcement,attack
- * and fortification happens.
+ * This is a interface of RiskPlayGame business logic. Where
+ * reinforcement,attack and fortification happens.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @see com.riskgame.model.RiskMap
@@ -39,7 +39,7 @@ public interface RiskPlayInterface {
 	 * at the phase of reinforcement
 	 * 
 	 * @param noOfCountries
-	 * @return
+	 * @return List of riskcard
 	 */
 	List<RiskCard> makeCards(int noOfCountries);
 
@@ -56,7 +56,7 @@ public interface RiskPlayInterface {
 	 * This method will update armyCount after card exchange
 	 * 
 	 * @param player
-	 * @return
+	 * @return player model
 	 */
 	Player updateArmyAfterCardExchange(Player player);
 
@@ -91,7 +91,7 @@ public interface RiskPlayInterface {
 	boolean validateToCountry(String fromCountry, String toCountry, RiskMap riskMap, Player player);
 
 	/**
-	 * This method wil validate the number of dice given by attacker
+	 * This method will validate the number of dice given by attacker
 	 * 
 	 * @param dies
 	 * @param fromCountry
@@ -156,8 +156,23 @@ public interface RiskPlayInterface {
 	 */
 	RiskCard getCardBycardNumberofPlayer(Player player, int cardNumber);
 
+	/**
+	 * This method will return percentage string of percentage of map covered by
+	 * given player
+	 * 
+	 * @param player
+	 * @param totalCountry
+	 * @return
+	 */
 	String getPlayerPercentageByCountry(Player player, int totalCountry);
 
+	/**
+	 * This method will return army count of given player
+	 * 
+	 * @param players
+	 * @param currentPlayer
+	 * @return army count of player
+	 */
 	int getTotalArmyByPlayer(List<Player> players, Player currentPlayer);
 
 	/**
@@ -195,6 +210,14 @@ public interface RiskPlayInterface {
 	 */
 	PlayerTerritory getStrongestTerritory(Player player);
 
+	/**
+	 * This method will return list of continent whose all countries occupied by
+	 * given player in given map
+	 * 
+	 * @param player
+	 * @param fileName
+	 * @return list of continent
+	 */
 	List<String> getContinentControlledByPlayer(Player player, String fileName);
 
 	/**
