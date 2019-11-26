@@ -21,7 +21,11 @@ import com.riskgame.model.RiskMap;
 import com.riskgame.model.Territory;
 import com.riskgame.service.ConquestMapInterface;
 
-
+/**
+ * 
+ * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
+ * @version 1.0.0
+ */
 public class ConquestMapImpl implements ConquestMapInterface {
 
 	public static final String MAP_DIR_PATH = "src/main/resources/maps/";
@@ -29,15 +33,16 @@ public class ConquestMapImpl implements ConquestMapInterface {
 	enum FileDivider {
 		MAP, CONTINENT, TERRITORY;
 	}
-//	public static void main(String[] args) {
-//		ConquestMapImpl impl = new ConquestMapImpl();
-//		impl.readMap("India.map");
-//	}
 
 	private FileDivider currentSection;
 	private Map<Integer, Continent> continentMap;
 	private List<Territory> territoryList;
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.ConquestMapInterface#saveMapToFile(com.riskgame.model.RiskMap)
+	 */
 	@Override
 	public boolean saveMapToFile(RiskMap riskMap)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
@@ -113,6 +118,11 @@ public class ConquestMapImpl implements ConquestMapInterface {
 		return result;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.ConquestMapInterface#readMap(java.lang.String)
+	 */
 	@Override
 	public RiskMap readMap(String fileName) {
 
@@ -159,6 +169,10 @@ public class ConquestMapImpl implements ConquestMapInterface {
 		return riskMap;
 	}
 
+	/**
+	 * This method will set List of territory in Continent model which was read from
+	 * conquest map
+	 */
 	private void setTerritoryListinContinent() {
 		for (Entry<Integer, Continent> entry : continentMap.entrySet()) {
 			Continent c = entry.getValue();
@@ -172,6 +186,13 @@ public class ConquestMapImpl implements ConquestMapInterface {
 		}
 	}
 
+	/**
+	 * This method will set territory to map object which will be helpful to create
+	 * conquest type map
+	 * 
+	 * @param mapline        is the line of map
+	 * @param territoryCount is index of territory
+	 */
 	private void setTerritoriesToMapObject(String mapline, int territoryCount) {
 		if (mapline.length() > 0) {
 			List<String> neighbourTerritories = new ArrayList<String>();
@@ -195,6 +216,12 @@ public class ConquestMapImpl implements ConquestMapInterface {
 		}
 	}
 
+	/**
+	 * This method will set continent to map object (model)
+	 * 
+	 * @param mapline        is the current line in map
+	 * @param continentCount is the current continent index
+	 */
 	private void setContinentsToMapObject(String mapline, int continentCount) {
 		if (mapline.length() > 0) {
 			Continent continent = new Continent();
