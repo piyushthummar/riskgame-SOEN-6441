@@ -17,12 +17,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.aspectj.apache.bcel.util.Play;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -147,6 +146,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return controlvalueTosend;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getContinentControlledByPlayer(com.riskgame.model.Player,
+	 *      java.lang.String)
+	 */
 	@Override
 	public List<String> getContinentControlledByPlayer(Player player, String fileName) {
 		List<String> continentLst = new ArrayList<String>();
@@ -176,9 +181,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 			}
 		}
-
 		return continentLst;
-
 	}
 
 	/**
@@ -188,7 +191,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 */
 	@Override
 	public Player updateArmyAfterCardExchange(Player player) {
-		
+
 		if (player.getExchangeCount() == 0) {
 
 			player.setPlayerReinforceArmy((player.getPlayerReinforceArmy() + 5));
@@ -221,14 +224,19 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return player;
 
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#newArmyAfterCardExchange(com.riskgame.model.Player)
+	 */
 	@Override
 	public int newArmyAfterCardExchange(Player player) {
 		int updatedArmy = 0;
 		if (player.getExchangeCount() == 0) {
 
 			updatedArmy = player.getPlayerReinforceArmy() + 5;
-			
+
 		} else if (player.getExchangeCount() == 1) {
 
 			updatedArmy = player.getPlayerReinforceArmy() + 10;
@@ -576,6 +584,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return riskCardReturn;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getPlayerPercentageByCountry(com.riskgame.model.Player,
+	 *      int)
+	 */
 	@Override
 	public String getPlayerPercentageByCountry(Player player, int totalCountry) {
 
@@ -586,6 +600,12 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getTotalArmyByPlayer(java.util.List,
+	 *      com.riskgame.model.Player)
+	 */
 	@Override
 	public int getTotalArmyByPlayer(List<Player> players, Player currentPlayer) {
 
@@ -605,7 +625,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method prepares a CardTrade Object for any Computer Player
+	 * {@inheritDoc} This method prepares a CardTrade Object for any Computer Player
 	 * 
 	 * @param currentPlayer Current player who is about to exchange card
 	 * @return RiskCardExchange has the set of three cards to be exchange
@@ -654,7 +674,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method exchange cards during reinforcement phase of the game
+	 * {@inheritDoc} This method exchange cards during reinforcement phase of the
+	 * game
 	 * 
 	 * @param gamePlayPhase State of the game at point of time holding the entire
 	 *                      info about game. Like the current phase and player.
@@ -712,8 +733,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method updates current player's card list also free card lists after
-	 * player's exchange cards
+	 * {@inheritDoc} This method updates current player's card list also free card
+	 * lists after player's exchange cards
 	 * 
 	 * @param player        current Player.
 	 * @param freeRiskCards list of freeRiskCards
@@ -738,7 +759,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method finds and returns the strongest territory that the current player
+	 * {@inheritDoc} This method finds and returns the strongest territory that the
+	 * current player
 	 * 
 	 * @param player Currently player in game.
 	 * @return PlayerTerritory Strongest Territory.
@@ -757,7 +779,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method finds and returns the weakest territory that the current player
+	 * {@inheritDoc} This method finds and returns the weakest territory that the
+	 * current player
 	 * 
 	 * @param player Currently player in game.
 	 * @return PlayerTerritory weakest Territory.
@@ -782,7 +805,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method will give total countries from the map.
+	 * {@inheritDoc} This method will give total countries from the map.
 	 * 
 	 * @param riskmap of current game
 	 */
@@ -800,7 +823,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 
 	/**
-	 * This method is used for current player is winner or not
+	 * {@inheritDoc} This method is used for current player is winner or not
 	 * 
 	 * @param gamePlayPhase Current gamePlayPhase
 	 */
@@ -812,7 +835,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 				if (getTotalCountries(gamePlayPhase.getRiskMap()) == player.getPlayerterritories().size()) {
 					gamePlayPhase.setGamePhase("GAME_FINISH");
-					gamePlayPhase.setStatus(gamePlayPhase.getStatus()+ " \n Congratulations ! " + player.getPlayerName() + " You are the Winner of the Game");
+					gamePlayPhase.setStatus(gamePlayPhase.getStatus() + " \n Congratulations ! "
+							+ player.getPlayerName() + " You are the Winner of the Game");
 					gamePlayPhase.setWinner("Player: " + player.getPlayerName() + " Behaviour : "
 							+ player.getPlayerType() + "is Winner");
 				}
@@ -885,6 +909,8 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	/**
 	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getAvailableGameFiles()
 	 */
 	@Override
 	public List<String> getAvailableGameFiles() {
@@ -901,6 +927,11 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		return gameList;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getPlayersCountries(com.riskgame.model.Player)
+	 */
 	@Override
 	public List<String> getPlayersCountries(Player player) {
 
@@ -912,26 +943,30 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		return countries;
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.RiskPlayInterface#getPlayerTerritoryByCountry(java.lang.String,
+	 *      java.util.List)
+	 */
 	@Override
-	public PlayerTerritory getPlayerTerritoryByCountry(String countryName,List<Player> playerList) {
+	public PlayerTerritory getPlayerTerritoryByCountry(String countryName, List<Player> playerList) {
 		PlayerTerritory playerTerritory = null;
 		for (Player player : playerList) {
-			
+
 			List<PlayerTerritory> playerTerritories = player.getPlayerterritories();
 			for (PlayerTerritory playercountry : playerTerritories) {
-				
-				
-				if(playercountry.getContinentName().equalsIgnoreCase(countryName)) {
-					
+
+				if (playercountry.getContinentName().equalsIgnoreCase(countryName)) {
+
 					playerTerritory = playercountry;
 					return playerTerritory;
-					
+
 				}
-				
+
 			}
-			
-			
+
 		}
 		return playerTerritory;
 	}

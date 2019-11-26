@@ -581,6 +581,10 @@ public class MapManagementImpl implements MapManagementInterface {
 		return result;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * @see com.riskgame.service.MapManagementInterface#isMapConquest(java.lang.String)
+	 */
 	@Override
 	public boolean isMapConquest(String fileName) {
 		String mapline = "";

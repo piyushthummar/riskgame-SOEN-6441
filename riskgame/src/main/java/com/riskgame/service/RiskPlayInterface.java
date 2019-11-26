@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
@@ -14,7 +13,7 @@ import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 
 /**
- * This is a interface of RiskPlayGame buiness logic. Where reinforcement,attack
+ * This is a interface of RiskPlayGame business logic. Where reinforcement,attack
  * and fortification happens.
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
@@ -277,30 +276,52 @@ public interface RiskPlayInterface {
 	 * This method will convert gameplayphase object to JSON file and save the game
 	 * 
 	 * @param gamePlayPhase current phase of game
-	 * @throws FileNotFoundException, IOException 
-	 * @throws UnsupportedEncodingException 
+	 * @throws FileNotFoundException,       IOException
+	 * @throws UnsupportedEncodingException
 	 */
-	void convertObjectToJsonFile(GamePlayPhase gamePlayPhase, String fileName) throws UnsupportedEncodingException, FileNotFoundException, IOException;
+	void convertObjectToJsonFile(GamePlayPhase gamePlayPhase, String fileName)
+			throws UnsupportedEncodingException, FileNotFoundException, IOException;
 
 	/**
 	 * This method will convert JSON file to GamePlayPhase object while loading game
 	 * 
 	 * @param fileName is JSON file which you want to load
 	 * @return GamePlayPhase object
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
+	 * @throws IOException
+	 * @throws FileNotFoundException
 	 */
 	GamePlayPhase convertJsonFileToObject(String fileName) throws FileNotFoundException, IOException;
-	
+
 	/**
 	 * This method will return list of available saved game file's names
+	 * 
 	 * @return List of available saved games
 	 */
 	public List<String> getAvailableGameFiles();
 
+	/**
+	 * This method will return list of player names of given player
+	 * 
+	 * @param player
+	 * @return list of player country's names
+	 */
 	List<String> getPlayersCountries(Player player);
 
+	/**
+	 * This method will given playerTerritory model of given country name and list
+	 * of playerList
+	 * 
+	 * @param countryName
+	 * @param playerList
+	 * @return PlayerTerritory object (model)
+	 */
 	PlayerTerritory getPlayerTerritoryByCountry(String countryName, List<Player> playerList);
 
+	/**
+	 * This method will return new army count after every time player exchange cards
+	 * 
+	 * @param player
+	 * @return no of increasing army count after card exchange
+	 */
 	int newArmyAfterCardExchange(Player player);
 }
