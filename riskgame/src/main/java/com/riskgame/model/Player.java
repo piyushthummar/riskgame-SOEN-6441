@@ -109,6 +109,11 @@ public class Player {
 		return gamePlayPhase;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns

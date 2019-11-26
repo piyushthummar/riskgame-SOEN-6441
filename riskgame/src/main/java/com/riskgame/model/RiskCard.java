@@ -17,19 +17,24 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RiskCard {
-	
+
 	/**
 	 * This data member indicate card number
 	 */
 	private int cardNumber;
-	
+
 	/**
 	 * It indicate types of army i.e. Infantry, cavilary etc.
 	 */
 	private String armyType;
-	
+
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
 		return "RiskCard [cardNumber=" + cardNumber + ", armyType=" + armyType + "]";
-	}	
+	}
 }

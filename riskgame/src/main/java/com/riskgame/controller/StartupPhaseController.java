@@ -16,7 +16,7 @@ import org.springframework.stereotype.Controller;
 
 import com.riskgame.adapter.DominationToConquestAdapter;
 import com.riskgame.config.StageManager;
-import com.riskgame.constant.COMPUTERSTRATEGY;
+import com.riskgame.constant.ComputerStrategy;
 import com.riskgame.constant.HumanStrategy;
 import com.riskgame.constant.StrategyType;
 import com.riskgame.model.GamePlayPhase;
@@ -637,7 +637,7 @@ public class StartupPhaseController implements Initializable {
 		if (strategy.equalsIgnoreCase(HumanStrategy.HUMAN.toString())) {
 			player.setPlayerType(HumanStrategy.HUMAN.toString());
 		} else {
-			player.setPlayerType(COMPUTERSTRATEGY.COMPUTER.toString());
+			player.setPlayerType(ComputerStrategy.COMPUTER.toString());
 		}
 		player.setStrategyName(strategy);
 		playerList.add(player);
