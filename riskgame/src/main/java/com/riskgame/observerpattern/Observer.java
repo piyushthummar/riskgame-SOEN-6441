@@ -4,8 +4,8 @@
 package com.riskgame.observerpattern;
 
 /**
- * This is the Observer class.
- * @author PIYUSH
+ * This is the Observer class for implementing observer-pattern.
+ * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
  * 
  */
 public abstract class Observer {

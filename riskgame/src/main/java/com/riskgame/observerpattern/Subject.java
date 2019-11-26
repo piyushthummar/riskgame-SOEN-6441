@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * This class is Subject class to implement the observer pattern.
- * @author PIYUSH
+ * @author <a href="mailto:p_thumma@encs.concordia.ca">Piyush Thummar</a>
  *
  */
 public class Subject {
@@ -24,7 +24,7 @@ public class Subject {
 	private String playerCardExchangeViewMessage;
 	
 	/**
-	 * This method will notify all oberver the changes were happened
+	 * This method will notify all obervers the changes that were happened
 	 */
 	public void notifyAllObservers()
 	{
@@ -34,21 +34,45 @@ public class Subject {
 		}
 	}
 	
+	/**
+	 * This method gives the update message
+	 * @return message
+	 */
 	public String getMessage() {
 		return message;
 	}
+	/**
+	 * This method sets the update message
+	 * @param message
+	 */
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	/**
+	 * This method gives the current state of the game
+	 * @return state
+	 */
 	public String getState() {
 		return state;
 	}
+	/**
+	 * This method sets the current state of the game
+	 * @param state
+	 */
 	public void setState(String state) {
 		this.state = state;
 	}
+	/**
+	 * This method gives the current phase of the game
+	 * @return
+	 */
 	public String getPhase() {
 		return phase;
 	}
+	/**
+	 * This method sets the current phase of the game
+	 * @param phase
+	 */
 	public void setPhase(String phase) {
 		this.phase = phase;
 	}
@@ -97,14 +121,14 @@ public class Subject {
 		}
 	}
 	/**
-	 * This method will get fortification message for fortification phase
+	 * This method will get fortification message for fortification phase.
 	 * @return fortification message
 	 */
 	public String getFortificationMessage() {
 		return fortificationMessage;
 	}
 	/**
-	 * This method will set fortification message for fortification phase
+	 * This method will set fortification message for fortification phase.
 	 * @param fortificationMessage
 	 */
 	public void setFortificationMessage(String fortificationMessage) {
@@ -117,10 +141,18 @@ public class Subject {
 		}
 	}
 	
+	/**
+	 * This method gives the message for playerWorldDominationView.
+	 * @return playerDominationViewMessage
+	 */
 	public String getPlayerDominationViewMessage() {
 		return playerDominationViewMessage;
 	}
 	
+	/**
+	 * This method sets the message for playerWorldDominationView.
+	 * @param playerDominationViewMessage
+	 */
 	public void setPlayerDominationViewMessage(String playerDominationViewMessage) {
 		this.playerDominationViewMessage = playerDominationViewMessage;
 		
@@ -132,10 +164,18 @@ public class Subject {
 	}
 	
 	
+	/**
+	 * This method gives the message for getPlayerPhaseView.
+	 * @return getPlayerPhaseViewMessage
+	 */
 	public String getPlayerPhaseViewMessage() {
 		return playerPhaseViewMessage;
 	}
 
+	/**
+	 * This method sets the message for getPlayerPhaseView.
+	 * @param playerPhaseViewMessage
+	 */
 	public void setPlayerPhaseViewMessage(String playerPhaseViewMessage) {
 		this.playerPhaseViewMessage = playerPhaseViewMessage;
 		
@@ -145,10 +185,18 @@ public class Subject {
 		}
 	}
 	
+	/**
+	 * This method gives the message for getPlayerCardExchangeView.
+	 * @return getPlayerCardExchangeViewMessage
+	 */
 	public String getPlayerCardExchangeViewMessage() {
 		return playerCardExchangeViewMessage;
 	}
 
+	/**
+	 * This method gives the message for getPlayerCardExchangeView.
+	 * @param playerCardExchangeViewMessage
+	 */
 	public void setPlayerCardExchangeViewMessage(String playerCardExchangeViewMessage) {
 		this.playerCardExchangeViewMessage = playerCardExchangeViewMessage;
 		
@@ -159,7 +207,7 @@ public class Subject {
 	}
 
 	/**
-	 * This method will attack observer to subject
+	 * This method will attach observer to subject.
 	 * @param observer
 	 */
 	public void attach(Observer observer)
