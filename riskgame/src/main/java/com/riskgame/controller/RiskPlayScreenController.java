@@ -465,10 +465,23 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			if (player.getPlayerName().equals(playerName)) {
 
-				RiskCard riskCard = cardList.get(0);
-				player.getCardListOwnedByPlayer().add(riskCard);
-				sb.append(riskCard).append(" Assigned to ").append(playerName).append(NEWLINE);
-				break;
+				if(cardList.size()>0) {
+					
+					RiskCard riskCard = cardList.get(0);
+					player.getCardListOwnedByPlayer().add(riskCard);
+					sb.append(riskCard).append(" Assigned to ").append(playerName).append(NEWLINE);
+					
+					cardList.remove(0);
+					gameplayphase.setRiskCardList(cardList);
+					
+					System.out.println("Card Size ==> " + gameplayphase.getRiskCardList().size());
+
+					System.out.println("Card ==> " + gameplayphase.getRiskCardList());
+					
+					break;
+				}
+				
+				
 			}
 
 		}
@@ -478,14 +491,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		// gameplayphase.getRiskCardList().listIterator();
 
 		// List<RiskCard> riskcardList = gameplayphase.getRiskCardList();
-		cardList.remove(0);
-		gameplayphase.setRiskCardList(cardList);
+		
 
 		// gameplayphase.setRiskCardList(riskcardList);
 
-		System.out.println("Card Size ==> " + gameplayphase.getRiskCardList().size());
-
-		System.out.println("Card ==> " + gameplayphase.getRiskCardList());
+		
 
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
@@ -952,7 +962,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 								if (player.getPlayerName().equals(currentPlayer.getPlayerName())) {
 
-									player.setExchangeCount(count + 1);
+									player.setExchangeCount(player.getExchangeCount() + 1);
+									currentPlayer.setExchangeCount(currentPlayer.getExchangeCount()+1);
 
 									ListIterator<RiskCard> cards = player.getCardListOwnedByPlayer().listIterator();
 									while (cards.hasNext()) {
@@ -970,8 +981,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 //							playerReinforceArmy = playerReinforceArmy
 //									+ riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
-							
-							currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy() + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
+					
+							currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
 
 							leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
 							sb.append(leftArmyMsg).append(NEWLINE);
@@ -1089,7 +1100,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(
 				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
 		
-		currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy()+riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
+		currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
 
 		turnStartedMsg = playerName + "'s turn is started";
 		leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
@@ -1136,7 +1147,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(
 					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
 			
-			currentPlayer.setPlayerReinforceArmy(currentPlayer.getPlayerReinforceArmy()+riskPlayImpl.updateArmyAfterCardExchange(currentPlayer));
+			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
 
 			turnStartedMsg = playerName + "'s turn is started";
 			leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
@@ -1296,12 +1307,23 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		excahangeCardView.append(currentPlayer.getPlayerName()).append(" cardexchange view :").append(NEWLINE);
 		excahangeCardView.append("Risk Cards:").append(NEWLINE);
 
-		for (RiskCard riskCard : currentPlayer.getCardListOwnedByPlayer()) {
+		
+		for (Player player : playerList) {
 
-			excahangeCardView.append("cardNumber: ").append(riskCard.getCardNumber()).append(" armyType: ")
-					.append(riskCard.getArmyType()).append(NEWLINE);
+			if (player.getPlayerName().equals(currentPlayer.getPlayerName())) {
+
+				for (RiskCard riskCard : player.getCardListOwnedByPlayer()) {
+
+					excahangeCardView.append("cardNumber: ").append(riskCard.getCardNumber()).append(" armyType: ")
+							.append(riskCard.getArmyType()).append(NEWLINE);
+
+				}
+				break;
+			}
 
 		}
+		
+		
 		txtCardExchangeView.setText(excahangeCardView.toString());
 
 	}

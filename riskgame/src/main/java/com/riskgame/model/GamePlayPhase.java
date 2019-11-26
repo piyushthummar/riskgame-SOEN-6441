@@ -4,6 +4,7 @@
 package com.riskgame.model;
 
 import java.util.List;
+import java.util.Observable;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +21,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class GamePlayPhase {
+public class GamePlayPhase extends Observable {
 	
 	/**
 	 * It'll manage list of player in that particlaur state of game

@@ -19,6 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PlayerTerritory {
+	
 	/**
 	 * name of the continent of that particular player's territory
 	 */
@@ -38,6 +39,23 @@ public class PlayerTerritory {
 	public String toString() {
 		return "PlayerTerritory [continentName=" + continentName + ", territoryName=" + territoryName
 				+ ", armyOnterritory=" + armyOnterritory + "]"+"\n";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PlayerTerritory other = (PlayerTerritory) obj;
+		if (territoryName == null) {
+			if (other.territoryName != null)
+				return false;
+		} else if (!territoryName.equals(other.territoryName))
+			return false;
+		return true;
 	}
 
 }
