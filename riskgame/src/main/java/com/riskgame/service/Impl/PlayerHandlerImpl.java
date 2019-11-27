@@ -190,6 +190,11 @@ public class PlayerHandlerImpl implements PlayerHandlerInterface {
 		return gamePlayPhase;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * @see com.riskgame.service.PlayerHandlerInterface#getStrategyByName(String)
+	 */
 	@Override
 	public Object getStrategyByName(String strategy) {
 		

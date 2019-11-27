@@ -961,10 +961,10 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			List<PlayerTerritory> playerTerritories = player.getPlayerterritories();
 			for (PlayerTerritory playercountry : playerTerritories) {
 
-				if (playercountry.getContinentName().equalsIgnoreCase(countryName)) {
+				if (playercountry.getTerritoryName().equalsIgnoreCase(countryName)) {
 
-					playerTerritory = playercountry;
-					return playerTerritory;
+					
+					return playercountry;
 
 				}
 
