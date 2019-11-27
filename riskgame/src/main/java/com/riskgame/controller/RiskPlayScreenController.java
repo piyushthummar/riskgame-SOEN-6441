@@ -212,10 +212,48 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 */
 	@FXML
 	void fireCommand(ActionEvent event) {
-
-		singleGameMode();
-		String command = "";
-		//commandTournament(command);
+		
+		String command = txtCommandLine.getText();
+		
+		try {
+			
+			if (command != null && !command.isEmpty()) {
+				
+				String[] dataArray = command.split(" ");
+				List<String> commandData = Arrays.asList(dataArray);
+				
+				if (commandData.get(0).equals("tournament") && commandData.size() == 9) {
+					
+					
+					txtConsoleLog.setText(commandTournament(command));
+					
+				}else if(commandData.get(0).equalsIgnoreCase("showmap")) {
+					
+					txtConsoleLog.setText(gameplayphase.getRiskMap().toString());
+					
+				}else if(commandData.get(0).equalsIgnoreCase("savegame") || commandData.get(0).equalsIgnoreCase("loadgame")) {
+					
+					txtConsoleLog.setText(commandData.get(0));
+					
+				}else if(gameplayphase.getAction().equalsIgnoreCase("startgame")) {
+					
+					singleGameMode();
+					
+				}else {
+					txtConsoleLog.setText("Please Enter Valid Command");
+				}
+				
+				
+			}else {
+				txtConsoleLog.setText("Please Enter Valid Command");
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			txtConsoleLog.setText("Please Enter Valid Command");
+		}
+		
+	
 	}
 
 	/**
@@ -301,174 +339,22 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					if (currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.AGGRESIVE.toString())) {
 
 						System.out.println("Inside AGGRESIVE with type: "+currentPlayer.getPlayerType()+" strategy: "+currentPlayer.getStrategyName()+" name:"+ currentPlayer.getPlayerName()+ " index: "+playerIndex+" id: "+currentPlayer.getPlayerId());
-						
-						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("ATTACK");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("ATTACK", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("FORTIFICATION");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-						
-						changeUserTurn();
-						// singleGameMode();
+						callStrategy();
 
 					} else if (currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.BENEVOLENT.toString())) {
 
 						System.out.println("Inside BENEVOLENT with type: "+currentPlayer.getPlayerType()+" strategy: "+currentPlayer.getStrategyName()+" name:"+ currentPlayer.getPlayerName()+ " index: "+playerIndex+" id: "+currentPlayer.getPlayerId());
-						
-						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("ATTACK");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("ATTACK", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("FORTIFICATION");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-						
-						changeUserTurn();
-						// singleGameMode();
+						callStrategy();
 
 					} else if (currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.RANDOM.toString())) {
 						
 						System.out.println("Inside RANDOM with type: "+currentPlayer.getPlayerType()+" strategy: "+currentPlayer.getStrategyName()+" name:"+ currentPlayer.getPlayerName()+ " index: "+playerIndex+" id: "+currentPlayer.getPlayerId());
-						
-						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("ATTACK");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("ATTACK", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("FORTIFICATION");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						txtPhaseView.setText(gameplayphase.getStatus());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-						
-						changeUserTurn();
-						// singleGameMode();
+						callStrategy();
 
 					} else if (currentPlayer.getStrategyName().equalsIgnoreCase(StrategyType.CHEATER.toString())) {
 						
 						System.out.println("Inside CHEATER with type: "+currentPlayer.getPlayerType()+" strategy: "+currentPlayer.getStrategyName()+" name:"+ currentPlayer.getPlayerName()+ " index: "+playerIndex+" id: "+currentPlayer.getPlayerId());
-
-						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-				System.out.println("Before CHEATER reinforce => "+playerList.get(playerIndex).getPlayerterritories());
-						gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-				System.out.println("after CHEATER reinforce => "+playerList.get(playerIndex).getPlayerterritories());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("ATTACK");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-				System.out.println("Before CHEATER attack => "+playerList.get(playerIndex).getPlayerterritories());
-						gameplayphase = currentPlayer.executeStrategy("ATTACK", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-				System.out.println("After CHEATER attack => "+playerList.get(playerIndex).getPlayerterritories());
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-
-						subject.setPlayerPhaseViewMessage("FORTIFICATION");
-						gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
-						gameplayphase.setPlayerList(playerList);
-				System.out.println("Before CHEATER fortify => "+playerList.get(playerIndex).getPlayerterritories());			
-						gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
-						//playerList.clear();
-						//playerList.addAll(gameplayphase.getPlayerList());
-				System.out.println("after CHEATER fortify => "+playerList.get(playerIndex).getPlayerterritories());						
-						fillTerritoryList();
-						fillAdjacentTerritoryList();
-						//txtPhaseView.setText(gameplayphase.getStatus());
-						txtPhaseView.setText(phaseView.append(sb.toString()).toString());
-						txtConsoleLog.setText(gameplayphase.getStatus());
-						
-						changeUserTurn();
-						// singleGameMode();
+						callStrategy();
 
 					}
 				}
@@ -490,6 +376,55 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			txtConsoleLog.setText("Congratulations! "+currentPlayer.getPlayerName()+ " won the Game. Type: "+currentPlayer.getPlayerType()+ " Strategy: "+currentPlayer.getStrategyName());
 		}
 
+	}
+	
+	public void callStrategy() {
+		
+		subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+		gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+		gameplayphase.setPlayerList(playerList);
+System.out.println("Before reinforce => "+playerList.get(playerIndex).getPlayerterritories());
+		gameplayphase = currentPlayer.executeStrategy("REINFORCEMENT", gameplayphase);
+		//playerList.clear();
+		//playerList.addAll(gameplayphase.getPlayerList());
+System.out.println("after reinforce => "+playerList.get(playerIndex).getPlayerterritories());
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+		//txtPhaseView.setText(gameplayphase.getStatus());
+		txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		txtConsoleLog.setText(gameplayphase.getStatus());
+
+		subject.setPlayerPhaseViewMessage("ATTACK");
+		gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+		gameplayphase.setPlayerList(playerList);
+System.out.println("Before attack => "+playerList.get(playerIndex).getPlayerterritories());
+		gameplayphase = currentPlayer.executeStrategy("ATTACK", gameplayphase);
+		//playerList.clear();
+		//playerList.addAll(gameplayphase.getPlayerList());
+System.out.println("After attack => "+playerList.get(playerIndex).getPlayerterritories());
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+		//txtPhaseView.setText(gameplayphase.getStatus());
+		txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		txtConsoleLog.setText(gameplayphase.getStatus());
+
+		subject.setPlayerPhaseViewMessage("FORTIFICATION");
+		gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+		gameplayphase.setPlayerList(playerList);
+System.out.println("Before fortify => "+playerList.get(playerIndex).getPlayerterritories());			
+		gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
+		//playerList.clear();
+		//playerList.addAll(gameplayphase.getPlayerList());
+System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterritories());						
+		fillTerritoryList();
+		fillAdjacentTerritoryList();
+		//txtPhaseView.setText(gameplayphase.getStatus());
+		txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+		txtConsoleLog.setText(gameplayphase.getStatus());
+		
+		changeUserTurn();
+		// singleGameMode();
+		
 	}
 
 	/**
@@ -1265,59 +1200,70 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerList.clear();
 		// Display the message
 		gameplayphase = (GamePlayPhase) object;
+		
+		if(gameplayphase.getAction().equalsIgnoreCase("startgame")) {
+			
+			
+			if (mapManagementImpl.isMapConquest(gameplayphase.getFileName())) {
+				ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+				MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+				riskMap = mapInterface.readMap(gameplayphase.getFileName());
+			} else {
+				riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+			}
+			gameplayphase.setRiskMap(riskMap);
 
-		if (mapManagementImpl.isMapConquest(gameplayphase.getFileName())) {
-			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
-			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
-			riskMap = mapInterface.readMap(gameplayphase.getFileName());
-		} else {
-			riskMap = mapManagementImpl.readMap(gameplayphase.getFileName());
+			// System.out.println("===> " + gameplayphase);
+			// System.out.println(riskMap);
+
+			playerList.addAll(gameplayphase.getPlayerList());
+
+			totalCountries = getTotalCountries(riskMap);
+			cardList = riskPlayImpl.makeCards(totalCountries);
+			gameplayphase.setRiskCardList(cardList);
+
+			//System.out.println("totalCountries => " + totalCountries);
+			//System.out.println("cardList => " + cardList);
+			//System.out.println("cardList Size => " + cardList.size());
+
+			txtCommandLine.clear();
+			txtConsoleLog.clear();
+
+			playerName = playerList.get(playerIndex).getPlayerName();
+			currentPlayer = playerList.get(playerIndex);
+
+//			playerReinforceArmy = riskPlayImpl.checkForReinforcement(
+//					playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
+//			playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
+
+			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
+
+			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
+
+			turnStartedMsg = playerName + "'s turn is started";
+			leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
+			sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
+
+			txtConsoleLog.setText(sb.toString());
+
+			fillTerritoryList();
+			fillAdjacentTerritoryList();
+
+			// printPhaseView("REINFORCEMENT");
+			subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+			// printPlayerDominationView();
+			subject.setPlayerDominationViewMessage(sb.toString());
+
+			singleGameMode();
+			
+			
+		}else if(gameplayphase.getAction().equalsIgnoreCase("starttournament")) {
+			
+		}else if(gameplayphase.getAction().equalsIgnoreCase("loadpreviousgame")) {
+			
 		}
-		gameplayphase.setRiskMap(riskMap);
 
-		// System.out.println("===> " + gameplayphase);
-		// System.out.println(riskMap);
-
-		playerList.addAll(gameplayphase.getPlayerList());
-
-		totalCountries = getTotalCountries(riskMap);
-		cardList = riskPlayImpl.makeCards(totalCountries);
-		gameplayphase.setRiskCardList(cardList);
-
-		//System.out.println("totalCountries => " + totalCountries);
-		//System.out.println("cardList => " + cardList);
-		//System.out.println("cardList Size => " + cardList.size());
-
-		txtCommandLine.clear();
-		txtConsoleLog.clear();
-
-		playerName = playerList.get(playerIndex).getPlayerName();
-		currentPlayer = playerList.get(playerIndex);
-
-//		playerReinforceArmy = riskPlayImpl.checkForReinforcement(
-//				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName());
-//		playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
-
-		currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(
-				playerList.get(playerIndex).getPlayerterritories().size(), currentPlayer, gameplayphase.getFileName()));
-
-		currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
-
-		turnStartedMsg = playerName + "'s turn is started";
-		leftArmyMsg = "You have " + currentPlayer.getPlayerReinforceArmy() + " armies to Reinforcement";
-		sb.append(turnStartedMsg).append(NEWLINE).append(leftArmyMsg).append(NEWLINE);
-
-		txtConsoleLog.setText(sb.toString());
-
-		fillTerritoryList();
-		fillAdjacentTerritoryList();
-
-		// printPhaseView("REINFORCEMENT");
-		subject.setPlayerPhaseViewMessage("REINFORCEMENT");
-		// printPlayerDominationView();
-		subject.setPlayerDominationViewMessage(sb.toString());
-
-		singleGameMode();
+		
 	}
 
 	/**
@@ -1352,9 +1298,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 //					gameplayphase.getFileName());
 //			playerReinforceArmy = playerReinforceArmy + riskPlayImpl.updateArmyAfterCardExchange(currentPlayer);
 
-			currentPlayer.setPlayerReinforceArmy(
-					riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(),
-							currentPlayer, gameplayphase.getFileName()));
+			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(playerList.get(playerIndex).getPlayerterritories().size(),currentPlayer, gameplayphase.getFileName()));
 
 			currentPlayer.setPlayerReinforceArmy(riskPlayImpl.newArmyAfterCardExchange(currentPlayer));
 
@@ -1550,24 +1494,34 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 */
 	private String commandTournament(String command) {
 		
+		txtPhaseView.clear();
+		txtPlayerDominationView.clear();
+		territoryArea.clear();
+		txtCardExchangeView.clear();
+		adjacentTerritoryArea.clear();
+		txtConsoleLog.clear();
+		sbtournament = new StringBuilder();
+		
+		
+		
 		List<String> mapFilesInCommand;
 		List<String> strategyfromUserTournamnet;
-		TournamentInput tournamentInput;
 		List<String> availableMapFiles = mapManagementImpl.getAvailableMap();
 		List<TounamentStrategy> list = Arrays.asList(tournamentStrategyArray);
 		List<String> playerStrategiesListFromEnum = list.stream().map(e -> e.toString().toLowerCase())
 				.collect(Collectors.toList());
-		
-		
-		
+
 		String[] dataArray = command.split(" ");
-		tournamentInput = new TournamentInput();
+		TournamentInput tournamentInput = new TournamentInput();
 		int gamesByUser = 0;
 		int turnsByUser = 0;
+
 		List<String> commandData = Arrays.asList(dataArray);
 		if (commandData.get(0).equals("tournament") && commandData.size() == 9) {
+
 			if (commandData.get(1).equals("-M") && commandData.get(3).equals("-P") && commandData.get(5).equals("-G")
 					&& commandData.get(7).equals("-D")) {
+
 				mapFilesInCommand = new ArrayList<String>();
 				mapFilesInCommand = Arrays.asList(commandData.get(2).split(","));
 				strategyfromUserTournamnet = new ArrayList<>();
@@ -1576,41 +1530,53 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				if (mapFilesInCommand.size() <= 5 && strategyfromUserTournamnet.size() >= 2
 						&& strategyfromUserTournamnet.size() <= 4 && validateInput(commandData.get(6), "[1-9][0-9]*")
 						&& validateInput(commandData.get(8), "[1-9][0-9]*")) {
-					for (String str : mapFilesInCommand) {
-						if (!validateInput(str, "[a-zA-Z-]+") && !availableMapFiles.contains(str)) // this string need
-																									// to be checked
-						{
-							sbtournament.append("File name is either not valid or file not exist in system");
-						}
-					}
-					tournamentInput.setMapList(mapFilesInCommand);
 
-					for (String str : strategyfromUserTournamnet) {
-						if (!validateInput(str, "[a-zA-Z-]+") && !playerStrategiesListFromEnum.contains(str)) {
+					if (riskPlayImpl.tournamentValidMapCheck(mapFilesInCommand, availableMapFiles)) {
+
+						tournamentInput.setMapList(mapFilesInCommand);
+
+						if (riskPlayImpl.tournamentValidStrategy(strategyfromUserTournamnet,
+								playerStrategiesListFromEnum)) {
+							tournamentInput.setStrategiesList(strategyfromUserTournamnet);
+
+							gamesByUser = Integer.parseInt(commandData.get(6));
+							turnsByUser = Integer.parseInt(commandData.get(8));
+
+							if (gamesByUser > 5 || gamesByUser < 1 || turnsByUser < 10 || turnsByUser > 50) {
+								sbtournament.append("Invalid game count or turn per game count");
+							} else {
+
+								tournamentInput.setNoOfGames(gamesByUser);
+								tournamentInput.setMaxTurns(turnsByUser);
+								
+								System.out.println("tournamentInput => "+ tournamentInput);
+
+							}
+
+						} else {
 							sbtournament.append("Strategies given for tournamnet is not valid");
 						}
-					}
-					tournamentInput.setStrategiesList(strategyfromUserTournamnet);
 
-					gamesByUser = Integer.parseInt(commandData.get(6));
-					turnsByUser = Integer.parseInt(commandData.get(8));
-
-					if (gamesByUser >= 5 || gamesByUser < 1 || turnsByUser < 10 || turnsByUser > 50) {
-						sbtournament.append("Invalid game count of turn per game count");
 					} else {
-						tournamentInput.setNoOfGames(gamesByUser);
-						tournamentInput.setMaxTurns(turnsByUser);
+						sbtournament.append("Please enter correct Map file Information");
 					}
 
 				} else {
-					sbtournament.append("Files should not be more than 5 and strategy should be between 2 to 4");
+					sbtournament.append("map Files should not be more than 5 and strategy should be between 2 to 4");
 				}
 
 			} else
 				sbtournament.append("Please enter valid mode name with - ");
 		} else
-			sbtournament.append("Please enter valid tournamant command.");
+			sbtournament.append("Please enter valid tournament command.");
 		return sbtournament.toString();
+	}
+	
+	private void startTournament(TournamentInput tournamentInput) {
+		
+		
+		
+		
 	}
 
 	/**
