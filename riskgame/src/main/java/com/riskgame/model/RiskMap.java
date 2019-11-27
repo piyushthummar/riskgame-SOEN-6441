@@ -11,29 +11,34 @@ import lombok.ToString;
  * structure started. This Map is having Map of continents and continent will
  * have territories and those territories will have their adjacent territories.
  * 
- * Three annotations (Getter, Setter, toString) you can see on the top of the class are
- * lombok dependencies to automatically generate getter, setter and tostring.
- * method in the code.
+ * Two annotations (Getter, Setter) you can see on the top of the class are
+ * lombok dependencies to automatically generate getter, setter and tostring..
  * 
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  */
 @Getter
 @Setter
-@ToString
+
 public class RiskMap {
-	
+
 	/**
 	 * It will represent the name of mapfile.
 	 */
 	private String mapName;
-	
+
 	/**
 	 * This will store all the continents with index.
 	 */
 	private Map<Integer, Continent> continents;
-	
+
 	/**
 	 * It'll represent the status of the map whether it's valid or not.
 	 */
 	private String status;
+
+	@Override
+	public String toString() {
+		return "RiskMap [mapName=" + mapName + ", continents=" + continents + ", status=" + status + "]" + "\n";
+	}
+
 }
