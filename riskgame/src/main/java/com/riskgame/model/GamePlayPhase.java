@@ -97,11 +97,11 @@ public class GamePlayPhase {
 	 */
 	@Override
 	public String toString() {
-		return "GamePlayPhase [playerList=" + playerList + ", gamePhase=" + gamePhase + ", fileName=" + fileName
+		return "GamePlayPhase \n [playerList=" + playerList + ", gamePhase=" + gamePhase + ", fileName=" + fileName
 				+ ", riskCardList=" + riskCardList + ", winner=" + winner + ", numberOfGames=" + numberOfGames
 				+ ", maxNumberOfTurns=" + maxNumberOfTurns + ", gamePlayPhaseId=" + gamePlayPhaseId + ", riskMap="
 				+ riskMap + ", currentPlayerId=" + currentPlayerId + ", status=" + status + ", riskCardExchange="
-				+ riskCardExchange + "]";
+				+ riskCardExchange + "]" + "\n";
 	}
 
 }

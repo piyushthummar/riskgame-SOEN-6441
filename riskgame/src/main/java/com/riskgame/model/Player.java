@@ -116,11 +116,11 @@ public class Player {
 	 */
 	@Override
 	public String toString() {
-		return "Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns
+		return "\n Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns
 				+ ", playerReinforceArmy=" + playerReinforceArmy + ", playerterritories=" + playerterritories
 				+ ", cardListOwnedByPlayer=" + cardListOwnedByPlayer + ", exchangeCount=" + exchangeCount
 				+ ", isTerritoryConqured=" + isTerritoryConqured + ", playerType=" + playerType + ", strategyName="
-				+ strategyName + ", strategy=" + strategy + "]";
+				+ strategyName +"]" +"\n";
 	}
 
 }
