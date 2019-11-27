@@ -267,6 +267,7 @@ public class StartupPhaseController implements Initializable {
 						setText(null);
 					}
 				}
+
 				private void viewPlayer(Player player) {
 
 					List<PlayerTerritory> ptList = player.getPlayerterritories();
@@ -349,8 +350,12 @@ public class StartupPhaseController implements Initializable {
 					gamePlayPhase.setPlayerList(playerList);
 					gamePlayPhase.setGamePhase("Startup");
 					gamePlayPhase.setFileName(mapFileName);
-					txtConsoleLog.setText(gamePlayPhase.toString());
-
+					if (gamePlayPhase.getPlayerList().isEmpty()) {
+						txtConsoleLog.setText("Please add players first to see Continent, countries, ownership and army");
+					} else {
+						txtConsoleLog.setText(gamePlayPhase.toString());
+					}
+					System.out.println(gamePlayPhase);
 				} else if (command.startsWith("loadmap")) {
 
 					txtConsoleLog.setText(commandloadMapCommand(command));
