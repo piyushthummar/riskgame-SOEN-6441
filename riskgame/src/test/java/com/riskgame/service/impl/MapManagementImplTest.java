@@ -32,7 +32,7 @@ public class MapManagementImplTest {
 	public static final String VALID_MAP_NAME = "world.map";
 	public static final String INVALID_MAP_NAME = "invalidone.map";
 	public static final String COUNTRY_NAME = "India";
-	public static final String VALID_SMALL_MAP = "validSmall.map";
+	public static final String VALID_SMALL_MAP = "validsmalltwo.map";
 	
 	public static final boolean TRUE = true;
 	public static RiskMap riskMap;

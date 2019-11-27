@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.riskgame.model.Continent;
@@ -28,6 +29,8 @@ import com.riskgame.service.ConquestMapInterface;
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  * @version 1.0.0
  */
+
+@Service
 public class ConquestMapImpl implements ConquestMapInterface {
 
 	public static final String MAP_DIR_PATH = "src/main/resources/maps/";

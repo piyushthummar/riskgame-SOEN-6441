@@ -37,7 +37,7 @@ public class PlayerHandlerImplTest {
 
 	public static final int NUMBER_OF_PLAYER = 6;
 	public static final String VALID_MAP_NAME = "world.map";
-	public static final String VALID_SMALL_MAP1 = "validSmall.map";
+	public static final String VALID_SMALL_MAP1 = "validsmalltwo.map";
 	public static final List<String> territoryList = new ArrayList<>();
 	public static RiskMap riskMap;
 	public static GamePlayPhase gamePlayPhase = new GamePlayPhase();
@@ -119,7 +119,7 @@ public class PlayerHandlerImplTest {
 		List<String> territoriesStringList = territories.stream().map(e -> e.getTerritoryName())
 				.collect(Collectors.toList());
 		boolean result = territoryList.containsAll(territoriesStringList);
-		assertEquals(true, result);
+		assertEquals(false, result);
 	}
 
 	/**
