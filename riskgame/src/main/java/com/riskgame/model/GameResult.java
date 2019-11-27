@@ -26,7 +26,7 @@ public class GameResult {
 	/**
 	 * no of game user wants to play
 	 */
-	private int gameNo;
+	private String gameName;
 	
 	/**
 	 * The name of winner

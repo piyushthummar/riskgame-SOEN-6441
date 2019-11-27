@@ -364,4 +364,8 @@ public interface RiskPlayInterface {
 	 * @param playerStrategiesListFromEnum available strategy in system
 	 */
 	boolean tournamentValidStrategy(List<String> strategyfromUserTournamnet, List<String> playerStrategiesListFromEnum);
+
+	List<Player> generatePlayerListByStrategy(List<String> strategy);
+
+	GamePlayPhase GenerateGamePlayPhase(GamePlayPhase gamePlayPhase, List<String> strategyList,String mapFileNameEach);
 }

@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.riskgame.adapter.DominationToConquestAdapter;
+import com.riskgame.constant.ComputerStrategy;
 import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
@@ -40,6 +41,10 @@ import com.riskgame.model.RiskMap;
 import com.riskgame.service.ConquestMapInterface;
 import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.RiskPlayInterface;
+import com.riskgame.strategy.StrategyInterface;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * This is a implementation class of RiskPlayInterface where all buisness logic
@@ -64,6 +69,9 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 	@Autowired
 	public MapManagementImpl mapManagementImpl;
+	
+	@Autowired
+	private PlayerHandlerImpl playerHandlerImpl;
 
 	/**
 	 * {@inheritDoc}
@@ -1018,5 +1026,82 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * {@inheritDoc} This method is generating playerList based on strategy
+	 * 
+	 * @param strategy List of strategy
+	 */
+	@Override
+	public List<Player> generatePlayerListByStrategy(List<String> strategy){
+		
+		List<Player> playerList = new ArrayList<Player>();
+		int playerId = 1;
+		Player player;
+		
+		for (String strategyString : strategy) {
+			
+			player = new Player();
+			player.setPlayerId(playerId);
+			player.setPlayerName(strategyString);
+			player.setArmyOwns(0);
+			player.setPlayerType(ComputerStrategy.COMPUTER.toString());
+			player.setStrategy((StrategyInterface) playerHandlerImpl.getStrategyByName(strategyString));
+			player.setStrategyName(strategyString);
+			playerList.add(player);
+		}
+		return playerList;
+		
+	}
+	
+	/**
+	 * This method is generate GamePlayPhase for tournament 
+	 * 
+	 * @param gamePlayPhase gameplayphase for earch game
+	 * @param strategyList player strategy
+	 */
+	
+	@Override
+	public GamePlayPhase GenerateGamePlayPhase(GamePlayPhase gamePlayPhase,List<String> strategyList,String mapFileNameEach) {
+		
+		gamePlayPhase = new GamePlayPhase();
+		gamePlayPhase.setFileName(mapFileNameEach);
+		
+		ObservableList<Player> tourNamentPlayerList = FXCollections.observableArrayList();
+		tourNamentPlayerList.addAll(generatePlayerListByStrategy(strategyList));
+		gamePlayPhase.setPlayerList(tourNamentPlayerList);
+		
+		RiskMap riskmap;
+		if (mapManagementImpl.isMapConquest(gamePlayPhase.getFileName())) {
+			ConquestMapInterface conquestMapInterface = new ConquestMapImpl();
+			MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestMapInterface);
+			riskmap = mapInterface.readMap(gamePlayPhase.getFileName());
+		} else {
+			riskmap = mapManagementImpl.readMap(gamePlayPhase.getFileName());
+		}
+		gamePlayPhase.setRiskMap(riskmap);
+		
+		int totalCountries = getTotalCountries(riskmap);
+		List<RiskCard> cardList = makeCards(totalCountries);
+		gamePlayPhase.setRiskCardList(cardList);
+		gamePlayPhase.setTotalCountries(totalCountries);
+		
+		gamePlayPhase = playerHandlerImpl.populateTerritoriesRandomly(gamePlayPhase);
+		
+		for (Player player : gamePlayPhase.getPlayerList()) {
+
+			List<PlayerTerritory> ptList = player.getPlayerterritories();
+			for (PlayerTerritory playerTerritory : ptList) {
+				playerTerritory.setArmyOnterritory(0);
+
+			}
+		}
+		
+		gamePlayPhase = playerHandlerImpl.placeAllArmyByRoundRobin(gamePlayPhase);
+		
+		
+		return gamePlayPhase;
+		
 	}
 }

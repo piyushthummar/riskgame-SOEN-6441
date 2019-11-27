@@ -84,11 +84,16 @@ public class GamePlayPhase {
 	 * current player riskcardExchane will store in this model
 	 */
 	private RiskCardExchange riskCardExchange;
-	
+
 	/**
 	 * action of the User like Start Game, Start tournament or previously Load game
 	 */
 	private String action;
+
+	/**
+	 * totalCountries per map
+	 */
+	private int totalCountries;
 
 	/**
 	 * {@inheritDoc}
@@ -101,7 +106,7 @@ public class GamePlayPhase {
 				+ ", riskCardList=" + riskCardList + ", winner=" + winner + ", numberOfGames=" + numberOfGames
 				+ ", maxNumberOfTurns=" + maxNumberOfTurns + ", gamePlayPhaseId=" + gamePlayPhaseId + ", riskMap="
 				+ riskMap + ", currentPlayerId=" + currentPlayerId + ", status=" + status + ", riskCardExchange="
-				+ riskCardExchange + "]" + "\n";
+				+ riskCardExchange + "totalCountries=" + totalCountries + "]" + "\n";
 	}
 
 }
