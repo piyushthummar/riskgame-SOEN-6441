@@ -348,4 +348,20 @@ public interface RiskPlayInterface {
 	 * @return no of increasing army count after card exchange
 	 */
 	int newArmyAfterCardExchange(Player player);
+
+	/**
+	 * {@inheritDoc} This method is used checking map file
+	 * 
+	 * @param mapfiles list of map file from user
+	 * @param availableMap available map file in system
+	 */
+	boolean tournamentValidMapCheck(List<String> mapfiles, List<String> availableMap);
+
+	/**
+	 * {@inheritDoc} This method is used checking tournamentValidStrategy
+	 * 
+	 * @param strategyfromUserTournamnet list of strategy from User
+	 * @param playerStrategiesListFromEnum available strategy in system
+	 */
+	boolean tournamentValidStrategy(List<String> strategyfromUserTournamnet, List<String> playerStrategiesListFromEnum);
 }

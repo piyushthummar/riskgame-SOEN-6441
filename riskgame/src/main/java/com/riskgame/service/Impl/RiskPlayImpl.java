@@ -235,25 +235,25 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		int updatedArmy = 0;
 		if (player.getExchangeCount() == 0) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 5;
+			updatedArmy = player.getPlayerReinforceArmy();
 
 		} else if (player.getExchangeCount() == 1) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 10;
+			updatedArmy = player.getPlayerReinforceArmy() + 5;
 		} else if (player.getExchangeCount() == 2) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 15;
+			updatedArmy = player.getPlayerReinforceArmy() + 10;
 		} else if (player.getExchangeCount() == 3) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 20;
+			updatedArmy = player.getPlayerReinforceArmy() + 15;
 		} else if (player.getExchangeCount() == 4) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 25;
+			updatedArmy = player.getPlayerReinforceArmy() + 20;
 		} else if (player.getExchangeCount() == 5) {
 
-			updatedArmy = player.getPlayerReinforceArmy() + 30;
+			updatedArmy = player.getPlayerReinforceArmy() + 25;
 		} else if (player.getExchangeCount() > 5) {
-			updatedArmy = player.getPlayerReinforceArmy() + 35;
+			updatedArmy = player.getPlayerReinforceArmy() + 30;
 		}
 
 		return updatedArmy;
@@ -972,5 +972,51 @@ public class RiskPlayImpl implements RiskPlayInterface {
 
 		}
 		return playerTerritory;
+	}
+	
+	/**
+	 * {@inheritDoc} This method is used checking map file
+	 * 
+	 * @param mapfiles list of map file from user
+	 * @param availableMap available map file in system
+	 */
+	@Override
+	public boolean tournamentValidMapCheck(List<String> mapfiles,List<String> availableMap) {
+		boolean result = true;
+		
+		if(availableMap.size()>0) {
+			for (String mapfile : mapfiles) {
+				if(!availableMap.contains(mapfile)) {
+					return false;
+				}
+			}
+		}else {
+			result = false;
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * {@inheritDoc} This method is used checking tournamentValidStrategy
+	 * 
+	 * @param strategyfromUserTournamnet list of strategy from User
+	 * @param playerStrategiesListFromEnum available strategy in system
+	 */
+	@Override
+	public boolean tournamentValidStrategy(List<String> strategyfromUserTournamnet,List<String> playerStrategiesListFromEnum) {
+		boolean result = true;
+		
+		if(playerStrategiesListFromEnum.size()>0) {
+			for (String strategy : strategyfromUserTournamnet) {
+				if(!playerStrategiesListFromEnum.contains(strategy.toLowerCase())) {
+					return false;
+				}
+			}
+		}else {
+			result = false;
+		}
+		
+		return result;
 	}
 }

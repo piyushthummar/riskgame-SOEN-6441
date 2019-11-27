@@ -26,21 +26,21 @@ public class TournamentInput {
 	/**
 	 * List of map files name
 	 */
-	List<String> mapList;
+	private List<String> mapList;
 	
 	/**
 	 * List of player strategies
 	 */
-	List<String> strategiesList;
+	private List<String> strategiesList;
 	
 	/**
 	 * No of games user wants to play
 	 */
-	int noOfGames;
+	private int noOfGames;
 	
 	/**
 	 * No of turn per game in tournament mode
 	 */
-	int maxTurns;
+	private int maxTurns;
 
 }
