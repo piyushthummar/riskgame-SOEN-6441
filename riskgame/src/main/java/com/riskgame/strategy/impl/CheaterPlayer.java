@@ -4,8 +4,10 @@
 package com.riskgame.strategy.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.springframework.util.StringUtils;
 
@@ -29,11 +31,11 @@ import com.riskgame.strategy.StrategyInterface;
 public class CheaterPlayer implements StrategyInterface {
 
 	public static StringBuilder sb;
-	//private static String NEWLINE = System.getProperty("line.separator");
+	// private static String NEWLINE = System.getProperty("line.separator");
 
 	private MapManagementInterface mapManagementImpl;
 	private RiskPlayInterface riskPlayImpl;
-	
+
 	/**
 	 * Constructor which will initialize object of services
 	 */
@@ -59,13 +61,16 @@ public class CheaterPlayer implements StrategyInterface {
 				for (PlayerTerritory territory : player.getPlayerterritories()) {
 
 					territory.setArmyOnterritory(territory.getArmyOnterritory() * 2);
-					countriesList.add(territory.getContinentName());
+					countriesList.add(territory.getTerritoryName());
 
 				}
+
+				break;
 			}
 		}
 		String countries = StringUtils.collectionToCommaDelimitedString(countriesList);
 		gamePlayPhase.setStatus("Cheater Doubled Armies on Territories: " + countries + "\n");
+		System.out.println("CheaterPlayer reinforce - " + gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -77,74 +82,87 @@ public class CheaterPlayer implements StrategyInterface {
 	@Override
 	public GamePlayPhase attack(GamePlayPhase gamePlayPhase) {
 		sb = new StringBuilder();
-		List<String> countriesList = new ArrayList<String>();
-		//Player currentPlayer = null;
+		Set<String> countriesList = new HashSet<String>();
+		Player currentPlayer = null;
+		List<String> playerOwnCountries = new ArrayList<String>();
+		List<PlayerTerritory> playert = new ArrayList<PlayerTerritory>();
 		for (Player player : gamePlayPhase.getPlayerList()) {
-			
+
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
-				//currentPlayer = player;
-				
-				List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(player);
+				currentPlayer = player;
 
-				for (PlayerTerritory territory : player.getPlayerterritories()) {
+				playerOwnCountries = riskPlayImpl.getPlayersCountries(player);
 
-					List<String> neighbourList = mapManagementImpl.getNeighbourCountriesListByCountryName(
-							gamePlayPhase.getRiskMap(), territory.getTerritoryName());
-
-					if (neighbourList.size() > 0) {
-
-						for (String neighbourCountry : neighbourList) {
-
-							if (!playerOwnCountries.contains(neighbourCountry)) {
-
-								PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountry(neighbourCountry,
-										gamePlayPhase.getPlayerList());
-
-								if (playerTerritory != null) {
-
-									// adding country
-									playerTerritory.setArmyOnterritory(1);
-									player.getPlayerterritories().add(playerTerritory);
-
-									countriesList.add(playerTerritory.getContinentName());
-
-									// Fore removing country
-									for (Player playertoLst : gamePlayPhase.getPlayerList()) {
-
-										ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories()
-												.listIterator();
-
-										while (playerTerritories.hasNext()) {
-											if (playerTerritories.next().getTerritoryName()
-													.equalsIgnoreCase(playerTerritory.getTerritoryName())) {
-												playerTerritories.remove();
-											}
-										}
-									}
-
-								}
-
-							}
-
-						}
-
-					}
-
-				}
-				
-				
-				
 				break;
 			} else {
 				continue;
 			}
 		}
 
-		
+		for (PlayerTerritory territory : currentPlayer.getPlayerterritories()) {
+
+			List<String> neighbourList = mapManagementImpl
+					.getNeighbourCountriesListByCountryName(gamePlayPhase.getRiskMap(), territory.getTerritoryName());
+
+			if (neighbourList.size() > 0) {
+
+				for (String neighbourCountry : neighbourList) {
+
+					if (!playerOwnCountries.contains(neighbourCountry)) {
+
+						countriesList.add(neighbourCountry);
+
+					}
+
+				}
+
+			}
+
+		}
+
+		if (countriesList.size() > 0) {
+			for (String country : countriesList) {
+				PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountry(country,
+						gamePlayPhase.getPlayerList());
+
+				if (playerTerritory != null) {
+
+					// adding country
+					playerTerritory.setArmyOnterritory(1);
+
+					playert.add(playerTerritory);
+
+				}
+			}
+		}
+
+		if (playert.size() > 0) {
+			currentPlayer.getPlayerterritories().addAll(playert);
+		}
+
+		if (countriesList.size() > 0) {
+			// Fore removing country
+			for (String country : countriesList) {
+				for (Player playertoLst : gamePlayPhase.getPlayerList()) {
+
+					ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories().listIterator();
+
+					while (playerTerritories.hasNext()) {
+						if (playerTerritories.next().getTerritoryName().equalsIgnoreCase(country)
+
+								&& playertoLst.getPlayerId() != gamePlayPhase.getCurrentPlayerId()) {
+							playerTerritories.remove();
+						}
+					}
+				}
+
+			}
+		}
+
 		gamePlayPhase.setStatus(
 				"Territories won by Cheater: " + StringUtils.collectionToCommaDelimitedString(countriesList) + "\n");
 		riskPlayImpl.checkForWinner(gamePlayPhase);
-		
+		System.out.println("CheaterPlayer attack - " + gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -158,11 +176,11 @@ public class CheaterPlayer implements StrategyInterface {
 
 		sb = new StringBuilder();
 		List<String> countriesList = new ArrayList<String>();
-		//Player currentPlayer = null;
+		// Player currentPlayer = null;
 		for (Player player : gamePlayPhase.getPlayerList()) {
 			if (player.getPlayerId() == gamePlayPhase.getCurrentPlayerId()) {
-				//currentPlayer = player;
-				
+				// currentPlayer = player;
+
 				List<String> playerOwnCountries = riskPlayImpl.getPlayersCountries(player);
 
 				for (PlayerTerritory territory : player.getPlayerterritories()) {
@@ -187,18 +205,16 @@ public class CheaterPlayer implements StrategyInterface {
 					}
 
 				}
-				
-				
+
 				break;
 			} else {
 				continue;
 			}
 		}
 
-
 		gamePlayPhase.setStatus("Territories fortified by Cheater: "
 				+ StringUtils.collectionToCommaDelimitedString(countriesList) + "\n");
-
+		System.out.println("CheaterPlayer fortify - " + gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 

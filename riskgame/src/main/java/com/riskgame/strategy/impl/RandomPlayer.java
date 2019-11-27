@@ -74,6 +74,7 @@ public class RandomPlayer implements StrategyInterface {
 		}
 
 		gamePlayPhase.setStatus(sb.toString());
+		System.out.println("RandomPlayer reinforce - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -202,6 +203,7 @@ public class RandomPlayer implements StrategyInterface {
 		gamePlayPhase.setGamePhase("ATTACK");
 		riskPlayImpl.checkForWinner(gamePlayPhase);
 		gamePlayPhase.setStatus(sb.toString() + gamePlayPhase.getStatus());
+		System.out.println("RandomPlayer attack - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 
 	}
@@ -279,6 +281,7 @@ public class RandomPlayer implements StrategyInterface {
 		}
 
 		gamePlayPhase.setStatus(sb.toString());
+		System.out.println("RandomPlayer fortify - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 

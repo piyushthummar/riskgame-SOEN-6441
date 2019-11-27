@@ -92,15 +92,15 @@ public class AggresivePlayer implements StrategyInterface {
 					currentPlayer.setPlayerReinforceArmy(0);
 					
 					
-					sb.append("Strongest Territory :").append(playerStrongestTerritory.getTerritoryName())
-					.append("Reinforced New Army count on strongest territory:")
-					.append(playerStrongestTerritory.getArmyOnterritory()).append(gamePlayPhase.getStatus())
+					sb.append("Strongest Territory: ").append(playerStrongestTerritory.getTerritoryName())
+					.append(" Reinforced New Army count on strongest territory:")
+					.append(playerStrongestTerritory.getArmyOnterritory())
 					.append(NEWLINE);
 				}
 			}		
 		}
 		gamePlayPhase.setStatus(sb.toString());
-
+		System.out.println("AggresivePlayer Reinforce - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -222,7 +222,8 @@ public class AggresivePlayer implements StrategyInterface {
 
 		gamePlayPhase.setGamePhase("ATTACK");
 		riskPlayImpl.checkForWinner(gamePlayPhase);
-		gamePlayPhase.setStatus(sb.toString() + gamePlayPhase.getStatus());
+		gamePlayPhase.setStatus(sb.toString());
+		System.out.println("AggresivePlayer Attack - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -286,6 +287,7 @@ public class AggresivePlayer implements StrategyInterface {
 		}
 
 		gamePlayPhase.setStatus(aggressiveMessageForFortify);
+		System.out.println("AggresivePlayer fortify - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 

@@ -83,6 +83,7 @@ public class BenevolentPlayer implements StrategyInterface {
 			}
 		}
 		gamePlayPhase.setStatus(sb.toString());
+		System.out.println("BenevolentPlayer reinforce - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -94,6 +95,7 @@ public class BenevolentPlayer implements StrategyInterface {
 	@Override
 	public GamePlayPhase attack(GamePlayPhase gamePlayPhase) {
 		gamePlayPhase.setStatus("Benevolent Player will never attack \n");
+		System.out.println("BenevolentPlayer attack - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
@@ -127,6 +129,7 @@ public class BenevolentPlayer implements StrategyInterface {
 
 			}
 		}
+		System.out.println("BenevolentPlayer fortify - "+gamePlayPhase.getStatus());
 		return gamePlayPhase;
 	}
 
