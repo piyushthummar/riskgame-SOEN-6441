@@ -5,6 +5,7 @@ package com.riskgame.model;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.Exchanger;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -83,6 +84,11 @@ public class GamePlayPhase {
 	 * current player riskcardExchane will store in this model
 	 */
 	private RiskCardExchange riskCardExchange;
+	
+	/**
+	 * action of the User like Start Game, Start tournament or previously Load game
+	 */
+	private String action;
 
 	/**
 	 * {@inheritDoc}

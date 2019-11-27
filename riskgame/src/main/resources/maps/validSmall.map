@@ -19,8 +19,8 @@ crd risk.cards
 prv world.jpg
 
 [continents]
-Asia 12 none
-north 23 none
+Asia 1 none
+north 1 none
 
 [countries]
 1 india 1 0 0
