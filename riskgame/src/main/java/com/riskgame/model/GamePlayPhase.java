@@ -22,7 +22,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class GamePlayPhase extends Observable {
+public class GamePlayPhase {
 
 	/**
 	 * It'll manage list of player in that particlaur state of game

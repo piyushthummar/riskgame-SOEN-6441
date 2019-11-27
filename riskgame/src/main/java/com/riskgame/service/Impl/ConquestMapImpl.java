@@ -167,7 +167,7 @@ public class ConquestMapImpl implements ConquestMapInterface {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		System.out.println(riskMap);
+		//System.out.println(riskMap);
 		return riskMap;
 	}
 
