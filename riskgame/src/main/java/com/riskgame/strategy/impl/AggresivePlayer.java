@@ -39,6 +39,10 @@ public class AggresivePlayer implements StrategyInterface {
 		mapManagementImpl = new MapManagementImpl();
 		riskPlayImpl = new RiskPlayImpl();
 	}
+	
+	public boolean attackAgain = false;
+	public String fromC = null;
+	public String toC = null;
 
 	/**
 	 * {@inheritDoc}
@@ -134,8 +138,14 @@ public class AggresivePlayer implements StrategyInterface {
 				break;
 			}
 		}
+		
+		if(attackAgain) {
+			Player fromP = riskPlayImpl.getPlayerByCountry(fromC, gamePlayPhase.getPlayerList());
+			playerStrongestTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromC,fromP);
+			
+		}
 
-		if (playerStrongestTerritory.getArmyOnterritory() > 1) {
+		if (fromCountry!= null && playerStrongestTerritory.getArmyOnterritory() > 1) {
 
 			List<String> neighbourCountriesList = mapManagementImpl
 					.getNeighbourCountriesListByCountryName(gamePlayPhase.getRiskMap(), fromCountry);
@@ -145,6 +155,11 @@ public class AggresivePlayer implements StrategyInterface {
 					break;
 				}
 			}
+			
+			if(attackAgain) {
+				toCountry = toC;
+			}
+			
 			if (toCountry != null) {
 
 				int armyOnFromC = playerStrongestTerritory.getArmyOnterritory();
@@ -166,7 +181,7 @@ public class AggresivePlayer implements StrategyInterface {
 						} else if (defenderList.get(i) > attackerList.get(i)) {
 							updateArmyAfterBattle(fromCountry, "attacker", gamePlayPhase);
 						} else if (defenderList.get(i) < attackerList.get(i)) {
-							updateArmyAfterBattle(fromCountry, "defender", gamePlayPhase);
+							updateArmyAfterBattle(toCountry, "defender", gamePlayPhase);
 						}
 					}
 
@@ -201,6 +216,26 @@ public class AggresivePlayer implements StrategyInterface {
 							gamePlayPhase.getRiskCardList().remove(0);
 							
 						}
+					}else {
+						
+						
+						armyOnFromC = riskPlayImpl.getCurrentAramyByCountryName(fromCountry, gamePlayPhase.getPlayerList());
+						armyOnToC = riskPlayImpl.getCurrentAramyByCountryName(toCountry, gamePlayPhase.getPlayerList());
+
+						attackerDice = riskPlayImpl.getAttackerDiesCount(armyOnFromC);
+						defenderDice = riskPlayImpl.getDefenderDiceCount(armyOnToC);
+						
+						if (attackerDice > 0 && defenderDice > 0) {
+							
+							attackAgain = true;
+							fromC = fromCountry;
+							toC = toCountry;
+							attack(gamePlayPhase);
+							
+						}else {
+							sb.append("Allout Attack not possible - not an valid army on country").append(NEWLINE);
+						}
+						
 					}
 
 				} else {
@@ -254,12 +289,16 @@ public class AggresivePlayer implements StrategyInterface {
 
 			for (PlayerTerritory territoryA : currentPlayer.getPlayerterritories()) {
 
+				if(isneighbour == true) {
+					break;
+				}
+				
 				if (territoryA.getArmyOnterritory() == 1) {
 					continue;
 				}
 				for (PlayerTerritory territoryB : currentPlayer.getPlayerterritories()) {
 
-					isneighbour = false;
+					//isneighbour = false;
 
 					if (territoryA.getTerritoryName().equalsIgnoreCase(territoryB.getTerritoryName())
 							|| territoryB.getArmyOnterritory() == 1) {
@@ -275,13 +314,18 @@ public class AggresivePlayer implements StrategyInterface {
 
 					if (isneighbour == true) {
 
-						messgeOld = (territoryB.getArmyOnterritory() - 1) + " army moved from "
-								+ territoryB.getTerritoryName() + " to " + territoryA.getTerritoryName() + "\n";
+						messgeOld = (territoryA.getArmyOnterritory() - 1) + " army moved from "
+								+ territoryA.getTerritoryName() + " to " + territoryB.getTerritoryName() + "\n";
 						aggressiveMessageForFortify = messgeOld + aggressiveMessageForFortify;
-						territoryA.setArmyOnterritory(
-								territoryA.getArmyOnterritory() + territoryB.getArmyOnterritory() - 1);
-						territoryB.setArmyOnterritory(1);
+						
+						territoryB.setArmyOnterritory(territoryB.getArmyOnterritory()+territoryA.getArmyOnterritory()-1);
+						territoryA.setArmyOnterritory(1);
+						
+						break;
 					}
+					
+					
+					
 				}
 			}
 		}
@@ -309,8 +353,7 @@ public class AggresivePlayer implements StrategyInterface {
 					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory() - 1);
 					player.setArmyOwns(player.getArmyOwns() - 1);
 
-					sb.append(name).append(" Country loses 1 army ").append(name).append(" has left with ")
-							.append(playerTerritory.getArmyOnterritory()).append(NEWLINE);
+					//sb.append(name).append(" Country loses 1 army ").append(country).append(" has left with ").append(playerTerritory.getArmyOnterritory()).append(NEWLINE);
 
 					break;
 

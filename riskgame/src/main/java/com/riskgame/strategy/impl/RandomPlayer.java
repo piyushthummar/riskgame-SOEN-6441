@@ -143,7 +143,7 @@ public class RandomPlayer implements StrategyInterface {
 								} else if (defenderList.get(i) > attackerList.get(i)) {
 									updateArmyAfterBattle(fromCountry, "attacker", gamePlayPhase);
 								} else if (defenderList.get(i) < attackerList.get(i)) {
-									updateArmyAfterBattle(fromCountry, "defender", gamePlayPhase);
+									updateArmyAfterBattle(toCountry, "defender", gamePlayPhase);
 								}
 							}
 
@@ -303,8 +303,7 @@ public class RandomPlayer implements StrategyInterface {
 					playerTerritory.setArmyOnterritory(playerTerritory.getArmyOnterritory() - 1);
 					player.setArmyOwns(player.getArmyOwns() - 1);
 
-					sb.append(name).append(" Country loses 1 army ").append(name).append(" has left with ")
-							.append(playerTerritory.getArmyOnterritory()).append(NEWLINE);
+					//sb.append(name).append(" Country loses 1 army ").append(name).append(" has left with ").append(playerTerritory.getArmyOnterritory()).append(NEWLINE);
 
 					break;
 
