@@ -174,6 +174,12 @@ public class StartupPhaseController implements Initializable {
 	@FXML
 	void btnTournament(ActionEvent event) {
 
+		GamePlayPhase gamePlayPhase = new GamePlayPhase();
+		gamePlayPhase.setAction("starttournament");
+		
+
+		stageManager.switchScene(FxmlView.PLAYGAME, gamePlayPhase);
+		
 	}
 
 	/**
@@ -183,7 +189,11 @@ public class StartupPhaseController implements Initializable {
 	 */
 	@FXML
 	void btnLoadGame(ActionEvent event) {
+		GamePlayPhase gamePlayPhase = new GamePlayPhase();
+		gamePlayPhase.setAction("loadpreviousgame");
+		
 
+		stageManager.switchScene(FxmlView.PLAYGAME, gamePlayPhase);
 	}
 
 	/**
@@ -308,6 +318,7 @@ public class StartupPhaseController implements Initializable {
 			GamePlayPhase gamePlayPhase = new GamePlayPhase();
 			gamePlayPhase.setPlayerList(playerList);
 			gamePlayPhase.setGamePhase("Startup");
+			gamePlayPhase.setAction("startgame");
 			if (mapFileName != null && !mapFileName.isEmpty()) {
 				gamePlayPhase.setFileName(mapFileName);
 			} else {
