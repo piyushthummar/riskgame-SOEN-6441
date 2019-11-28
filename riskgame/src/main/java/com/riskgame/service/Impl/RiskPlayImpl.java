@@ -388,7 +388,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	@Override
 	public Player getPlayerByCountry(String country, List<Player> playerList) {
 
-		Player playerFromCountry = null;
+		Player playerFromCountry = new Player();
 
 		for (Player player : playerList) {
 
@@ -438,8 +438,13 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	 */
 	@Override
 	public PlayerTerritory getPlayerTerritoryByCountryName(String country, Player player) {
-		return player.getPlayerterritories().stream().filter(x -> country.equals(x.getTerritoryName())).findAny()
-				.orElse(null);
+		PlayerTerritory playerTerritory = null;
+		if(country != null &&  player!= null && player.getPlayerterritories().size()>0) {
+			return player.getPlayerterritories().stream().filter(x -> country.equals(x.getTerritoryName())).findAny()
+					.orElse(null);
+		}
+		return playerTerritory;
+		
 	}
 
 	/**

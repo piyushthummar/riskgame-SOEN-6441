@@ -31,6 +31,7 @@ import com.riskgame.model.RiskCard;
 import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 import com.riskgame.model.TournamentInput;
+import com.riskgame.model.TournamentResults;
 import com.riskgame.observerpattern.Observer;
 import com.riskgame.observerpattern.Subject;
 import com.riskgame.service.ConquestMapInterface;
@@ -167,6 +168,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	private boolean gamewin = false;
 
 	private Subject subject;
+	
+	private StringBuilder tournamentPhaseViewb;
+	private StringBuilder tournamentConsoleView;
+	private StringBuilder tournamentPlayerDominationview;
 
 	/**
 	 * This is an initialization method for this controller to start.
@@ -191,6 +196,10 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 		subject = new Subject();
 		subject.attach(this);
+		
+		tournamentPhaseViewb = new StringBuilder();
+		tournamentConsoleView = new StringBuilder();
+		tournamentPlayerDominationview = new StringBuilder();
 
 	}
 
@@ -229,8 +238,21 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 				
 				if (commandData.get(0).equals("tournament") && commandData.size() == 9) {
 					
+					txtConsoleLog.clear();
+					txtPhaseView.clear();
+					txtPlayerDominationView.clear();
+					territoryArea.clear();
+					adjacentTerritoryArea.clear();
 					
-					txtConsoleLog.setText(commandTournament(command));
+					tournamentPhaseViewb = new StringBuilder();
+					tournamentConsoleView = new StringBuilder();
+					tournamentPlayerDominationview = new StringBuilder();
+					
+					String result = commandTournament(command);
+					tournamentConsoleView.append(NEWLINE).append(result);
+					txtConsoleLog.setText(tournamentConsoleView.toString());
+					txtPhaseView.setText(tournamentPhaseViewb.toString());
+					txtPlayerDominationView.setText(tournamentPlayerDominationview.toString());
 					
 				}else if(commandData.get(0).equalsIgnoreCase("showmap")) {
 					
@@ -238,6 +260,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					
 				}else if(commandData.get(0).equalsIgnoreCase("savegame") || commandData.get(0).equalsIgnoreCase("loadgame")) {
 					
+					saveorLoadGame(commandData);
 					txtConsoleLog.setText(commandData.get(0));
 					
 				}else if(gameplayphase.getAction().equalsIgnoreCase("startgame")) {
@@ -259,6 +282,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 		
 	
+	}
+
+	private void saveorLoadGame(List<String> commandData) {
+		
+		
+		
 	}
 
 	/**
@@ -506,13 +535,20 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 								defenderPlayer = riskPlayImpl.getPlayerByCountry(toCountryAttack, playerList);
 
 								attackFire = true;
+								
+								if(toCountryAttack != null && defenderPlayer.getPlayerterritories().size()>0) {
+									PlayerTerritory toTerritory = riskPlayImpl
+											.getPlayerTerritoryByCountryName(toCountryAttack, defenderPlayer);
 
-								PlayerTerritory toTerritory = riskPlayImpl
-										.getPlayerTerritoryByCountryName(toCountryAttack, defenderPlayer);
+									sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
+									sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
+											.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
+								}
 
-								sb.append(defenderPlayer.getPlayerName() + "'s defend turn started..").append(NEWLINE);
-								sb.append(defenderPlayer.getPlayerName() + "'s country Name: ").append(toCountryAttack)
-										.append(" Army: ").append(toTerritory.getArmyOnterritory()).append(NEWLINE);
+
+								
+								
+								
 							} else {
 								sb.append("Attacker dices should be less than army owned on Attacking territory")
 										.append(NEWLINE);
@@ -1556,7 +1592,10 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 								
 								System.out.println("tournamentInput => "+ tournamentInput);
 								
-								startTournament(tournamentInput);
+								
+								String result = startTournament(tournamentInput);
+								
+								sbtournament.append(NEWLINE).append(result);
 
 							}
 
@@ -1579,17 +1618,19 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 		return sbtournament.toString();
 	}
 	
-	private void startTournament(TournamentInput tournamentInput) {
+	private String startTournament(TournamentInput tournamentInput) {
 		
 		List<String> mapfileList = tournamentInput.getMapList();
 		List<String> strategyList = tournamentInput.getStrategiesList();
 		int noGame = tournamentInput.getNoOfGames();
 		int noTurn = tournamentInput.getMaxTurns();
 		GameResult gameResult;
+		TournamentResults tournamentResults = new TournamentResults();
 		
 		//ObservableList<Player> tourNamentPlayerList = FXCollections.observableArrayList();
 		
 		GamePlayPhase gamePlayPhase = null;
+		boolean gameWon = false;
 		
 		//map
 		for (int i = 0; i < mapfileList.size(); i++) {
@@ -1599,6 +1640,7 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 			//eachGame
 			for (int j = 1; j <= noGame; j++) {
 				
+				gameWon = false;
 				gameResult = new GameResult();
 				String gameName = "Game "+j;
 				gameResult.setGameName(gameName);
@@ -1613,6 +1655,7 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 				
 				for(int turn = 1; turn <= noTurn; turn++) {
 				
+					System.out.println("TURN =====> "+turn);
 					
 					for (Player currentPlayer : gamePlayPhase.getPlayerList()) {
 						
@@ -1620,10 +1663,18 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 						this.playerIndex = currentPlayer.getPlayerId()-1;
 						this.playerList = (ObservableList<Player>) gamePlayPhase.getPlayerList();
 						
+						if(currentPlayer.getPlayerterritories().size()==0) {
+							continue;
+						}
+						
+						//reinforce Army
+						currentPlayer.setPlayerReinforceArmy(riskPlayImpl.checkForReinforcement(currentPlayer.getPlayerterritories().size(), currentPlayer, gamePlayPhase.getFileName()));
+						
 						String message = "Current Player:"+currentPlayer.getPlayerName()+" ID: "+currentPlayer.getPlayerId()+" strategy: "+currentPlayer.getStrategyName()+NEWLINE;
 						System.out.println(message);
 						
 						subject.setPlayerPhaseViewMessage("REINFORCEMENT");
+						tournamentPhaseViewb.append(" Current Player: ").append(currentPlayer.getPlayerName()).append(NEWLINE).append("Current Phase: ").append("REINFORCEMENT").append(NEWLINE).append(NEWLINE);
 						gamePlayPhase.setCurrentPlayerId(currentPlayer.getPlayerId());
 						//gamePlayPhase.setPlayerList(playerList);
 				System.out.println("Before reinforce => "+currentPlayer.getPlayerterritories());
@@ -1637,11 +1688,14 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 						//txtPhaseView.setText(gameplayphase.getStatus());
 						//txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 						
+						tournamentPhaseViewb.append(gamePlayPhase.getStatus()).append(NEWLINE);
+						tournamentConsoleView.append(gamePlayPhase.getStatus()).append(NEWLINE);
 						txtPhaseView.setText(phaseView.append(NEWLINE).append(gamePlayPhase.getStatus()).toString());
 						
 						txtConsoleLog.setText(txtConsoleLog.getText()+NEWLINE+gamePlayPhase.getStatus());
 
 						subject.setPlayerPhaseViewMessage("ATTACK");
+						tournamentPhaseViewb.append(" Current Player: ").append(currentPlayer.getPlayerName()).append(NEWLINE).append("Current Phase: ").append("ATTACK").append(NEWLINE).append(NEWLINE);
 						gamePlayPhase.setCurrentPlayerId(currentPlayer.getPlayerId());
 						//gamePlayPhase.setPlayerList(playerList);
 				System.out.println("Before attack => "+currentPlayer.getPlayerterritories());
@@ -1653,10 +1707,13 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 				tournamentFillAdjacentTerritoryList(currentPlayer,gamePlayPhase.getRiskMap());
 						//txtPhaseView.setText(gameplayphase.getStatus());
 						//txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+				tournamentPhaseViewb.append(gamePlayPhase.getStatus()).append(NEWLINE);
+				tournamentConsoleView.append(gamePlayPhase.getStatus()).append(NEWLINE);
 						txtPhaseView.setText(phaseView.append(NEWLINE).append(gamePlayPhase.getStatus()).toString());
 						txtConsoleLog.setText(txtConsoleLog.getText()+NEWLINE+gamePlayPhase.getStatus());
 
 						subject.setPlayerPhaseViewMessage("FORTIFICATION");
+						tournamentPhaseViewb.append(" Current Player: ").append(currentPlayer.getPlayerName()).append(NEWLINE).append("Current Phase: ").append("FORTIFICATION").append(NEWLINE).append(NEWLINE);
 						gamePlayPhase.setCurrentPlayerId(currentPlayer.getPlayerId());
 						//gamePlayPhase.setPlayerList(playerList);
 				System.out.println("Before fortify => "+currentPlayer.getPlayerterritories());			
@@ -1669,30 +1726,55 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 						
 						//txtPhaseView.setText(gameplayphase.getStatus());
 						//txtPhaseView.setText(phaseView.append(sb.toString()).toString());
+				tournamentPhaseViewb.append(gamePlayPhase.getStatus()).append(NEWLINE);
+				tournamentConsoleView.append(gamePlayPhase.getStatus()).append(NEWLINE);
 						txtPhaseView.setText(phaseView.append(NEWLINE).append(gamePlayPhase.getStatus()).toString());
 						txtConsoleLog.setText(txtConsoleLog.getText()+NEWLINE+gamePlayPhase.getStatus());
 						
 						
 						
+						String percentage = riskPlayImpl.getPlayerPercentageByCountry(currentPlayer, gamePlayPhase.getTotalCountries());
+						List<String> continentList = riskPlayImpl.getContinentControlledByPlayer(currentPlayer,
+								gamePlayPhase.getFileName());
+						List<String> territoryList = currentPlayer.getPlayerterritories().stream().map(e->e.getTerritoryName()).collect(Collectors.toList());
+						
+						tournamentPlayerDominationview.append("Map Controlled by ").append(currentPlayer.getPlayerName()).append(" is ").append(percentage)
+						.append(NEWLINE);
+						tournamentPlayerDominationview.append("Continent : ").append(continentList).append(NEWLINE);
+						tournamentPlayerDominationview.append("Territory : ").append(territoryList).append(NEWLINE);
+						
+						
 						if(currentPlayer.getPlayerterritories().size()==gamePlayPhase.getTotalCountries()) {
 							
+							gameWon = true;
+							gameResult.setWinner(currentPlayer.getPlayerName());
+							if(currentPlayer.getPlayerName().equalsIgnoreCase(StrategyType.BENEVOLENT.toString())) {
+								gameResult.setWinner("Draw");
+							}
 							
-							
+							break;
 						}
 						
 						
 					}
 					
-					
+					if(gameWon) {
+						break;
+					}
 				}
 				
+				if(!gameWon) {
+					gameResult.setWinner("Draw");
+				}
+				
+				tournamentResults.getGameResult().add(gameResult);
 			}
 			
 			
 		}
 		
-		
-		
+		System.out.println("tournamentResults ==> "+tournamentResults);
+		return tournamentResults.toString();
 	}
 	
 	
