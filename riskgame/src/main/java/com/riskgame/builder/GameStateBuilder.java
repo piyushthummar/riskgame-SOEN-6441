@@ -24,14 +24,20 @@ public abstract class GameStateBuilder {
 	}
 
 	/**
-	 * Create a new unspecified GameState that will be eventually build by calling the
-	 * following abstract methods in a concrete class derived from the GameState class
+	 * Create a new unspecified GameState that will be eventually build by calling
+	 * the following abstract methods in a concrete class derived from the GameState
+	 * class
 	 */
 
 	public void createNewGameState() {
 		gameState = new GameState();
 	}
-	
+
+	/**
+	 * This is abstract method to implement (build) gameplayphase which is given
+	 * 
+	 * @param gamePlayPhase
+	 */
 	abstract void buildGamePlayPhase(GamePlayPhase gamePlayPhase);
 
 }
