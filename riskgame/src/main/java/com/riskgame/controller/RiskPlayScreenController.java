@@ -260,8 +260,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					
 				}else if(commandData.get(0).equalsIgnoreCase("savegame") || commandData.get(0).equalsIgnoreCase("loadgame")) {
 					
-					saveorLoadGame(commandData);
-					txtConsoleLog.setText(commandData.get(0));
+					if(commandData.get(0).equalsIgnoreCase("savegame") && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+						saveGame(commandData.get(1));
+					}else if(commandData.get(0).equalsIgnoreCase("loadgame") && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
+						loadGame(commandData.get(1));
+					}
+					
+					
 					
 				}else if(gameplayphase.getAction().equalsIgnoreCase("startgame")) {
 					
@@ -284,7 +289,13 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	
 	}
 
-	private void saveorLoadGame(List<String> commandData) {
+	private void saveGame(String fileName) {
+		
+		
+		
+	}
+	
+	private void loadGame(String fileName) {
 		
 		
 		
@@ -456,8 +467,18 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 		txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 		txtConsoleLog.setText(gameplayphase.getStatus());
 		
-		changeUserTurn();
-		// singleGameMode();
+		if (currentPlayer.getPlayerterritories().size() != totalCountries) {
+			changeUserTurn();
+			// singleGameMode();
+		}else {
+			
+			gamewin = true;
+			
+			//sb.append(currentPlayer.getPlayerName()).append(" Won the Game !!").append(NEWLINE);
+			
+			txtConsoleLog.setText("Congratulations! "+currentPlayer.getPlayerName()+ " won the Game. Type: "+currentPlayer.getPlayerType()+ " Strategy: "+currentPlayer.getStrategyName());
+		}
+		
 		
 	}
 
