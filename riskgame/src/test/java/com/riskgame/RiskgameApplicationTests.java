@@ -9,6 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.riskgame.controller.MapControllerTest;
 import com.riskgame.controller.RiskPlayScreenControllerTest;
 import com.riskgame.controller.StartupPhaseControllerTest;
+import com.riskgame.service.Impl.ConquestMapImpl;
+import com.riskgame.service.impl.ConquestMapImplTest;
 import com.riskgame.service.impl.MapManagementImplTest;
 import com.riskgame.service.impl.PlayerHandlerImplTest;
 import com.riskgame.service.impl.RiskPlayImplTest;
@@ -25,7 +27,7 @@ import com.riskgame.service.impl.RiskPlayImplTest;
 @SpringBootTest
 @RunWith(Suite.class)
 @SuiteClasses({ MapControllerTest.class, RiskPlayScreenControllerTest.class, StartupPhaseControllerTest.class,
-		MapManagementImplTest.class, RiskPlayImplTest.class, PlayerHandlerImplTest.class })
+		MapManagementImplTest.class, RiskPlayImplTest.class, PlayerHandlerImplTest.class, ConquestMapImplTest.class })
 public class RiskgameApplicationTests {
 
 	/**

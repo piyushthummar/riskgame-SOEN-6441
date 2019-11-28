@@ -165,6 +165,7 @@ public class StartupPhaseController implements Initializable {
 	private static String NEWLINE = System.getProperty("line.separator");
 	private StringBuilder sb;
 	private static StrategyType[] strategyArray = StrategyType.values();
+	private boolean ispopulate = false;
 
 	/**
 	 * On action method for tournament start button
@@ -176,10 +177,9 @@ public class StartupPhaseController implements Initializable {
 
 		GamePlayPhase gamePlayPhase = new GamePlayPhase();
 		gamePlayPhase.setAction("starttournament");
-		
 
 		stageManager.switchScene(FxmlView.PLAYGAME, gamePlayPhase);
-		
+
 	}
 
 	/**
@@ -191,7 +191,6 @@ public class StartupPhaseController implements Initializable {
 	void btnLoadGame(ActionEvent event) {
 		GamePlayPhase gamePlayPhase = new GamePlayPhase();
 		gamePlayPhase.setAction("loadpreviousgame");
-		
 
 		stageManager.switchScene(FxmlView.PLAYGAME, gamePlayPhase);
 	}
@@ -362,7 +361,8 @@ public class StartupPhaseController implements Initializable {
 					gamePlayPhase.setGamePhase("Startup");
 					gamePlayPhase.setFileName(mapFileName);
 					if (gamePlayPhase.getPlayerList().isEmpty()) {
-						txtConsoleLog.setText("Please add players first to see Continent, countries, ownership and army");
+						txtConsoleLog
+								.setText("Please add players first to see Continent, countries, ownership and army");
 					} else {
 						txtConsoleLog.setText(gamePlayPhase.toString());
 					}
@@ -374,8 +374,15 @@ public class StartupPhaseController implements Initializable {
 				} else if (command.startsWith("gameplayer")) {
 					txtConsoleLog.setText(commandGamePlayer(command));
 				} else if (command.startsWith("populatecountries")) {
-					txtConsoleLog.setText(commandPopulateCountries());
-					txtConsoleLog.appendText(changeUserTurn());
+					if (!ispopulate) {
+						txtConsoleLog.setText(commandPopulateCountries());
+						txtConsoleLog.appendText(changeUserTurn());
+						ispopulate=true;
+					}
+					else
+					{
+						txtConsoleLog.setText("Populate Countries is done. Go for Placearmy");
+					}
 				} else if (command.startsWith("placearmy")) {
 
 					if (!placeAll) {
@@ -901,7 +908,6 @@ public class StartupPhaseController implements Initializable {
 
 				commonPopulateCountries();
 				result = "All countries are randomly assigned to players. Please fire showmap command to view";
-
 			} else {
 				result = "Atleast 2 pleayers are requiredd for the game please add players";
 			}
@@ -985,5 +991,6 @@ public class StartupPhaseController implements Initializable {
 		loadPlayerDetails();
 		txtConsoleLog.clear();
 		playerIndex = -1;
+		ispopulate=false;
 	}
 }
