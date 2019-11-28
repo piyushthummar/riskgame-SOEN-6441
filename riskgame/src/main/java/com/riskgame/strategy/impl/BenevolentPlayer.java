@@ -169,8 +169,13 @@ public class BenevolentPlayer implements StrategyInterface {
 							strongTerritory = neigboursList.get(i);
 						}
 					}
+					
+					if(strongTerritory != null && weakTerritory != null) {
+					
 					int diff = (int) Math.floor(
 							Math.abs(strongTerritory.getArmyOnterritory() - weakTerritory.getArmyOnterritory()) / 2);
+					
+					
 					if (diff < 1) {
 						message += "Fortification not possible because ";
 						message += " Strong Territory Info : [ " + strongTerritory.getTerritoryName() + ","
@@ -192,6 +197,9 @@ public class BenevolentPlayer implements StrategyInterface {
 						gamePlayPhase.setStatus(message);
 						return;
 					}
+					
+					}
+					
 				} else {
 					message += "No Strong Territory Neighbours Found For Territory " + weakTerritory.getTerritoryName()
 							+ "\n";

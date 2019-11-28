@@ -202,7 +202,7 @@ public class AggresivePlayer implements StrategyInterface {
 						PlayerTerritory fromTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(fromCountry,
 								attackerPlayer);
 
-						if (fromTerritory.getArmyOnterritory() > 1) {
+						if (fromTerritory != null && fromTerritory.getArmyOnterritory() > 1) {
 							int armyToMove = fromTerritory.getArmyOnterritory() - 1;
 							moveArmy(fromCountry, toCountry, armyToMove, gamePlayPhase);
 						}
@@ -250,9 +250,9 @@ public class AggresivePlayer implements StrategyInterface {
 
 		} else {
 
-			sb.append("Can't attack because strongest selected territory : ")
-					.append(playerStrongestTerritory.getTerritoryName()).append(" has only ")
-					.append(playerStrongestTerritory.getArmyOnterritory()).append(" army ").append(NEWLINE);
+			sb.append("Can't attack because strongest selected territory has not enough Army: ");
+//					.append(playerStrongestTerritory.getTerritoryName()).append(" has only ")
+//					.append(playerStrongestTerritory.getArmyOnterritory()).append(" army ").append(NEWLINE);
 		}
 
 		gamePlayPhase.setGamePhase("ATTACK");
