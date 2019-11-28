@@ -2,6 +2,9 @@ package com.riskgame.model;
 
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,6 +20,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@JsonIgnoreProperties
 public class Territory {
 	
 	/**
@@ -37,11 +41,13 @@ public class Territory {
 	/**
 	 * x Axis of this territory in map
 	 */
+	@JsonIgnore
 	private int xAxis;
 	
 	/**
 	 * y Axis of this territory in map
 	 */
+	@JsonIgnore
 	private int yAxis;
 	
 	/**

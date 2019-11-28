@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.Exchanger;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@JsonIgnoreProperties
 public class GamePlayPhase {
 
 	/**
@@ -94,6 +97,8 @@ public class GamePlayPhase {
 	 * totalCountries per map
 	 */
 	private int totalCountries;
+	
+	
 
 	/**
 	 * {@inheritDoc}

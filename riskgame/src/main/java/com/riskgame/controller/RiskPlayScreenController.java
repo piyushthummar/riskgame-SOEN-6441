@@ -1,5 +1,8 @@
 package com.riskgame.controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +21,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import com.riskgame.adapter.DominationToConquestAdapter;
+import com.riskgame.builder.GameState;
+import com.riskgame.builder.GameStateBuilder;
+import com.riskgame.builder.GameStateConcreteBuilder;
+import com.riskgame.builder.GameStateDirector;
 import com.riskgame.config.StageManager;
 import com.riskgame.constant.HumanStrategy;
 import com.riskgame.constant.StrategyType;
@@ -262,8 +269,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 					
 					if(commandData.get(0).equalsIgnoreCase("savegame") && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
 						saveGame(commandData.get(1));
-					}else if(commandData.get(0).equalsIgnoreCase("loadgame") && validateInput(commandData.get(1), "^([a-zA-Z]-+\\s)*[a-zA-Z-]+$")) {
-						loadGame(commandData.get(1));
+						txtConsoleLog.setText("Current Game state saved successfully in file : "+commandData.get(1));
+					}else if(commandData.get(0).equalsIgnoreCase("loadgame")) {
+						txtConsoleLog.setText(loadGame(commandData.get(1)));
 					}
 					
 					
@@ -293,11 +301,52 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		
 		
 		
+		GameStateBuilder gameStateBuilder = new GameStateConcreteBuilder();
+		GameStateDirector director = new GameStateDirector(gameplayphase);
+		director.setBuilder(gameStateBuilder);
+		director.constructGameState();
+		GameState gameState = director.getGameState();
+		System.out.println("Builder ===> "+gameState.getGamePlayPhase());
+		
+		try {
+			riskPlayImpl.convertObjectToJsonFile(gameState.getGamePlayPhase(), fileName);
+			
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
-	private void loadGame(String fileName) {
-		
-		
+	private String loadGame(String fileName) {
+		String result  = "";
+		try {
+			List<String> fileList = riskPlayImpl.getAvailableGameFiles();
+			if(fileList.contains(fileName+".json")) {
+				
+				GamePlayPhase gamePlayPhase = riskPlayImpl.convertJsonFileToObject(fileName);
+				System.out.println("loadGame ====> "+gamePlayPhase);
+				
+				
+				
+			}else {
+				return "File not available Please enter valid file name";
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
 		
 	}
 
@@ -460,6 +509,7 @@ System.out.println("Before fortify => "+playerList.get(playerIndex).getPlayerter
 		gameplayphase = currentPlayer.executeStrategy("FORTIFICATION", gameplayphase);
 		//playerList.clear();
 		//playerList.addAll(gameplayphase.getPlayerList());
+		gameplayphase.setPlayerList(playerList);
 System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterritories());						
 		fillTerritoryList();
 		fillAdjacentTerritoryList();
@@ -467,7 +517,7 @@ System.out.println("after fortify => "+playerList.get(playerIndex).getPlayerterr
 		txtPhaseView.setText(phaseView.append(sb.toString()).toString());
 		txtConsoleLog.setText(gameplayphase.getStatus());
 		
-		if (currentPlayer.getPlayerterritories().size() != totalCountries) {
+		if (playerList.get(playerIndex).getPlayerterritories().size() != totalCountries) {
 			changeUserTurn();
 			// singleGameMode();
 		}else {

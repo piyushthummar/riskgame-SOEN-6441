@@ -24,6 +24,8 @@ import java.util.stream.Stream;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
+import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -875,6 +877,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	public void convertObjectToJsonFile(GamePlayPhase gamePlayPhase, String fileName)
 			throws UnsupportedEncodingException, FileNotFoundException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
+		mapper.setVisibility(JsonMethod.FIELD, Visibility.ANY);
 		String jsonInString = "";
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(
 				new OutputStreamWriter(new FileOutputStream(GAME_DIR_PATH + fileName + ".json"), "utf-8")))) {
@@ -904,7 +907,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 		String jsonInString = "";
 		String line = "";
 		StringBuilder sb = new StringBuilder();
-		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(GAME_DIR_PATH + fileName))) {
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(GAME_DIR_PATH + fileName+".json"))) {
 			while ((line = bufferedReader.readLine()) != null) {
 				sb.append(line);
 			}

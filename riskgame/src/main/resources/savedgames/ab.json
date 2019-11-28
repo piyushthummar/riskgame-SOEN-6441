@@ -1,0 +1,81 @@
+{
+  "playerList" : [ {
+    "playerId" : 1,
+    "playerName" : "ashish",
+    "armyOwns" : 40,
+    "playerReinforceArmy" : 4,
+    "playerterritories" : [ {
+      "continentName" : "Asia",
+      "territoryName" : "india",
+      "armyOnterritory" : 40
+    } ],
+    "cardListOwnedByPlayer" : [ ],
+    "exchangeCount" : 0,
+    "playerType" : "HUMAN",
+    "strategyName" : "HUMAN"
+  }, {
+    "playerId" : 2,
+    "playerName" : "zkp",
+    "armyOwns" : 40,
+    "playerReinforceArmy" : 0,
+    "playerterritories" : [ {
+      "continentName" : "north",
+      "territoryName" : "china",
+      "armyOnterritory" : 40
+    } ],
+    "cardListOwnedByPlayer" : [ ],
+    "exchangeCount" : 0,
+    "playerType" : "HUMAN",
+    "strategyName" : "HUMAN"
+  } ],
+  "gamePhase" : "Startup",
+  "fileName" : "validSmall.map",
+  "riskCardList" : [ {
+    "cardNumber" : 2,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 1,
+    "armyType" : "INFANTRY"
+  } ],
+  "winner" : null,
+  "numberOfGames" : 0,
+  "maxNumberOfTurns" : 0,
+  "gamePlayPhaseId" : 0,
+  "riskMap" : {
+    "mapName" : "validSmall map",
+    "continents" : {
+      "1" : {
+        "continentIndex" : 1,
+        "continentName" : "Asia",
+        "continentValue" : 1,
+        "territoryList" : [ {
+          "territoryIndex" : 1,
+          "territoryName" : "india",
+          "continentIndex" : 1,
+          "neighbourTerritories" : [ "china" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "2" : {
+        "continentIndex" : 2,
+        "continentName" : "north",
+        "continentValue" : 1,
+        "territoryList" : [ {
+          "territoryIndex" : 2,
+          "territoryName" : "china",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "india" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      }
+    },
+    "status" : null
+  },
+  "currentPlayerId" : 0,
+  "status" : null,
+  "riskCardExchange" : null,
+  "action" : "startgame",
+  "totalCountries" : 0
+}

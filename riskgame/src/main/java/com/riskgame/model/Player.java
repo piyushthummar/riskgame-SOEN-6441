@@ -3,6 +3,9 @@ package com.riskgame.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import com.riskgame.strategy.StrategyInterface;
 
 import lombok.Getter;
@@ -22,6 +25,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonIgnoreProperties
 public class Player {
 	/**
 	 * Stores the id of player
@@ -59,11 +63,6 @@ public class Player {
 	private int exchangeCount;
 
 	/**
-	 * boolean represents territory conquered or not
-	 */
-	private boolean isTerritoryConqured;
-
-	/**
 	 * type of player (human or computer)
 	 */
 	private String playerType;
@@ -77,6 +76,8 @@ public class Player {
 	 * Strategy representation of the player (different player strategy will have
 	 * different reinforcement, attack and fortification.
 	 */
+	
+	@JsonIgnore
 	private StrategyInterface strategy;
 
 	/**
@@ -119,7 +120,7 @@ public class Player {
 		return "\n Player [playerId=" + playerId + ", playerName=" + playerName + ", armyOwns=" + armyOwns
 				+ ", playerReinforceArmy=" + playerReinforceArmy + ", playerterritories=" + playerterritories
 				+ ", cardListOwnedByPlayer=" + cardListOwnedByPlayer + ", exchangeCount=" + exchangeCount
-				+ ", isTerritoryConqured=" + isTerritoryConqured + ", playerType=" + playerType + ", strategyName="
+				 + ", playerType=" + playerType + ", strategyName="
 				+ strategyName +"]" +"\n";
 	}
 
