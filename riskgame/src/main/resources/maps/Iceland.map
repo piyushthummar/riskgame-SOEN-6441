@@ -1,0 +1,41 @@
+[Map]
+author=Sid6.7
+image=iceland.bmp
+wrap=yes
+scroll=none
+warn=yes
+
+[Continents]
+Reyjavik Farthing=2
+Sudurnes Farthing=1
+Sudurland Farthing=4
+Austurland Farthing=2
+Estya Farthing=5
+Vestya Farthing=2
+Vestfirdir Farthing=4
+Vesturland Farthing=3
+
+[Territories]
+Reykjavik,182,373,Reyjavik Farthing,Selfoss,Borgames,Hafnafjordur
+Hafnafjordur,172,398,Reyjavik Farthing,Keflavikfur,Selfoss,Reykjavik
+Keflavikfur,126,416,Sudurnes Farthing,Hafnafjordur,Selfoss,Vestmanneayjar
+Borgames,197,344,Vesturland Farthing,Selfoss,Blonduos,Reykjavik,Stykkisholmur,Holmavik
+Stykkisholmur,102,303,Vesturland Farthing,Borgames,Budardalur,Holmavik
+Budardalur,150,265,Vesturland Farthing,Stykkisholmur,Holmavik,Patreksfjordur
+Bolungarvik,111,124,Vestfirdir Farthing,Isfjordur,Holmavik
+Holmavik,154,179,Vestfirdir Farthing,Blonduos,Borgames,Stykkisholmur,Budardalur,Patreksfjordur,Isfjordur,Bolungarvik
+Isfjordur,95,181,Vestfirdir Farthing,Patreksfjordur,Holmavik,Bolungarvik
+Patreksfjordur,74,230,Vestfirdir Farthing,Budardalur,Isfjordur,Holmavik
+Blonduos,239,275,Vestya Farthing,Selfoss,Saudarkroker,Borgames,Holmavik
+Saudarkroker,297,238,Vestya Farthing,Akureyri,Olafsfjordur,Sijlufjodor,Blonduos
+Sijlufjodor,309,153,Estya Farthing,Olafsfjordur,Saudarkroker
+Olafsfjordur,319,181,Estya Farthing,Akureyri,Sijlufjodor,Saudarkroker
+Akureyri,359,232,Estya Farthing,Selfoss,Husavik,Saudarkroker,Olafsfjordur
+Husavik,412,227,Estya Farthing,Selfoss,Hvolsvollur,Saydisfjordur,Akureyri
+Saydisfjordur,494,242,Estya Farthing,Territory17,Husavik
+Territory17,527,297,Austurland Farthing,Hofn,Saydisfjordur
+Hofn,444,383,Austurland Farthing,Vik,Territory17
+Vik,331,427,Sudurland Farthing,Vestmanneayjar,Hofn,Hvolsvollur
+Hvolsvollur,286,404,Sudurland Farthing,Vestmanneayjar,Vik,Selfoss,Husavik
+Selfoss,251,371,Sudurland Farthing,Vestmanneayjar,Keflavikfur,Hvolsvollur,Borgames,Reykjavik,Hafnafjordur,Blonduos,Akureyri,Husavik
+Vestmanneayjar,220,485,Sudurland Farthing,Vik,Hvolsvollur,Selfoss,Keflavikfur
