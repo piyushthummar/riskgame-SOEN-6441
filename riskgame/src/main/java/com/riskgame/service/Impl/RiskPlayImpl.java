@@ -1064,6 +1064,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 	}
 	
 	/**
+	 * {@inheritDoc}
 	 * This method is generate GamePlayPhase for tournament 
 	 * 
 	 * @param gamePlayPhase gameplayphase for earch game

@@ -1563,6 +1563,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		}
 	}
 
+	/**
+	 * This method will convert String to Integer
+	 * @param str
+	 * @return Integer
+	 */
 	private int getint(String str) {
 		return Integer.parseInt(str);
 	}
@@ -1739,6 +1744,11 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		return sbtournament.toString();
 	}
 
+	/**
+	 * This method is for starting the tournament
+	 * @param tournamentInput
+	 * @return String : Final Message of tournament result
+	 */
 	private String startTournament(TournamentInput tournamentInput) {
 
 		List<String> mapfileList = tournamentInput.getMapList();

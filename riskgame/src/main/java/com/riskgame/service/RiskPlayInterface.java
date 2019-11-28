@@ -358,14 +358,26 @@ public interface RiskPlayInterface {
 	boolean tournamentValidMapCheck(List<String> mapfiles, List<String> availableMap);
 
 	/**
-	 * {@inheritDoc} This method is used checking tournamentValidStrategy
+	 * This method is used checking tournamentValidStrategy
 	 * 
 	 * @param strategyfromUserTournamnet list of strategy from User
 	 * @param playerStrategiesListFromEnum available strategy in system
 	 */
 	boolean tournamentValidStrategy(List<String> strategyfromUserTournamnet, List<String> playerStrategiesListFromEnum);
 
+	/**
+	 * This method will create playerList for tournament
+	 * @param strategy List 
+	 * @return List of Player
+	 */
 	List<Player> generatePlayerListByStrategy(List<String> strategy);
 
+	/**
+	 * This method will generate GamePlayPhase Object for Tournament
+	 * @param gamePlayPhase
+	 * @param strategyList
+	 * @param mapFileNameEach
+	 * @return GamePlayPhase
+	 */
 	GamePlayPhase GenerateGamePlayPhase(GamePlayPhase gamePlayPhase, List<String> strategyList,String mapFileNameEach);
 }
