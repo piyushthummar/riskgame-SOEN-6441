@@ -3,7 +3,9 @@ package com.riskgame.service.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ public class MapManagementImplTest {
 	public static final String VALID_MAP_NAME = "world.map";
 	public static final String INVALID_MAP_NAME = "invalidone.map";
 	public static final String COUNTRY_NAME = "India";
-	public static final String VALID_SMALL_MAP = "validsmalltwo.map";
+	public static final String VALID_SMALL_MAP = "validSmall.map";
 	
 	public static final boolean TRUE = true;
 	public static RiskMap riskMap;
@@ -146,10 +148,13 @@ public class MapManagementImplTest {
 	 * 
 	 * @param riskMap
 	 * @return
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
 	 */
 	@Test
-	public void testSaveMapToFile() {
-		boolean result = map.validateMap(riskMap);
+	public void testSaveMapToFile() throws UnsupportedEncodingException, FileNotFoundException, IOException {
+		boolean result = map.saveMapToFile(riskMap);
 		assertEquals(true, result);
 	}
 }
