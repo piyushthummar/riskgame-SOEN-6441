@@ -1,5 +1,8 @@
 com.riskgame
+com.riskgame.adapter
+com.riskgame.builder
 com.riskgame.config
+com.riskgame.constant
 com.riskgame.controller
 com.riskgame.dto
 com.riskgame.logging
@@ -8,4 +11,6 @@ com.riskgame.observerpattern
 com.riskgame.service
 com.riskgame.service.Impl
 com.riskgame.service.impl
+com.riskgame.strategy
+com.riskgame.strategy.impl
 com.riskgame.view
