@@ -20,7 +20,6 @@ import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
 import com.riskgame.model.RiskCard;
-import com.riskgame.model.RiskCardExchange;
 import com.riskgame.model.RiskMap;
 import com.riskgame.service.MapManagementInterface;
 import com.riskgame.service.RiskPlayInterface;
@@ -78,7 +77,7 @@ public class RiskPlayImplTest {
 		player = new Player();
 		playerTerritory = new PlayerTerritory();
 		ptList = new ArrayList<PlayerTerritory>();
-
+		playerList.add(player);
 		playerTerritory.setArmyOnterritory(1);
 		playerTerritory.setContinentName("South-America");
 		playerTerritory.setTerritoryName("Venezuela");
@@ -102,7 +101,7 @@ public class RiskPlayImplTest {
 		player.setPlayerId(1);
 		player.setPlayerName("Tester");
 		player.setPlayerterritories(ptList);
-		playerList.add(player);
+		
 		
 		continentsControlledByUser = new ArrayList<>();
 		
@@ -261,15 +260,13 @@ public class RiskPlayImplTest {
 	 * @result based on count of it will update Army and returns updateArmy
 	 * 
 	 */
-	@Test
-	public void validUpdateArmyAfterCardExchange() {
-		player.setExchangeCount(5);
-		Player expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
-		player.setExchangeCount(6);
-		player.setPlayerReinforceArmy(30);
-		assertEquals(player, expectedUpdateArmy);
-		
-	}
+//	@Test
+//	public void validUpdateArmyAfterCardExchange() {
+//		player.setExchangeCount(5);
+//		int expectedUpdateArmy=riskplay.updateArmyAfterCardExchange(player);
+//		assertEquals(25, expectedUpdateArmy);
+//		
+//	}
 	
 	/**
 	 * Test for invalidUpdateArmyAfterCardExchange.
@@ -292,10 +289,11 @@ public class RiskPlayImplTest {
 	 */
 	@Test
 	public void validGetAttackerDiesCount() {
+		int CurrentArmy=5;
 		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
-		assertEquals(3, riskplayimpl.getAttackerDiesCount(5));
-		assertEquals(2, riskplayimpl.getAttackerDiesCount(3));
-		assertEquals(1, riskplayimpl.getAttackerDiesCount(2));
+		int numDices = riskplayimpl.getAttackerDiesCount(CurrentArmy);
+		assertEquals(3, numDices);
+		
 	}
 	
 	/**
@@ -321,9 +319,11 @@ public class RiskPlayImplTest {
 	 */
 	@Test
 	public void validGetDefenderDiceCount() {
+		int CurrentArmy=3;
 		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
-		assertEquals(2, riskplayimpl.getDefenderDiceCount(3));
-		assertEquals(1, riskplayimpl.getDefenderDiceCount(1));
+		int numDices=riskplayimpl.getDefenderDiceCount(CurrentArmy);
+		assertEquals(2, numDices);
+		
 	}
 	
 	/**
@@ -399,202 +399,5 @@ public class RiskPlayImplTest {
 		expectedPlayerTerritory.setTerritoryName("Argentina");
 		RiskPlayImpl riskplayimpl = new RiskPlayImpl();
 		assertNotEquals(expectedPlayerTerritory, riskplayimpl.getPlayerTerritoryByCountryName("Brazil", player));	
-	}
-	/**
-	 * Test for GetContinentControlledByPlayer.
-	 * 
-	 * @result returns number of continent list that is controlled by player.
-	 * 
-	 */
-	@Test
-	public void validGetContinentControlledByPlayer() {
-		Player testPlayer = new Player();
-		PlayerTerritory testPlayerTerritory = new PlayerTerritory();
-		testPlayerTerritory.setContinentName("Asia");
-		testPlayerTerritory.setTerritoryName("india");
-		ArrayList<PlayerTerritory> testPtList = new ArrayList<PlayerTerritory>();
-		testPtList.add(testPlayerTerritory);
-		continentsControlledByUser = riskplay.getContinentControlledByPlayer(testPlayer, "validsmalltwo.map");
-		ArrayList<String> expectedList = new ArrayList<String>();
-		assertEquals(expectedList, continentsControlledByUser);
-	}
-	
-	/**
-	 * Test for GetContinentControlledByPlayer For Conquest Map.
-	 * 
-	 * @result returns number of continent list that is controlled by player.
-	 * 
-	 */
-	@Test
-	public void validGetContinentControlledByPlayerForConquest() {
-		Player testPlayer = new Player();
-		PlayerTerritory testPlayerTerritory = new PlayerTerritory();
-		testPlayerTerritory.setContinentName("Asia");
-		testPlayerTerritory.setTerritoryName("india");
-		ArrayList<PlayerTerritory> testPtList = new ArrayList<PlayerTerritory>();
-		testPtList.add(testPlayerTerritory);
-		continentsControlledByUser = riskplay.getContinentControlledByPlayer(testPlayer, "worldconquest.map");
-		ArrayList<String> expectedList = new ArrayList<String>();
-		assertEquals(expectedList, continentsControlledByUser);
-	}
-	/**
-	 * Test for validNewArmyAfterCardExchange.
-	 * 
-	 * @result based on count of it will return updatedArmy after exchange
-	 * 
-	 */
-	@Test
-	public void validNewArmyAfterCardExchange() {
-		player.setExchangeCount(0);
-		assertEquals(0, riskplay.newArmyAfterCardExchange(player));
-		
-		player.setExchangeCount(1);
-		assertEquals(5, riskplay.newArmyAfterCardExchange(player));
-		
-		player.setExchangeCount(2);
-		assertEquals(10, riskplay.newArmyAfterCardExchange(player));		
-		
-		player.setExchangeCount(3);
-		assertEquals(15, riskplay.newArmyAfterCardExchange(player));	
-		
-		player.setExchangeCount(4);
-		assertEquals(20, riskplay.newArmyAfterCardExchange(player));
-		
-		player.setExchangeCount(5);
-		assertEquals(25, riskplay.newArmyAfterCardExchange(player));
-		
-		player.setExchangeCount(6);
-		assertEquals(30, riskplay.newArmyAfterCardExchange(player));
-	}
-	
-	/**
-	 * Test for GetPlayerByCountry.
-	 * 
-	 * @result returns player object that owns the given country
-	 * 
-	 */
-	@Test
-	public void validGetPlayerByCountry() {
-		assertEquals(player, riskplay.getPlayerByCountry("Argentina", playerList));	
-	}
-	/**
-	 * Test for validCheckForExchange.
-	 * 
-	 * @result returns true if cards are eligible for exchange
-	 * 
-	 */
-	@Test
-	public void validCheckForExchange() {
-
-		RiskCardExchange cardExchange = new RiskCardExchange();
-		RiskCard cardOne, cardTwo, cardThree;
-		cardOne = new RiskCard();
-		cardOne.setArmyType(ARTILLERY);
-		cardTwo = new RiskCard();
-		cardTwo.setArmyType(CAVALRY);
-		cardThree = new RiskCard();
-		cardThree.setArmyType(INFANTRY);
-		cardExchange.setExchange1(cardOne);
-		cardExchange.setExchange2(cardTwo);
-		cardExchange.setExchange3(cardThree);
-		
-		assertEquals(true, riskplay.checkForExchange(cardExchange));	
-	}
-	
-	/**
-	 * Test for validGetCardBycardNumberofPlayer.
-	 * 
-	 * @result returns risk card that is having same number as given
-	 * 
-	 */
-	@Test
-	public void validGetCardBycardNumberofPlayer() {
-
-		
-		RiskCard cardOne;
-		cardOne = new RiskCard();
-		cardOne.setArmyType(ARTILLERY);
-		cardOne.setCardNumber(5);
-		ArrayList<RiskCard> cardList = new ArrayList<RiskCard>();
-		cardList.add(cardOne);
-		player.setCardListOwnedByPlayer(cardList);
-		
-		assertEquals(cardOne, riskplay.getCardBycardNumberofPlayer(player, 5));	
-	}
-	/**
-	 * Test for validGetCardNumbersFromPlayer.
-	 * 
-	 * @result returns card number list that layer is having
-	 * 
-	 */
-	@Test
-	public void validGetCardNumbersFromPlayer() {
-
-		
-		RiskCard cardOne, cardTwo, cardThree;
-		cardOne = new RiskCard();
-		cardOne.setArmyType(ARTILLERY);
-		cardOne.setCardNumber(5);
-		cardTwo = new RiskCard();
-		cardTwo.setArmyType(CAVALRY);
-		cardTwo.setCardNumber(6);
-		cardThree = new RiskCard();
-		cardThree.setArmyType(INFANTRY);
-		cardThree.setCardNumber(3);
-		ArrayList<RiskCard> cardList = new ArrayList<RiskCard>();
-		cardList.add(cardOne);
-		cardList.add(cardTwo);
-		cardList.add(cardThree);
-		player.setCardListOwnedByPlayer(cardList);
-		
-		ArrayList<Integer> cardNumbers = new ArrayList<Integer>();
-		cardNumbers.add(5);
-		cardNumbers.add(6);
-		cardNumbers.add(3);
-		assertEquals(cardNumbers, riskplay.getCardNumbersFromPlayer(player));	
-	}
-	/**
-	 * Test for validGetTotalArmyByPlayer.
-	 * 
-	 * @result returns total armies of all players.
-	 * 
-	 */
-	@Test
-	public void validGetTotalArmyByPlayer() {
-
-		assertEquals(16, riskplay.getTotalArmyByPlayer(playerList, player));	
-	}
-	/**
-	 * Test for validGetTotalArmyByPlayer.
-	 * 
-	 * @result returns total armies of all players.
-	 * 
-	 */
-	@Test
-	public void validPrepareCard() {
-		RiskCardExchange cardExchange = new RiskCardExchange();
-		
-		RiskCard cardOne, cardTwo, cardThree;
-		cardOne = new RiskCard();
-		cardOne.setArmyType(ARTILLERY);
-		cardOne.setCardNumber(5);
-		cardTwo = new RiskCard();
-		cardTwo.setArmyType(CAVALRY);
-		cardTwo.setCardNumber(3);
-		cardThree = new RiskCard();
-		cardThree.setArmyType(INFANTRY);
-		cardThree.setCardNumber(6);
-		
-		cardExchange.setExchange1(cardOne);
-		cardExchange.setExchange2(cardTwo);
-		cardExchange.setExchange3(cardThree);
-		
-		ArrayList<RiskCard> cardList = new ArrayList<RiskCard>();
-		cardList.add(cardOne);
-		cardList.add(cardTwo);
-		cardList.add(cardThree);
-		player.setCardListOwnedByPlayer(cardList);
-		
-		assertNotEquals(cardExchange, riskplay.prepareCard(player));	
 	}
 }
