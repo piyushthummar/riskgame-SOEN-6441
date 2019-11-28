@@ -35,8 +35,8 @@ import com.riskgame.model.Territory;
 public class ConquestMapImplTest {
 	public static RiskMap riskMap, expectedRiskMap;
 	public static MapManagementInterface mapInterface;
-	public static final String VALID_CONQUEST_MAP_NAME = "worldconquest.map";
-	public static final String VALID_SMALL_CONQUEST_MAP_NAME = "validSmallConquest.map";
+	public static final String VALID_CONQUEST_MAP_NAME = "worldconquest";
+	public static final String VALID_SMALL_CONQUEST_MAP_NAME = "validSmallConquest";
 	@Autowired
 	ConquestMapInterface conquestImpl;
 
@@ -88,13 +88,13 @@ public class ConquestMapImplTest {
 		continents.put(1, continent);
 
 		expectedRiskMap = new RiskMap();
-		expectedRiskMap.setMapName("validSmallConquest.map");
+		expectedRiskMap.setMapName("validSmallConquest");
 		expectedRiskMap.setStatus(null);
 		expectedRiskMap.setContinents(continents);
 
 		conquestImpl = new ConquestMapImpl();
 		MapManagementInterface mapInterface = new DominationToConquestAdapter(conquestImpl);
-		riskMap = mapInterface.readMap(VALID_SMALL_CONQUEST_MAP_NAME);
+		riskMap = mapInterface.readMap(VALID_SMALL_CONQUEST_MAP_NAME+".map");
 
 		assertNotEquals(expectedRiskMap, riskMap);
 	}
@@ -107,7 +107,7 @@ public class ConquestMapImplTest {
 	public void testSaveMapToFile() {
 		boolean actualResult = false;
 
-		riskMap = mapInterface.readMap(VALID_CONQUEST_MAP_NAME);
+		riskMap = mapInterface.readMap(VALID_CONQUEST_MAP_NAME+".map");
 
 		try {
 			actualResult = conquestImpl.saveMapToFile(riskMap);
