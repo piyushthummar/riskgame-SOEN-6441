@@ -1,0 +1,897 @@
+{
+  "playerList" : [ {
+    "playerId" : 1,
+    "playerName" : "ashish",
+    "armyOwns" : 34,
+    "playerReinforceArmy" : 0,
+    "playerterritories" : [ {
+      "continentName" : "Canada",
+      "territoryName" : "Alberta",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Canada",
+      "territoryName" : "Saskatchewan",
+      "armyOnterritory" : 6
+    }, {
+      "continentName" : "Northwest U.S.",
+      "territoryName" : "Oregon",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Texas",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Mexico",
+      "territoryName" : "Eastern Mexico",
+      "armyOnterritory" : 3
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Florida",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Louisiana",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Canada",
+      "territoryName" : "Ontario",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "West Virginia",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Massachusetts",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Indiana",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Illinois",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "New York",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "New Jersey",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Mexico",
+      "territoryName" : "Western Mexico",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Maine",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Maryland",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Canada",
+      "territoryName" : "British Columbia",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Arkansas",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "North Carolina",
+      "armyOnterritory" : 1
+    } ],
+    "cardListOwnedByPlayer" : [ {
+      "cardNumber" : 30,
+      "armyType" : "CAVALRY"
+    } ],
+    "exchangeCount" : 0,
+    "playerType" : "COMPUTER",
+    "strategyName" : "AGGRESIVE"
+  }, {
+    "playerId" : 2,
+    "playerName" : "zkp",
+    "armyOwns" : 33,
+    "playerReinforceArmy" : 6,
+    "playerterritories" : [ {
+      "continentName" : "Canada",
+      "territoryName" : "Manitoba",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "North Dakota",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Kansas",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northwest U.S.",
+      "territoryName" : "Wyoming",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Mississippi",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Vermont",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northwest U.S.",
+      "territoryName" : "Idaho",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northwest U.S.",
+      "territoryName" : "Washington",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "Colorado",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Georgia",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "Nevada",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "Arizona",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Tennessee",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Oklahoma",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "New Hampshire",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "South Dakota",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "New Mexico",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Canada",
+      "territoryName" : "Quebec",
+      "armyOnterritory" : 1
+    } ],
+    "cardListOwnedByPlayer" : [ ],
+    "exchangeCount" : 0,
+    "playerType" : "HUMAN",
+    "strategyName" : "HUMAN"
+  }, {
+    "playerId" : 3,
+    "playerName" : "anshu",
+    "armyOwns" : 35,
+    "playerReinforceArmy" : 0,
+    "playerterritories" : [ {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Delaware",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Missouri",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Wisconsin",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "South Carolina",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Pennsylvania",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Ohio",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northwest U.S.",
+      "territoryName" : "Montana",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Mexico",
+      "territoryName" : "Baja California",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Rhode Island",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Kentucky",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "Utah",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southwest U.S.",
+      "territoryName" : "California",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Canada",
+      "territoryName" : "New Brunswick",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Connecticut",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Nebraska",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Alabama",
+      "armyOnterritory" : 2
+    }, {
+      "continentName" : "Southeast U.S.",
+      "territoryName" : "Virginia",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Northeast U.S.",
+      "territoryName" : "Michigan",
+      "armyOnterritory" : 1
+    }, {
+      "continentName" : "Midwest U.S.",
+      "territoryName" : "Minnisota",
+      "armyOnterritory" : 1
+    } ],
+    "cardListOwnedByPlayer" : [ ],
+    "exchangeCount" : 0,
+    "playerType" : "COMPUTER",
+    "strategyName" : "CHEATER"
+  } ],
+  "gamePhase" : "ATTACK",
+  "fileName" : "USA.map",
+  "riskCardList" : [ {
+    "cardNumber" : 21,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 24,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 48,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 34,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 7,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 53,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 52,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 15,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 27,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 2,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 42,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 35,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 14,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 26,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 23,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 56,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 9,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 40,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 3,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 45,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 43,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 44,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 29,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 32,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 22,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 57,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 54,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 38,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 33,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 17,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 4,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 11,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 36,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 50,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 46,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 5,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 41,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 19,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 18,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 31,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 51,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 1,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 39,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 55,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 10,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 13,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 49,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 37,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 6,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 12,
+    "armyType" : "CAVALRY"
+  }, {
+    "cardNumber" : 20,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 47,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 16,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 8,
+    "armyType" : "ARTILLERY"
+  }, {
+    "cardNumber" : 28,
+    "armyType" : "INFANTRY"
+  }, {
+    "cardNumber" : 25,
+    "armyType" : "INFANTRY"
+  } ],
+  "winner" : null,
+  "numberOfGames" : 0,
+  "maxNumberOfTurns" : 0,
+  "gamePlayPhaseId" : 0,
+  "riskMap" : {
+    "mapName" : "USA.map",
+    "continents" : {
+      "1" : {
+        "continentIndex" : 1,
+        "continentName" : "Mexico",
+        "continentValue" : 2,
+        "territoryList" : [ {
+          "territoryIndex" : 1,
+          "territoryName" : "Baja California",
+          "continentIndex" : 1,
+          "neighbourTerritories" : [ "California", "Western Mexico" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 2,
+          "territoryName" : "Western Mexico",
+          "continentIndex" : 1,
+          "neighbourTerritories" : [ "Baja California", "Arizona", "New Mexico", "Texas", "Eastern Mexico" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 3,
+          "territoryName" : "Eastern Mexico",
+          "continentIndex" : 1,
+          "neighbourTerritories" : [ "Western Mexico", "Texas" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "2" : {
+        "continentIndex" : 2,
+        "continentName" : "Northwest U.S.",
+        "continentValue" : 3,
+        "territoryList" : [ {
+          "territoryIndex" : 4,
+          "territoryName" : "Washington",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "British Columbia", "Idaho", "Oregon" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 5,
+          "territoryName" : "Oregon",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "Washington", "Idaho", "Nevada", "California" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 6,
+          "territoryName" : "Idaho",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "British Columbia", "Montana", "Wyoming", "Utah", "Nevada", "Oregon", "Washington" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 7,
+          "territoryName" : "Montana",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "British Columbia", "Alberta", "Saskatchewan", "North Dakota", "South Dakota", "Wyoming", "Idaho" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 8,
+          "territoryName" : "Wyoming",
+          "continentIndex" : 2,
+          "neighbourTerritories" : [ "Montana", "South Dakota", "Nebraska", "Colorado", "Utah", "Idaho" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "3" : {
+        "continentIndex" : 3,
+        "continentName" : "Southwest U.S.",
+        "continentValue" : 4,
+        "territoryList" : [ {
+          "territoryIndex" : 9,
+          "territoryName" : "California",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "Oregon", "Nevada", "Arizona", "Baja California" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 10,
+          "territoryName" : "Nevada",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "Oregon", "Idaho", "Utah", "Arizona", "California" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 11,
+          "territoryName" : "Utah",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "Idaho", "Wyoming", "Colorado", "Arizona", "Nevada" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 12,
+          "territoryName" : "Colorado",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "Wyoming", "Nebraska", "Kansas", "Oklahoma", "New Mexico", "Utah" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 13,
+          "territoryName" : "Arizona",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "California", "Nevada", "Utah", "New Mexico", "Western Mexico" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 14,
+          "territoryName" : "New Mexico",
+          "continentIndex" : 3,
+          "neighbourTerritories" : [ "Colorado", "Oklahoma", "Texas", "Western Mexico", "Arizona" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "4" : {
+        "continentIndex" : 4,
+        "continentName" : "Canada",
+        "continentValue" : 5,
+        "territoryList" : [ {
+          "territoryIndex" : 15,
+          "territoryName" : "British Columbia",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Alberta", "Montana", "Idaho", "Washington" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 16,
+          "territoryName" : "Alberta",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Saskatchewan", "Montana", "British Columbia" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 17,
+          "territoryName" : "Saskatchewan",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Manitoba", "North Dakota", "Montana", "Alberta" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 18,
+          "territoryName" : "Manitoba",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Ontario", "Minnisota", "North Dakota", "Saskatchewan" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 19,
+          "territoryName" : "Ontario",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Quebec", "New York", "Ohio", "Michigan", "Minnisota", "Manitoba" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 20,
+          "territoryName" : "Quebec",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "New Brunswick", "Maine", "New Hampshire", "Vermont", "New York", "Ontario" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 21,
+          "territoryName" : "New Brunswick",
+          "continentIndex" : 4,
+          "neighbourTerritories" : [ "Maine", "Quebec" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "5" : {
+        "continentIndex" : 5,
+        "continentName" : "Southeast U.S.",
+        "continentValue" : 6,
+        "territoryList" : [ {
+          "territoryIndex" : 22,
+          "territoryName" : "Kentucky",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Illinois", "Indiana", "Ohio", "West Virginia", "Virginia", "Tennessee", "Missouri" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 23,
+          "territoryName" : "West Virginia",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Ohio", "Pennsylvania", "Maryland", "Virginia", "Kentucky" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 24,
+          "territoryName" : "Maryland",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Pennsylvania", "Delaware", "Virginia", "West Virginia" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 25,
+          "territoryName" : "Delaware",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Pennsylvania", "New Jersey", "Maryland" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 26,
+          "territoryName" : "Virginia",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Maryland", "North Carolina", "Tennessee", "Kentucky", "West Virginia" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 27,
+          "territoryName" : "Tennessee",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Kentucky", "Virginia", "North Carolina", "Georgia", "Alabama", "Mississippi", "Arkansas", "Missouri" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 28,
+          "territoryName" : "North Carolina",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Virginia", "South Carolina", "Georgia", "Tennessee" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 29,
+          "territoryName" : "Mississippi",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Tennessee", "Alabama", "Louisiana", "Arkansas" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 30,
+          "territoryName" : "Alabama",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Tennessee", "Georgia", "Florida", "Mississippi" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 31,
+          "territoryName" : "Georgia",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Tennessee", "North Carolina", "South Carolina", "Florida", "Alabama" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 32,
+          "territoryName" : "South Carolina",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "North Carolina", "Georgia" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 33,
+          "territoryName" : "Florida",
+          "continentIndex" : 5,
+          "neighbourTerritories" : [ "Alabama", "Georgia" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "6" : {
+        "continentIndex" : 6,
+        "continentName" : "Northeast U.S.",
+        "continentValue" : 7,
+        "territoryList" : [ {
+          "territoryIndex" : 34,
+          "territoryName" : "Wisconsin",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Michigan", "Illinois", "Minnisota" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 35,
+          "territoryName" : "Michigan",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Ontario", "Ohio", "Indiana", "Wisconsin", "Minnisota" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 36,
+          "territoryName" : "Illinois",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Wisconsin", "Indiana", "Kentucky", "Missouri" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 37,
+          "territoryName" : "Indiana",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Michigan", "Ohio", "Kentucky", "Illinois" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 38,
+          "territoryName" : "Ohio",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Michigan", "Ontario", "Pennsylvania", "West Virginia", "Kentucky", "Indiana" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 39,
+          "territoryName" : "Pennsylvania",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "New York", "New Jersey", "Delaware", "Maryland", "West Virginia", "Ohio" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 40,
+          "territoryName" : "New Jersey",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "New York", "Delaware", "Pennsylvania" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 41,
+          "territoryName" : "New York",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Quebec", "Vermont", "Massachusetts", "Connecticut", "New Jersey", "Pennsylvania", "Ontario" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 42,
+          "territoryName" : "Connecticut",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Massachusetts", "Rhode Island", "New York" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 43,
+          "territoryName" : "Rhode Island",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Massachusetts", "Connecticut" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 44,
+          "territoryName" : "Massachusetts",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Vermont", "New Hampshire", "Rhode Island", "Connecticut", "New York" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 45,
+          "territoryName" : "Vermont",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Quebec", "New Hampshire", "Massachusetts", "New York" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 46,
+          "territoryName" : "New Hampshire",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Quebec", "Maine", "Massachusetts", "Vermont" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 47,
+          "territoryName" : "Maine",
+          "continentIndex" : 6,
+          "neighbourTerritories" : [ "Quebec", "New Brunswick", "New Hampshire" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      },
+      "7" : {
+        "continentIndex" : 7,
+        "continentName" : "Midwest U.S.",
+        "continentValue" : 8,
+        "territoryList" : [ {
+          "territoryIndex" : 48,
+          "territoryName" : "North Dakota",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Saskatchewan", "Manitoba", "Minnisota", "South Dakota", "Montana" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 49,
+          "territoryName" : "South Dakota",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "North Dakota", "Minnisota", "Nebraska", "Wyoming", "Montana" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 50,
+          "territoryName" : "Nebraska",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "South Dakota", "Missouri", "Kansas", "Colorado", "Wyoming" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 51,
+          "territoryName" : "Kansas",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Nebraska", "Missouri", "Oklahoma", "Colorado" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 52,
+          "territoryName" : "Oklahoma",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Kansas", "Missouri", "Arkansas", "Texas", "New Mexico", "Colorado" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 53,
+          "territoryName" : "Texas",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Oklahoma", "Arkansas", "Louisiana", "Eastern Mexico", "Western Mexico", "New Mexico" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 54,
+          "territoryName" : "Minnisota",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Ontario", "Michigan", "Wisconsin", "South Dakota", "North Dakota", "Manitoba" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 55,
+          "territoryName" : "Missouri",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Illinois", "Kentucky", "Tennessee", "Arkansas", "Oklahoma", "Kansas", "Nebraska" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 56,
+          "territoryName" : "Arkansas",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Missouri", "Tennessee", "Mississippi", "Louisiana", "Texas", "Oklahoma" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        }, {
+          "territoryIndex" : 57,
+          "territoryName" : "Louisiana",
+          "continentIndex" : 7,
+          "neighbourTerritories" : [ "Arkansas", "Mississippi" ],
+          "xaxis" : 0,
+          "yaxis" : 0
+        } ]
+      }
+    },
+    "status" : null
+  },
+  "currentPlayerId" : 1,
+  "status" : "1 army moved from Texas to Eastern Mexico\n",
+  "riskCardExchange" : null,
+  "action" : "startgame",
+  "totalCountries" : 0,
+  "phaseView" : "Current Player : zkp\nCurrent Phase : REINFORCEMENT\n\n",
+  "playerdomination" : "Map Controlled by zkp is 31.578947%\nContinent : []\nTotal Numebr of Army : 33\n",
+  "territoryList" : "1) Manitoba : 2\n2) North Dakota : 2\n3) Kansas : 2\n4) Wyoming : 2\n5) Mississippi : 2\n6) Vermont : 2\n7) Idaho : 2\n8) Washington : 2\n9) Colorado : 2\n10) Georgia : 2\n11) Nevada : 2\n12) Arizona : 2\n13) Tennessee : 2\n14) Oklahoma : 2\n15) New Hampshire : 2\n16) South Dakota : 1\n17) New Mexico : 1\n18) Quebec : 1\n",
+  "adjacentTerritory" : "1) Manitoba-2 ==> North Dakota\n2) North Dakota-2 ==> Manitoba ==> South Dakota\n3) Kansas-2 ==> Oklahoma ==> Colorado\n4) Wyoming-2 ==> South Dakota ==> Colorado ==> Idaho\n5) Mississippi-2 ==> Tennessee\n6) Vermont-2 ==> Quebec ==> New Hampshire\n7) Idaho-2 ==> Wyoming ==> Nevada ==> Washington\n8) Washington-2 ==> Idaho\n9) Colorado-2 ==> Wyoming ==> Kansas ==> Oklahoma ==> New Mexico\n10) Georgia-2 ==> Tennessee\n11) Nevada-2 ==> Idaho ==> Arizona\n12) Arizona-2 ==> Nevada ==> New Mexico\n13) Tennessee-2 ==> Georgia ==> Mississippi\n14) Oklahoma-2 ==> Kansas ==> New Mexico ==> Colorado\n15) New Hampshire-2 ==> Quebec ==> Vermont\n16) South Dakota-1 ==> North Dakota ==> Wyoming\n17) New Mexico-1 ==> Colorado ==> Oklahoma ==> Arizona\n18) Quebec-1 ==> New Hampshire ==> Vermont\n",
+  "cardExchangeView" : "zkp cardexchange view :\nRisk Cards:\n",
+  "consollog" : "ashish's turn is started\nYou have 6 armies to Reinforcement\nzkp's turn is started\nYou have 6 armies to Reinforcement\n"
+}

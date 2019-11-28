@@ -98,7 +98,12 @@ public class GamePlayPhase {
 	 */
 	private int totalCountries;
 	
-	
+	private String phaseView;
+	private String playerdomination;
+	private String territoryList;
+	private String adjacentTerritory;
+	private String cardExchangeView;
+	private String consollog;
 
 	/**
 	 * {@inheritDoc}
