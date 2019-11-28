@@ -1,0 +1,53 @@
+[Map]
+author=I.Farahmand
+image=Iran.bmp
+wrap=yes
+scroll=none
+warn=yes
+
+[Continents]
+North of Iran=4
+South of Iran=4
+Center of Iran=7
+Northwest of Iran=5
+Northeast of Iran=3
+Southwest of Iran=5
+Southeast of Iran=2
+
+[Territories]
+Gilan,218,129,North of Iran,Ardebil,Zanjan,Ghazvin,Mazandaran
+Mazandaran,291,159,North of Iran,Gilan,Ghazvin,Tehran,Semnan,Golestan
+Golestan,372,126,North of Iran,Mazandaran,Semnan,Khorasan-e-Shomali
+
+Bushehr,265,451,South of Iran,Khuzestan,Kohkiluye-va-BuyerAhmad,Fars,Hormozgan
+Hormozgan,429,482,South of Iran,Bushehr,Fars,Kerman,Sistan-va-Baluchestan
+Fars,329,445,South of Iran,Bushehr,Kohkiluye-va-BuyerAhmad,Esfahan,Yazd,Kerman,Hormozgan
+
+Tehran,266,184,Center of Iran,Ghazvin,Mazandaran,Semnan,Ghom,Markazi
+Markazi,213,221,Center of Iran,Hamedan,Ghazvin,Tehran,Ghom,Esfahan,Lorestan
+Ghom,252,217,Center of Iran,Markazi,Tehran,Semnan,Esfahan
+Semnan,366,196,Center of Iran,Ghom,Tehran,Mazandaran,Golestan,Khorasan-e-Shomali,Khorasan-e-Razavi,Yazd,Esfahan
+Esfahan,285,283,Center of Iran,Lorestan,Markazi,Ghom,Semnan,Yazd,Fars,Kohkiluye-va-BuyerAhmad,ChaharMahal-va-Bakhtiari
+Yazd,381,314,Center of Iran,Esfahan,Semnan,Khorasan-e-Razavi,Khorasan-e-Jonubi,Kerman,Fars
+
+Azarbayjan-e-Gharbi,95,132,Northwest of Iran,Azarbayjan-e-Shargi,Zanjan,Kordestan
+Azarbayjan-e-Shargi,130,94,Northwest of Iran,Azarbayjan-e-Gharbi,Ardebil,Zanjan
+Ardebil,175,84,Northwest of Iran,Azarbayjan-e-Shargi,Gilan,Zanjan
+Kordestan,135,181,Northwest of Iran,Azarbayjan-e-Gharbi,Zanjan,Hamedan,Kermanshah
+Zanjan,178,149,Northwest of Iran,Azarbayjan-e-Gharbi,Azarbayjan-e-Shargi,Ardebil,Gilan,Ghazvin,Hamedan,Kordestan
+Ghazvin,218,168,Northwest of Iran,Zanjan,Gilan,Mazandaran,Tehran,Markazi,Hamedan
+Kermanshah,115,222,Northwest of Iran,Kordestan,Hamedan,Lorestan,Ilam
+Hamedan,179,209,Northwest of Iran,Kermanshah,Kordestan,Zanjan,Ghazvin,Markazi,Lorestan
+
+Khorasan-e-Shomali,440,115,Northeast of Iran,Golestan,Khorasan-e-Razavi,Semnan
+Khorasan-e-Razavi,494,179,Northeast of Iran,Semnan,Khorasan-e-Shomali,Khorasan-e-Jonubi,Yazd
+Khorasan-e-Jonubi,522,299,Northeast of Iran,Yazd,Khorasan-e-Razavi,Sistan-va-Baluchestan,Kerman
+
+Ilam,121,272,Southwest of Iran,Kermanshah,Lorestan,Khuzestan
+Lorestan,171,258,Southwest of Iran,Ilam,Kermanshah,Hamedan,Markazi,Esfahan,ChaharMahal-va-Bakhtiari,Khuzestan
+Khuzestan,184,341,Southwest of Iran,Ilam,Lorestan,ChaharMahal-va-Bakhtiari,Kohkiluye-va-BuyerAhmad,Bushehr
+ChaharMahal-va-Bakhtiari,243,319,Southwest of Iran,Khuzestan,Lorestan,Esfahan,Kohkiluye-va-BuyerAhmad
+Kohkiluye-va-BuyerAhmad,243,364,Southwest of Iran,Khuzestan,ChaharMahal-va-Bakhtiari,Esfahan,Fars,Bushehr
+
+Kerman,453,409,Southeast of Iran,Fars,Yazd,Khorasan-e-Jonubi,Sistan-va-Baluchestan,Hormozgan
+Sistan-va-Baluchestan,567,479,Southeast of Iran,Hormozgan,Kerman,Khorasan-e-Jonubi
