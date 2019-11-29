@@ -97,13 +97,40 @@ public class GamePlayPhase {
 	 * totalCountries per map
 	 */
 	private int totalCountries;
-	
+
 	private String phaseView;
 	private String playerdomination;
 	private String territoryList;
 	private String adjacentTerritory;
 	private String cardExchangeView;
 	private String consollog;
+
+	private int playerIndex;
+	private String playerName;
+	private Player currentPlayer;
+	private boolean countryConquredInSingleAttack;
+
+	private boolean attackphaseEnded;
+	private boolean allOutTerritoryConqured;
+	private boolean fortificationStarted;
+	private int attackerDice;
+	private int defenderDice;
+
+	private Player defenderPlayer;
+	private String fromCountryAttack;
+	private String toCountryAttack;
+
+	private boolean exchangeRequired;
+
+	private boolean attackFire;
+
+	private boolean attackMove;
+
+	private List<RiskCard> cardList;
+
+	private String currentPhase;
+
+	private boolean gamewin;
 
 	/**
 	 * {@inheritDoc}

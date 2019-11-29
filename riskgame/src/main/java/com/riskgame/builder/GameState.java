@@ -17,8 +17,13 @@ import lombok.Setter;
 public class GameState {
 
 	/**
-	 * The components of the GameState to be constructed
+	 * The components of the GameState to be constructed (for SaveGame)
 	 */
 	private GamePlayPhase gamePlayPhase;
+	
+	/**
+	 * The components of the fileName to be constructed (for LoadGame)
+	 */
+	private String fileName;
 	
 }

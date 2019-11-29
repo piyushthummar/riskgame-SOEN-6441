@@ -326,17 +326,6 @@ public class RandomPlayer implements StrategyInterface {
 		Player player = riskPlayImpl.getPlayerByCountry(toCountryAttack, gamePlayPhase.getPlayerList());
 		PlayerTerritory playerTerritory = riskPlayImpl.getPlayerTerritoryByCountryName(toCountryAttack, player);
 
-		// Fore removing country
-		for (Player playertoLst : gamePlayPhase.getPlayerList()) {
-
-			ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories().listIterator();
-
-			while (playerTerritories.hasNext()) {
-				if (playerTerritories.next().getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName())) {
-					playerTerritories.remove();
-				}
-			}
-		}
 		// for Adding country
 		for (Player playerFromLst : gamePlayPhase.getPlayerList()) {
 
@@ -348,6 +337,20 @@ public class RandomPlayer implements StrategyInterface {
 				}
 			}
 		}
+		
+
+		// Fore removing country
+		for (Player playertoLst : gamePlayPhase.getPlayerList()) {
+
+			ListIterator<PlayerTerritory> playerTerritories = playertoLst.getPlayerterritories().listIterator();
+
+			while (playerTerritories.hasNext()) {
+				if (playerTerritories.next().getTerritoryName().equalsIgnoreCase(playerTerritory.getTerritoryName()) && player.getPlayerId()==playertoLst.getPlayerId()) {
+					playerTerritories.remove();
+				}
+			}
+		}
+		
 		sb.append(toCountryAttack).append(" country has been conquered ").append(NEWLINE);
 		return gamePlayPhase;
 	}

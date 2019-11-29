@@ -3,9 +3,12 @@ package com.riskgame.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -19,6 +22,7 @@ import com.riskgame.config.StageManager;
 import com.riskgame.constant.ComputerStrategy;
 import com.riskgame.constant.HumanStrategy;
 import com.riskgame.constant.StrategyType;
+import com.riskgame.model.Continent;
 import com.riskgame.model.GamePlayPhase;
 import com.riskgame.model.Player;
 import com.riskgame.model.PlayerTerritory;
@@ -166,6 +170,7 @@ public class StartupPhaseController implements Initializable {
 	private StringBuilder sb;
 	private static StrategyType[] strategyArray = StrategyType.values();
 	private boolean ispopulate = false;
+	RiskMap map = null;
 
 	/**
 	 * On action method for tournament start button
@@ -360,6 +365,7 @@ public class StartupPhaseController implements Initializable {
 					gamePlayPhase.setPlayerList(playerList);
 					gamePlayPhase.setGamePhase("Startup");
 					gamePlayPhase.setFileName(mapFileName);
+					gamePlayPhase.setRiskMap(map);
 					if (gamePlayPhase.getPlayerList().isEmpty()) {
 						txtConsoleLog
 								.setText("Please add players first to see Continent, countries, ownership and army");
@@ -376,11 +382,14 @@ public class StartupPhaseController implements Initializable {
 				} else if (command.startsWith("populatecountries")) {
 					if (!ispopulate) {
 						txtConsoleLog.setText(commandPopulateCountries());
-						txtConsoleLog.appendText(changeUserTurn());
-						ispopulate=true;
-					}
-					else
-					{
+						if (ispopulate) {
+							txtConsoleLog.appendText(changeUserTurn());
+						} else {
+							txtConsoleLog.setText(
+									"Total players should be less or equal to total countries, Please remove player or load different map");
+						}
+
+					} else {
 						txtConsoleLog.setText("Populate Countries is done. Go for Placearmy");
 					}
 				} else if (command.startsWith("placearmy")) {
@@ -496,9 +505,7 @@ public class StartupPhaseController implements Initializable {
 		String result = "";
 		List<String> command = Arrays.asList(commandLine.split(" "));
 		String fileName = command.get(1);
-		RiskMap map = null;
 		List<String> mapNameList = mapManagementImpl.getAvailableMap();
-
 		if (mapNameList.contains(fileName + ".map")) {
 
 			if (mapManagementImpl.isMapConquest(fileName + ".map")) {
@@ -897,19 +904,43 @@ public class StartupPhaseController implements Initializable {
 	}
 
 	/**
+	 * It will return total countries in given map
+	 * 
+	 * @param riskMap
+	 * @return total countries
+	 */
+	private static int getTotalCountries(RiskMap r) {
+		Map<Integer, Continent> continentMap = r.getContinents();
+		Iterator<Entry<Integer, Continent>> i = continentMap.entrySet().iterator();
+		int totalCountries = 0;
+		while (i.hasNext()) {
+			Entry<Integer, Continent> e = i.next();
+			Continent c = e.getValue();
+			totalCountries += c.getTerritoryList().size();
+		}
+		return totalCountries;
+	}
+
+	/**
 	 * @return string message of appropriate result to above method where this got
 	 *         called
 	 */
 	private String commandPopulateCountries() {
 		String result = "";
-
+		int countries = getTotalCountries(map);
+		System.out.println(playerList.size());
+		System.out.println(countries);
 		if (mapFileName != null && !mapFileName.isEmpty()) {
-			if (playerList.size() >= 2) {
-
-				commonPopulateCountries();
-				result = "All countries are randomly assigned to players. Please fire showmap command to view";
+			if (playerList.size() <= countries) {
+				if (playerList.size() >= 2) {
+					commonPopulateCountries();
+					ispopulate = true;
+					result = "All countries are randomly assigned to players. Please fire showmap command to view";
+				} else {
+					result = "Atleast 2 pleayers are requiredd for the game please add players";
+				}
 			} else {
-				result = "Atleast 2 pleayers are requiredd for the game please add players";
+				result = "Total players should be less or equal to total countries";
 			}
 		} else {
 			result = "Please fire loadmap command first to load your map";
@@ -985,12 +1016,13 @@ public class StartupPhaseController implements Initializable {
 		btnAddPlayer.setDisable(false);
 		btnPopulatecountry.setDisable(false);
 		btnPlaceAll.setDisable(false);
-		mapFileName = "";
+		mapFileName = null;
 		playerList.clear();
 		playerId = 1;
 		loadPlayerDetails();
 		txtConsoleLog.clear();
 		playerIndex = -1;
-		ispopulate=false;
+		ispopulate = false;
+		map = null;
 	}
 }

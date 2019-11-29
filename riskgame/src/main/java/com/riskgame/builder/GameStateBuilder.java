@@ -40,4 +40,11 @@ public abstract class GameStateBuilder {
 	 */
 	abstract void buildGamePlayPhase(GamePlayPhase gamePlayPhase);
 
+	/**
+	 * This is abstract method to implement (build) fileName which is given
+	 * 
+	 * @param fileName
+	 */
+	abstract void buildFileName(String fileName);
+
 }

@@ -19,7 +19,6 @@ import lombok.ToString;
  */
 @Getter
 @Setter
-@ToString
 @JsonIgnoreProperties
 public class Territory {
 	
@@ -54,5 +53,14 @@ public class Territory {
 	 * List of neighbor territory of this territory
 	 */
 	private List<String> neighbourTerritories;
+
+	@Override
+	public String toString() {
+		return "Territory \n [territoryIndex=" + territoryIndex + ", territoryName=" + territoryName + ", continentIndex="
+				+ continentIndex + ", xAxis=" + xAxis + ", yAxis=" + yAxis + ", neighbourTerritories="
+				+ neighbourTerritories + "] \n";
+	}
+	
+	
 
 }

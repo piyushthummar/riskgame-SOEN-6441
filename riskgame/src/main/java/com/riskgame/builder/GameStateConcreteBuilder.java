@@ -17,5 +17,13 @@ public class GameStateConcreteBuilder extends GameStateBuilder {
 	void buildGamePlayPhase(GamePlayPhase gamePlayPhase) {
 		gameState.setGamePlayPhase(gamePlayPhase);
 	}
+	
+	/**
+	 *  The construction of the fileName parts 
+	 */
+	@Override
+	void buildFileName(String fileName) {
+		gameState.setFileName(fileName);
+	}
 
 }

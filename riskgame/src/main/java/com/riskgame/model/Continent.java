@@ -9,14 +9,13 @@ import lombok.ToString;
 /**
  * This class represents all the continents in the map and it is having list of territories that continent owned.
  * 
- * Three annotations (Getter, Setter and ToString) you can see on the top of the class are lombok dependencies to 
- * automatically generate getter, setter and tostring method in the code.
+ * Two annotations (Getter, Setter) you can see on the top of the class are lombok dependencies to 
+ * automatically generate getter, setter method in the code.
  *
  * @author <a href="mailto:z_tel@encs.concordia.ca">Zankhanaben Patel</a>
  */
 @Getter
 @Setter
-@ToString
 public class Continent {
 	
 	/**
@@ -39,6 +38,12 @@ public class Continent {
 	 * List of territories this continent is having
 	 */
 	private List<Territory> territoryList = new ArrayList<>();
+
+	@Override
+	public String toString() {
+		return "Continent \n [continentIndex=" + continentIndex + ", continentName=" + continentName + ", continentValue="
+				+ continentValue + ", territoryList=" + territoryList + "] \n";
+	}
 
 }
 

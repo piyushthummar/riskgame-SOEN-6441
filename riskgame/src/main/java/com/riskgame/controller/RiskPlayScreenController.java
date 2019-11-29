@@ -208,11 +208,42 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		tournamentPhaseViewb = new StringBuilder();
 		tournamentConsoleView = new StringBuilder();
 		tournamentPlayerDominationview = new StringBuilder();
+		
+		playerIndex = 0;
+		playerName = "";
+		turnStartedMsg = "";
+		leftArmyMsg = "";
 
+		// public static final String NEUTRAL = "NEUTRAL";
+		currentPlayer = null; 
+		
+		mapConquered = false;
+		countryConquredInSingleAttack = false;
+		attackphaseEnded = false;
+		allOutTerritoryConqured = false;
+		fortificationStarted = false;
+		attackerDice = 0;
+		defenderDice = 0;
+
+		defenderPlayer = null;
+		fromCountryAttack = null;
+		toCountryAttack = null;
+
+		exchangeRequired = false;
+
+		attackFire = false;
+
+		attackMove = false;
+		totalCountries = 0;
+		currentPhase = null;
+
+		gamewin = false;
 	}
 
 	/**
-	 * @param riskMap2
+	 * It will return total countries in given map
+	 * @param riskMap
+	 * @return total countries
 	 */
 	private int getTotalCountries(RiskMap r) {
 		Map<Integer, Continent> continentMap = r.getContinents();
@@ -274,7 +305,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 						saveGame(commandData.get(1));
 						txtConsoleLog.setText("Current Game state saved successfully in file : " + commandData.get(1));
 					} else if (commandData.get(0).equalsIgnoreCase("loadgame")) {
-						txtConsoleLog.setText(loadGame(commandData.get(1)));
+						//txtConsoleLog.setText(loadGame(commandData.get(1)));
+						loadGame(commandData.get(1));
 					}
 
 				} else if (gameplayphase.getAction().equalsIgnoreCase("startgame")) {
@@ -303,12 +335,7 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	 */
 	private void saveGame(String fileName) {
 
-		gameplayphase.setPhaseView(txtPhaseView.getText());
-		gameplayphase.setPlayerdomination(txtPlayerDominationView.getText());
-		gameplayphase.setTerritoryList(territoryArea.getText());
-		gameplayphase.setAdjacentTerritory(adjacentTerritoryArea.getText());
-		gameplayphase.setCardExchangeView(txtCardExchangeView.getText());
-		gameplayphase.setConsollog(txtConsoleLog.getText());
+		preparGamePlayPhase();
 
 		GameStateBuilder gameStateBuilder = new GameStateConcreteBuilder();
 		GameStateDirector director = new GameStateDirector(gameplayphase);
@@ -345,7 +372,14 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 			List<String> fileList = riskPlayImpl.getAvailableGameFiles();
 			if (fileList.contains(fileName + ".json")) {
 
-				GamePlayPhase gamePlayPhaseLoad = riskPlayImpl.convertJsonFileToObject(fileName);
+				GameStateBuilder gameStateBuilder = new GameStateConcreteBuilder();
+				GameStateDirector director = new GameStateDirector(fileName);
+				director.setBuilder(gameStateBuilder);
+				director.constructGameState();
+				GameState gameState = director.getGameState();
+				System.out.println("FileName ===> " + gameState.getFileName());
+				
+				GamePlayPhase gamePlayPhaseLoad = riskPlayImpl.convertJsonFileToObject(gameState.getFileName());
 				System.out.println("loadGame ====> " + gamePlayPhaseLoad);
 
 				gameplayphase = gamePlayPhaseLoad;
@@ -360,13 +394,8 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 				}
 
-				txtPhaseView.setText(gameplayphase.getPhaseView());
-				txtPlayerDominationView.setText(gameplayphase.getPlayerdomination());
-				territoryArea.setText(gameplayphase.getTerritoryList());
-				adjacentTerritoryArea.setText(gameplayphase.getAdjacentTerritory());
-				txtCardExchangeView.setText(gameplayphase.getCardExchangeView());
-				txtConsoleLog.setText(gameplayphase.getConsollog());
-
+				preparGameplayPhaseForLoadGame();
+				
 				return "Game loaded Successfully.!";
 
 			} else {
@@ -385,12 +414,89 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 	}
 
 	/**
+	 * This method will create gameplayphase object for loadgame
+	 * @return void
+	 */
+	private void preparGameplayPhaseForLoadGame() {
+		
+		txtPhaseView.setText(gameplayphase.getPhaseView());
+		txtPlayerDominationView.setText(gameplayphase.getPlayerdomination());
+		territoryArea.setText(gameplayphase.getTerritoryList());
+		adjacentTerritoryArea.setText(gameplayphase.getAdjacentTerritory());
+		txtCardExchangeView.setText(gameplayphase.getCardExchangeView());
+		txtConsoleLog.setText(gameplayphase.getConsollog());
+		
+		riskMap = gameplayphase.getRiskMap();
+		playerIndex = gameplayphase.getPlayerIndex();
+		playerName = gameplayphase.getPlayerName();
+		currentPlayer = gameplayphase.getCurrentPlayer();
+		attackphaseEnded = gameplayphase.isAttackphaseEnded();
+		allOutTerritoryConqured = gameplayphase.isAllOutTerritoryConqured();
+		fortificationStarted = gameplayphase.isFortificationStarted();
+		attackerDice = gameplayphase.getAttackerDice();
+		defenderDice = gameplayphase.getDefenderDice();
+		defenderPlayer = gameplayphase.getDefenderPlayer();
+		fromCountryAttack = gameplayphase.getFromCountryAttack();
+		toCountryAttack = gameplayphase.getToCountryAttack();
+		exchangeRequired = gameplayphase.isExchangeRequired();
+		attackFire = gameplayphase.isAttackFire();
+		attackMove = gameplayphase.isAttackMove();
+		totalCountries = gameplayphase.getTotalCountries();
+		cardList = gameplayphase.getCardList();
+		currentPhase = gameplayphase.getCurrentPhase();
+		gamewin = gameplayphase.isGamewin();
+		
+	}
+	
+	/**
+	 * This method will create gameplayphase object
+	 * @return void
+	 */
+	private void preparGamePlayPhase() {
+		
+		gameplayphase.setPhaseView(txtPhaseView.getText());
+		gameplayphase.setPlayerdomination(txtPlayerDominationView.getText());
+		gameplayphase.setTerritoryList(territoryArea.getText());
+		gameplayphase.setAdjacentTerritory(adjacentTerritoryArea.getText());
+		gameplayphase.setCardExchangeView(txtCardExchangeView.getText());
+		gameplayphase.setConsollog(txtConsoleLog.getText());
+		
+		gameplayphase.setPlayerList(playerList);
+		gameplayphase.setRiskCardList(cardList);
+		gameplayphase.setRiskMap(riskMap);
+		gameplayphase.setCurrentPlayerId(currentPlayer.getPlayerId());
+		gameplayphase.setTotalCountries(totalCountries);
+		gameplayphase.setPlayerIndex(playerIndex);
+		gameplayphase.setPlayerName(currentPlayer.getPlayerName());
+		gameplayphase.setCurrentPlayer(currentPlayer);
+		gameplayphase.setAttackphaseEnded(attackphaseEnded);
+		gameplayphase.setAllOutTerritoryConqured(allOutTerritoryConqured);
+		gameplayphase.setFortificationStarted(fortificationStarted);
+		gameplayphase.setAttackerDice(attackerDice);
+		gameplayphase.setDefenderDice(defenderDice);
+		gameplayphase.setDefenderPlayer(defenderPlayer);
+		gameplayphase.setFromCountryAttack(fromCountryAttack);
+		gameplayphase.setToCountryAttack(toCountryAttack);
+		
+		gameplayphase.setExchangeRequired(exchangeRequired);
+		gameplayphase.setAttackFire(attackFire);
+		gameplayphase.setAttackMove(attackMove);
+		gameplayphase.setCardList(cardList);
+		gameplayphase.setCurrentPhase(currentPhase);
+		
+		gameplayphase.setGamewin(gamewin);
+		
+	}
+
+	/**
 	 * This method will handle single game mode of riskplay screen. All commands
 	 * will be filtered here.
 	 */
 	private void singleGameMode() {
 
 		if (!gamewin) {
+			
+			if(currentPlayer.getPlayerterritories().size()>0) {
 
 			// txtConsoleLog.clear();
 			fillTerritoryList();
@@ -510,7 +616,9 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 
 			// printPlayerDominationView();
 			subject.setPlayerDominationViewMessage(sb.toString());
-
+		}else {
+			changeUserTurn();
+		}
 		} else {
 
 			// sb.append("Game Finished ..!");
@@ -1622,6 +1730,12 @@ public class RiskPlayScreenController extends Observer implements Initializable 
 		playerView.append("Total Numebr of Army : ").append(totalArmy).append(NEWLINE);
 
 		txtPlayerDominationView.setText(playerView.toString());
+		
+		if(currentPlayer.getPlayerterritories().size()==totalCountries) {
+			gamewin = true;
+			txtConsoleLog.setText("Congratulations!! " + currentPlayer.getPlayerName() + " won the Game. Type: "
+					+ currentPlayer.getPlayerType() + " Strategy: " + currentPlayer.getStrategyName());
+		}
 
 	}
 

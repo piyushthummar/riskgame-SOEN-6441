@@ -14,9 +14,14 @@ public class GameStateDirector {
 	 * GamePlayPhase model
 	 */
 	private GamePlayPhase gamePlayPhase;
+	private String fileName;
 
 	public GameStateDirector(GamePlayPhase gamePlayPhase) {
 		this.gamePlayPhase = gamePlayPhase;
+	}
+	
+	public GameStateDirector(String filename) {
+		this.fileName = filename;
 	}
 
 	/**
@@ -41,6 +46,7 @@ public class GameStateDirector {
 	public void constructGameState() {
 		gameStateBuilder.createNewGameState();
 		gameStateBuilder.buildGamePlayPhase(this.gamePlayPhase);
+		gameStateBuilder.buildFileName(this.fileName);
 	}
 
 	/**

@@ -1058,6 +1058,7 @@ public class RiskPlayImpl implements RiskPlayInterface {
 			player.setStrategy((StrategyInterface) playerHandlerImpl.getStrategyByName(strategyString));
 			player.setStrategyName(strategyString);
 			playerList.add(player);
+			playerId++;
 		}
 		return playerList;
 		
