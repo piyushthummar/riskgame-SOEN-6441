@@ -1,0 +1,37 @@
+loadmap validSmall
+gameplayer -add ashish AGGRESIVE -add zkp HUMAN -add anshu CHEATER
+
+gameplayer -add ashish HUMAN -add zkp HUMAN
+
+populatecountries
+placeall
+
+gameplayer -add ashish AGGRESIVE -add zkp BENEVOLENT
+
+gameplayer -add ashish human -add zkp human
+
+gameplayer -add ashish AGGRESIVE -add zkp BENEVOLENT -add anshu CHEATER
+
+gameplayer -add ashish HUMAN -add zkp AGGRESIVE -add anshu CHEATER
+
+gameplayer -add zkp AGGRESIVE -add anshu CHEATER
+
+
+tournament -M world.map,validsmalltwo.map,Iran.map -P BENEVOLENT,CHEATER,RANDOM -G 4 -D 30
+
+tournament -M validsmalltwo.map,validsmalltwo.map,validsmalltwo.map -P AGGRESIVE,RANDOM,CHEATER,BENEVOLENT -G 4 -D 30
+
+tournament -M USA.map,USA.map,USA.map -P CHEATER,AGGRESIVE,RANDOM,BENEVOLENT -G 4 -D 25
+
+tournament -M world.map,validsmalltwo.map,USA.map -P CHEATER,AGGRESIVE,RANDOM,BENEVOLENT -G 4 -D 30
+
+tournament -M world.map,validsmalltwo.map,USA.map -P AGGRESIVE,RANDOM,CHEATER,BENEVOLENT -G 4 -D 30
+
+loadmap Iran
+gameplayer -add ashish HUMAN -add zkp AGGRESIVE -add anshu CHEATER
+populatecountries
+placeall
+
+savegame abc
+loadgame abc
+(savegame and loadgame will work in single game mode where human player is there, otherwise will not work)
